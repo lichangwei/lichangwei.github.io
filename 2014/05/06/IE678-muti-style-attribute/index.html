@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="李长伟的博客">
+    <meta name="keyword" content="">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="飞鹰走码" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        IE6，7，8(Q)中同一元素重复定义的style属性会被合并｜李长伟的博客
+        
+    </title>
+
+    <link rel="canonical" href="http://lichangwei.github.io/2014/05/06/IE678-muti-style-attribute/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('//o7bkkhiex.bkt.clouddn.com/lion-blur-bg.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    飞鹰走码
+                </span>
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>IE6，7，8(Q)中同一元素重复定义的style属性会被合并</h1>
+                    
+                    <span class="meta">
+                         作者 李长伟
+                        <span>
+                          日期 2014-05-06
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            IE6，7，8(Q)中同一元素重复定义的style属性会被合并
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <p>这个问题发生了有段时间了，现在把他记下来，一般人不会这么做，也不会遇到这种问题。但是你还是不能阻止有人不小心这么做了。出了问题就要解决，谁让咱是开发呢？  </p>
+<p>某次项目发布前，测试同事报出Bug：产品编辑页面原本有的产品分组输入框不见了。  </p>
+<p>翻出我们的VM文件，代码中#if等是velocity语法。代码如下：<br><figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"productTeamSelect"</span> <span class="attr">class</span>=<span class="string">"ui-form-item"</span> #<span class="attr">if</span>(!$<span class="attr">webProductPolicy.canDisplayGroupName</span>)<span class="attr">style</span>=<span class="string">"display:none;"</span>#<span class="attr">end</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>既然是该Div不显示看了吗？那么我只需要打印下<code>$webProductPolicy.canDisplayGroupName</code>的值即可，该字段表示用户是否可以进行产品分组。如果其值是<code>false</code>，那么该用户不可以进行产品分组，就不显示。否则显示分组。通过打印发现其值为<code>false</code>，表示该用户不可以进行产品分组。那么不显示就是正常的。查看Javascript代码也发现：控制产品分组元素是否显示只出现在两个地方，但是都在Click事件回调中，并不会在加载页面之后就执行。所以不显示就是因为后端传来的值<code>$webProductPolicy.canDisplayGroupName</code>为<code>false</code>导致，交给后端同事处理。  </p>
+<p>很快后端同事给出了回复，他们没有修改任何有关于此的代码，并且提出线上<code>$webProductPolicy.canDisplayGroupName</code>的值也同样为<code>flase</code>，但是线上却显示了产品分组元素，该产品已经下架，不能分组，也符合业务需求，所以后端认为当前线上显示了分组是错误的，而现在却是意外地改正了。  </p>
+<p>此时已经证明前端和后端都没有错误，而是当前线上代码有问题。线上代码是这样的：<br><figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"productTeamSelect"</span> <span class="attr">class</span>=<span class="string">"productTeamSelect"</span> <span class="attr">style</span>=<span class="string">"float:left;"</span> #<span class="attr">if</span>(!$<span class="attr">webProductPolicy.canDisplayGroupName</span>)<span class="attr">style</span>=<span class="string">"display:none;"</span>#<span class="attr">end</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>生成的页面源代码是：<br><figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"productTeamSelect"</span> <span class="attr">class</span>=<span class="string">"productTeamSelect"</span> <span class="attr">style</span>=<span class="string">"float:left;"</span> <span class="attr">style</span>=<span class="string">"display:none;"</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>没有什么不对啊？<code>display</code>属性被设置为<code>none</code>，本不该显示的啊？为什么显示了呢？</p>
+<p>只好通过<code>window.getComputedStyle</code>方法获取<code>display</code>属性值，看看浏览器是解析这段HTML的。实验发现<code>display</code>属性值竟然是<code>block</code>。奇怪了，为什么第二个style没有生效，难道是因为最近刚刚修改的document type造成的。然后我编写了两个测试页面，他们都有一个DIV元素，且都有两个style属性。唯一不同的是document type，分别是HTML5的document type：<code>&lt;!DOCTYPE html&gt;</code>，和旧的document type声明<br><figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</span></div></pre></td></tr></table></figure></p>
+<p>测试发现，结果一致，后定义的style都没有生效。这个有点出乎我的意料，虽然之前没有看到规范中如何定义，但是潜意识中认为应该是两个style会整合在一起，并且在后定义覆盖先定义的。难道我的认识有误？  </p>
+<p>谷歌了一下，发现一篇文章：<a href="http://www.w3help.org/zh-cn/causes/HY8002" target="_blank" rel="external">IE6 IE7 IE8(Q) 中同一元素重复定义的style属性会被合并</a>，文章介绍了IE6-8的这个Bug，并且指出“不要依赖 IE 的容错机制，避免重复定义HTML元素属性”。这个知识点比较冷，并且一般人都不会这么写，也不会遇到这个问题。现在回头看时才注意到通过Firefox产看源代码时<code>style=&quot;display:none;&quot;</code>是被红色标注的。Firefox意在提示我们第二个style属性没有生效，可惜这个重要信息被忽略了。    </p>
+<p>下架产品在IE6，7下不能分组，而在IE8和其他浏览器中却可以进行分组，为什么该代码的作者没有发现该问题呢，就不得而知了。难道该代码是很多年前的，那时候还没有IE8+，Firefox还不够流行，chrome还没有诞生？  </p>
+<p>锁定根本原因就好办了，要么是继续保持网站内部逻辑，下架产品不能分组，即产品分组输入框不可见，修复线上故障。要么是取消以前的网站内部逻辑，下架产品也可以进行分组，这样后端输出的<code>$webProductPolicy.canDisplayGroupName</code>值改成<code>true</code>即可，最终效果保持和线上一致。最终由PD拍板决定采用后一个方法，修改网站内部逻辑，保持对最终用户的逻辑不变，下架产品也能进行分组。  </p>
+<p>以上Bug是解决了，但是我们应该吸取教训，经常梳理业务逻辑，经常审核代码。  </p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2014/05/07/first-screen/" data-toggle="tooltip" data-placement="top"
+                           title="如何计算首屏加载时间？">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2014/05/05/terms-of-use/" data-toggle="tooltip" data-placement="top"
+                           title="网站使用条款的处理">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 飞鹰走码 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://lichangwei.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','dis9MygqwF8uGzyaxyE3','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="https://avatars1.githubusercontent.com/u/718802?v=4&amp;s=460">
+</body>
+
+</html>

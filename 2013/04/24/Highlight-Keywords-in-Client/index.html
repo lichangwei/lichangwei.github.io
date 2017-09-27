@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="李长伟的博客">
+    <meta name="keyword" content="">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="飞鹰走码" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        在客户端高亮关键字｜李长伟的博客
+        
+    </title>
+
+    <link rel="canonical" href="http://lichangwei.github.io/2013/04/24/Highlight-Keywords-in-Client/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('//o7bkkhiex.bkt.clouddn.com/lion-blur-bg.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    飞鹰走码
+                </span>
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>在客户端高亮关键字</h1>
+                    
+                    <span class="meta">
+                         作者 李长伟
+                        <span>
+                          日期 2013-04-24
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            在客户端高亮关键字
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>在某个项目中遇到这样的需求，用户输入几个关键字，然后根据关键字去后端搜索相关记录。后端返回记录中但是没有高亮这些关键字，这就需要前端来做这件事。按道理，高亮应该由后端完成，因为后端如何解析这些关键字，也知道如何去匹配，前端不知道也不应该知道后端为什么返回这些结果，英语中名词有复数形式，动词有现在式，过去式，过去完成式等，其他诸如德语，葡萄牙语有没有词性变换更是不得而知。后端依赖强大的知识库可以处理词性变换甚至近义词都是可能的，前端不可能完成工作，即便可能，也远比后来来处理高亮要复杂的多。但是这就是客户需求，我们还是要实现。  </p>
+<p>整个流程：获取用户输入，比如’search by keyword’，发送JSONP请求获取后端搜索到的记录。在关键的几个字段中，搜索‘search’，‘by’和‘keyword’这三个关键字，并在单词两边分别加上<code>&lt;span class=&quot;highlight&quot;&gt;</code>和<code>&lt;/span&gt;</code>，给<code>.highlight</code>定义一个合适的样式，比如粗体等，就完成了高亮的效果。  </p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><p>第一步，首先把关键字用空白符分隔开，得到一个一个的关键字。<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">var</span> keywords = keyword.split(<span class="regexp">/\s+/</span>);</div></pre></td></tr></table></figure></p>
+<p>第二步，将第一步中得到的字符串数组，转变成正则数组。<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line">keywords.map(<span class="function"><span class="keyword">function</span>(<span class="params">it</span>)</span>&#123;</div><div class="line">  <span class="comment">// g replace all</span></div><div class="line">  <span class="comment">// i case-insensitive</span></div><div class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">RegExp</span>(it, <span class="string">'gi'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>RegExp的第一个参数是传it呢，还是<code>&#39;\b&#39; + it + &#39;\b&#39;</code>呢？如果是前者，关键字<code>a</code>可以匹配<code>take</code>中的<code>a</code>。如果是后者，<code>teach</code>不可以匹配<code>teaches</code>中的<code>teach</code>。都不完美，这也是在文章开头提及的不适合前端做高亮的原因。<br>如果你够细心，你应该已经感觉到隐隐有些不妥，因为在通过RegExp创建正则表达式时，第一个参数不能包含正则中预定义的一些字符，除非在前面加上了一个反斜线，比如<code>[?</code>就不可以，而<code>\[\?</code>才是真正地匹配<code>[?</code>。所以在这之前，我们添加一步：  </p>
+<p>第〇步：给所有的正则预定义字符之前添加一个反斜线（backslash）。找出所有的预定义字符<code>char</code>并替换为<code>&#39;\\&#39; + char</code>。通过强大的<code>String.prototype.replace</code>方法很方便的完成。<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line">keyword = keyword.replace(<span class="regexp">/[\\\&#123;\&#125;\[\]\(\)\*\+\?\^\$\,\-\=\!]/g</span>, <span class="function"><span class="keyword">function</span>(<span class="params">char</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="string">'\\'</span> + char;</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>需要特别说的是，还有一处可以改进。在前面的一片文章<a href="./2013-04-15-Grouping-Numbers-with-Comma.md">【正则表达式】使用逗号将数字三位三位地分开</a>中，我们使用了零宽断言。它匹配了这样一个位置（是为零宽），它后面的字符满足一定条件（是为断言）。在这里，我们可以使用正则表达式匹配预定义字符前面的位置，将该位置替换为<code>&#39;\\&#39;</code>。<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line">keyword = keyword.replace(<span class="regexp">/(?=[\\\&#123;\&#125;\[\]\(\)\*\+\?\^\$\-\=\!])/g</span>, <span class="string">'\\'</span>);</div></pre></td></tr></table></figure></p>
+<p>换了一种思路，顿时感觉清爽多了。</p>
+<p>第三步，遍历正则数组，然后替换所有的关键字。<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line">keywords.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">it</span>)</span>&#123;</div><div class="line">  string = string.replace(it, <span class="function"><span class="keyword">function</span>(<span class="params">val</span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="string">'&lt;span class="highlight"&gt;'</span> + val + <span class="string">'&lt;/span&gt;'</span>;</div><div class="line">  &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>如果你足够细心或者以前遇到过类似问题，你可能已经知道，这一步中隐藏着一些问题，就是如果用户在一次搜索中，输入了两个相同的关键字，比如<code>take take</code>，那么匹配以后可能会出现<code>&#39;&lt;span class=&quot;highlight&quot;&gt;&lt;span class=&quot;highlight&quot;&gt;take&lt;/span&gt;&lt;/span&gt;&#39;</code>这种情况，不会出错，只是浏览器需要多创建一些DOM元素。更甚的是，当用户输入多个关键字以后，第一次替换时会引入<code>&#39;&lt;span class=&quot;highlight&quot;&gt;&#39;</code>和<code>&#39;&lt;/span&gt;&#39;</code>片段，这两段字符是不应被匹配并替换的。比如替换字符是<code>&#39;programer&#39;</code>，关键字是<code>&#39;a span&#39;</code>，<br>匹配关键字<code>a</code>以后，变成<br><figure class="highlight html"><table><tr><td class="code"><pre><div class="line">progr<span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"highlight"</span>&gt;</span>a<span class="tag">&lt;/<span class="name">span</span>&gt;</span>mer</div></pre></td></tr></table></figure></p>
+<p>匹配关键字<code>span</code>以后：<br><figure class="highlight"><table><tr><td class="code"><pre><div class="line">progr&lt;&lt;span class="highlight"&gt;span&lt;/span&gt; class="highlight"&gt;a&lt;/&lt;span class="highlight"&gt;span&lt;/span&gt;&gt;mer</div></pre></td></tr></table></figure></p>
+<p>完全乱套了。<br>为了保证以上<code>span</code>两端字符不会被匹配并替换，有一种做法是仅仅记住需要插入<code>span</code>的位置，并延迟替换。如果记住位置，考虑使用一种基本不会被用到的字符，比如0X2611(☑)以及0X2612（☒）。<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line">keywords.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">it</span>)</span>&#123;</div><div class="line">  string = string.replace(it, <span class="function"><span class="keyword">function</span>(<span class="params">val</span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">String</span>.fromCharCode(<span class="number">0X2611</span>) + val + <span class="built_in">String</span>.fromCharCode(<span class="number">0X2612</span>);</div><div class="line">  &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>匹配关键字<code>a</code>以后，变成<br><figure class="highlight html"><table><tr><td class="code"><pre><div class="line">progr☑a☒mer</div></pre></td></tr></table></figure></p>
+<p>匹配不到<code>span</code>字符串，匹配结束。  </p>
+<p>最后再将这两个特殊符号替换为<code>&#39;&lt;span class=&quot;highlight&quot;&gt;&#39;</code>和<code>&#39;&lt;/span&gt;&#39;</code>，在正则中使用<code>+</code>，可以匹配多个特殊字符，也就解决了用户输入输了两个以上相同的关键字并造成浏览器额外创建<code>span</code>元素的情况，当然你也可以再一开始就去重。<br>所以最终正确结果是<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line">string = string.replace(<span class="regexp">/\u2611+/g</span>, <span class="string">'&lt;span class="hightlight"&gt;'</span>)</div><div class="line">  .replace(<span class="regexp">/\u2612+/g</span>, <span class="string">'&lt;/span&gt;'</span>);</div></pre></td></tr></table></figure></p>
+<figure class="highlight html"><table><tr><td class="code"><pre><div class="line">progr<span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"highlight"</span>&gt;</span>a<span class="tag">&lt;/<span class="name">span</span>&gt;</span>mer</div></pre></td></tr></table></figure>
+<p>以上答案正确与否，取决于☑和☒会不会出现在被替换文字中。</p>
+<h2 id="最终代码"><a href="#最终代码" class="headerlink" title="最终代码"></a>最终代码</h2><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">var</span> keyword = input.value;</div><div class="line"><span class="keyword">var</span> string  = <span class="string">'The string will be highlighted'</span>；</div><div class="line"><span class="comment">// repleace all preserved characters in regular express.</span></div><div class="line">keyword = keyword.replace(<span class="regexp">/(?=[\\\&#123;\&#125;\[\]\(\)\*\+\?\^\$\-\=\!])/g</span>, <span class="string">'\\'</span>);</div><div class="line"><span class="comment">// split keyword by space characters.</span></div><div class="line"><span class="keyword">var</span> keywords = keyword.split(<span class="regexp">/\s+/</span>);</div><div class="line">keywords.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">it</span>)</span>&#123;</div><div class="line">  string = string.replace(it, <span class="function"><span class="keyword">function</span>(<span class="params">val</span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">String</span>.fromCharCode(<span class="number">0X2611</span>) + val + <span class="built_in">String</span>.fromCharCode(<span class="number">0X2612</span>);</div><div class="line">  &#125;);</div><div class="line">&#125;);</div><div class="line">string = string.replace(<span class="regexp">/\u2611+/g</span>, <span class="string">'&lt;span class="hightlight"&gt;'</span>)</div><div class="line">  .replace(<span class="regexp">/\u2612+/g</span>, <span class="string">'&lt;/span&gt;'</span>);</div></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-class">.highlight</span> &#123;</div><div class="line">  <span class="attribute">font-weight</span>: bold;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li>高亮根据关键字搜索出来的记录不适合在客户端做，即时实现了，很可能是该高亮的没有高亮，不该高亮的高亮了。后端可以依靠巨大的知识库来高亮词性变换后的单词，甚至近义词。  </li>
+<li>使用好强大的<code>String.prototype.replace</code>方法。  </li>
+<li>正则中零宽断言在适当的时候，可以简化代码。  </li>
+</ol>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2013/04/27/CSS3-Transition-Research/" data-toggle="tooltip" data-placement="top"
+                           title="CSS3 Transition过渡属性探索">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2013/04/22/Canvas-drawImage-vs-putImageData/" data-toggle="tooltip" data-placement="top"
+                           title="使用drawImage和putImageData缓存Canvas中间数据">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#背景介绍"><span class="toc-text">背景介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#步骤"><span class="toc-text">步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最终代码"><span class="toc-text">最终代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 飞鹰走码 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://lichangwei.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','dis9MygqwF8uGzyaxyE3','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="https://avatars1.githubusercontent.com/u/718802?v=4&amp;s=460">
+</body>
+
+</html>

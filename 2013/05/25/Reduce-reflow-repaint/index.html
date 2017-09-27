@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="李长伟的博客">
+    <meta name="keyword" content="">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="飞鹰走码" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        在DOM操作中，如何减少reflow或repaint｜李长伟的博客
+        
+    </title>
+
+    <link rel="canonical" href="http://lichangwei.github.io/2013/05/25/Reduce-reflow-repaint/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('//o7bkkhiex.bkt.clouddn.com/lion-blur-bg.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    飞鹰走码
+                </span>
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>在DOM操作中，如何减少reflow或repaint</h1>
+                    
+                    <span class="meta">
+                         作者 李长伟
+                        <span>
+                          日期 2013-05-25
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            在DOM操作中，如何减少reflow或repaint
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <p>在这篇博客中，我们列举一些可以减少reflow或者repaint的方法。下面先讲述一下这两个概念。<br><strong>reflow</strong>，翻译为重排，意为重新布局。当一个元素的形状位置发生改变时，浏览器会对该元素以及子元素（也可能包括同级元素）进行布局和重绘。称之为重排。<br><strong>repaint</strong>，翻译为重绘。当一个元素的颜色等发生改变时，浏览器会对该元素进行重绘。<br>为了减少重排和重绘，可以从以下几个方面着手。</p>
+<h2 id="批量增删节点"><a href="#批量增删节点" class="headerlink" title="批量增删节点"></a>批量增删节点</h2><h3 id="通过elem-innerHTML批量删除和添加子节点。"><a href="#通过elem-innerHTML批量删除和添加子节点。" class="headerlink" title="通过elem.innerHTML批量删除和添加子节点。"></a>通过<code>elem.innerHTML</code>批量删除和添加子节点。</h3><h3 id="通过elem-insertAdjacentHTML批量添加子节点。"><a href="#通过elem-insertAdjacentHTML批量添加子节点。" class="headerlink" title="通过elem.insertAdjacentHTML批量添加子节点。"></a>通过<code>elem.insertAdjacentHTML</code>批量添加子节点。</h3><h3 id="通过创建一个fragenment来批量添加子节点。"><a href="#通过创建一个fragenment来批量添加子节点。" class="headerlink" title="通过创建一个fragenment来批量添加子节点。"></a>通过创建一个fragenment来批量添加子节点。</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">var</span> fragenment = <span class="built_in">document</span>.createDocumentFragenment();</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)&#123;</div><div class="line">  <span class="keyword">var</span> div = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</div><div class="line">  fragenment.addChild(div);</div><div class="line">&#125;</div><div class="line">elem.appendChild(fragenment);</div></pre></td></tr></table></figure>
+<h3 id="通过创建一个range来批量删除一组连续节点。"><a href="#通过创建一个range来批量删除一组连续节点。" class="headerlink" title="通过创建一个range来批量删除一组连续节点。"></a>通过创建一个range来批量删除一组连续节点。</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">removeChildren</span>(<span class="params">parent, start, end</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> range = <span class="built_in">document</span>.createRange();</div><div class="line">  <span class="keyword">var</span> children = parent.children;</div><div class="line">  range.setStartBefore(children[start]);</div><div class="line">  range.setEndAfter(children[end]);</div><div class="line">  children = <span class="literal">null</span>;</div><div class="line">  range.deleteContents();</div><div class="line">&#125;</div><div class="line"><span class="string">``</span><span class="string">`  </span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">## 批量修改节点和样式</span></div><div class="line"><span class="string">### 通过修改class属性代替多次修改style属性  </span></div><div class="line"><span class="string">不好的做法：</span></div><div class="line"><span class="string">`</span><span class="string">``</span>javascript</div><div class="line">elem.style.width = <span class="string">'200px'</span>;</div><div class="line">elem.style.height = <span class="string">'200px'</span>;</div></pre></td></tr></table></figure>
+<p>较好的做法：<br><figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-class">.another-style</span>&#123;</div><div class="line">  <span class="attribute">width</span>: <span class="number">200px</span>;</div><div class="line">  <span class="attribute">height</span>: <span class="number">200px</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line">elem.className = <span class="string">'another-style'</span>;</div></pre></td></tr></table></figure>
+<h3 id="将节点隐藏或者删除后，批量修改，然后再显示或者添加到DOM树中。不管修改了多少次，只重新布局两次。"><a href="#将节点隐藏或者删除后，批量修改，然后再显示或者添加到DOM树中。不管修改了多少次，只重新布局两次。" class="headerlink" title="将节点隐藏或者删除后，批量修改，然后再显示或者添加到DOM树中。不管修改了多少次，只重新布局两次。"></a>将节点隐藏或者删除后，批量修改，然后再显示或者添加到DOM树中。不管修改了多少次，只重新布局两次。</h3><h3 id="先克隆节点，然后对克隆出来的节点做相应修改，然后再将原节点替换下来。"><a href="#先克隆节点，然后对克隆出来的节点做相应修改，然后再将原节点替换下来。" class="headerlink" title="先克隆节点，然后对克隆出来的节点做相应修改，然后再将原节点替换下来。"></a>先克隆节点，然后对克隆出来的节点做相应修改，然后再将原节点替换下来。</h3><h3 id="尽量缩小修改的影响"><a href="#尽量缩小修改的影响" class="headerlink" title="尽量缩小修改的影响"></a>尽量缩小修改的影响</h3><h3 id="让对经常变化的节点脱离文档流，比如使用absolute或者fixed的position。这样，当该节点重排时不会影响其以后的兄弟节点。"><a href="#让对经常变化的节点脱离文档流，比如使用absolute或者fixed的position。这样，当该节点重排时不会影响其以后的兄弟节点。" class="headerlink" title="让对经常变化的节点脱离文档流，比如使用absolute或者fixed的position。这样，当该节点重排时不会影响其以后的兄弟节点。"></a>让对经常变化的节点脱离文档流，比如使用absolute或者fixed的position。这样，当该节点重排时不会影响其以后的兄弟节点。</h3><h3 id="少使用table布局，很小的改动会导致整个table的重新布局。"><a href="#少使用table布局，很小的改动会导致整个table的重新布局。" class="headerlink" title="少使用table布局，很小的改动会导致整个table的重新布局。"></a>少使用table布局，很小的改动会导致整个table的重新布局。</h3><h2 id="访问DOM节点的某些属性"><a href="#访问DOM节点的某些属性" class="headerlink" title="访问DOM节点的某些属性"></a>访问DOM节点的某些属性</h2><p>比如offsetTop, offsetLeft, offsetWidth, offsetHeight, scrollTop/Left/Width/Height, clientTop/Left/Width/Height, getComputedStyle()等等，参考<a href="http://www.yiotabytes.com/2011/04/when-does-dom-access-slow-down.html" target="_blank" rel="external">When does DOM access slow down rendering?</a>。文章中也提到浏览器越来越聪明，会尽量避免这些不太必要的重排重绘。我暂时还不知道怎么验证是否发生了重排重绘。  </p>
+<p>留个问题，CSS3 Transition动画能不能减少重排呢？重绘肯定是少不了的。</p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2013/06/06/Events-in-Capture-Phase/" data-toggle="tooltip" data-placement="top"
+                           title="通过body的error事件捕获页面中所有图片的error事件">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2013/05/18/Using SVG/" data-toggle="tooltip" data-placement="top"
+                           title="【翻译】使用SVG">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#批量增删节点"><span class="toc-text">批量增删节点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#通过elem-innerHTML批量删除和添加子节点。"><span class="toc-text">通过elem.innerHTML批量删除和添加子节点。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#通过elem-insertAdjacentHTML批量添加子节点。"><span class="toc-text">通过elem.insertAdjacentHTML批量添加子节点。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#通过创建一个fragenment来批量添加子节点。"><span class="toc-text">通过创建一个fragenment来批量添加子节点。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#通过创建一个range来批量删除一组连续节点。"><span class="toc-text">通过创建一个range来批量删除一组连续节点。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#将节点隐藏或者删除后，批量修改，然后再显示或者添加到DOM树中。不管修改了多少次，只重新布局两次。"><span class="toc-text">将节点隐藏或者删除后，批量修改，然后再显示或者添加到DOM树中。不管修改了多少次，只重新布局两次。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#先克隆节点，然后对克隆出来的节点做相应修改，然后再将原节点替换下来。"><span class="toc-text">先克隆节点，然后对克隆出来的节点做相应修改，然后再将原节点替换下来。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#尽量缩小修改的影响"><span class="toc-text">尽量缩小修改的影响</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#让对经常变化的节点脱离文档流，比如使用absolute或者fixed的position。这样，当该节点重排时不会影响其以后的兄弟节点。"><span class="toc-text">让对经常变化的节点脱离文档流，比如使用absolute或者fixed的position。这样，当该节点重排时不会影响其以后的兄弟节点。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#少使用table布局，很小的改动会导致整个table的重新布局。"><span class="toc-text">少使用table布局，很小的改动会导致整个table的重新布局。</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#访问DOM节点的某些属性"><span class="toc-text">访问DOM节点的某些属性</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 飞鹰走码 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://lichangwei.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','dis9MygqwF8uGzyaxyE3','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="https://avatars1.githubusercontent.com/u/718802?v=4&amp;s=460">
+</body>
+
+</html>

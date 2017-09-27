@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="李长伟的博客">
+    <meta name="keyword" content="">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="飞鹰走码" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        Javascript的坑｜李长伟的博客
+        
+    </title>
+
+    <link rel="canonical" href="http://lichangwei.github.io/2013/06/20/Javascript-Trick/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('//o7bkkhiex.bkt.clouddn.com/lion-blur-bg.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    飞鹰走码
+                </span>
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>Javascript的坑</h1>
+                    
+                    <span class="meta">
+                         作者 李长伟
+                        <span>
+                          日期 2013-06-20
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            Javascript的坑
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <p>以下题目摘自<a href="http://bbs.sjtu.edu.cn/bbscon?board=WebDevelop&amp;file=M.1371046203.A" target="_blank" rel="external">饮水思源</a>。  </p>
+<h2 id="语言基础篇"><a href="#语言基础篇" class="headerlink" title="语言基础篇"></a>语言基础篇</h2><h3 id="0-this的指代"><a href="#0-this的指代" class="headerlink" title="0. this的指代"></a>0. this的指代</h3><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getThis</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(getThis.call(<span class="number">1</span>) === <span class="number">1</span>);</div><div class="line"><span class="built_in">console</span>.log(getThis.call(<span class="string">'test'</span>) === <span class="string">'test'</span>);</div><div class="line"><span class="built_in">console</span>.log(getThis.call() === <span class="literal">undefined</span>);</div><div class="line"><span class="built_in">console</span>.log(getThis.call(<span class="literal">null</span>) === <span class="literal">null</span>);</div><div class="line"><span class="built_in">console</span>.log(getThis.call(<span class="literal">false</span>) === <span class="literal">false</span>);</div></pre></td></tr></table></figure>
+<blockquote>
+<blockquote>
+<p>在ECMA5严格模式中，this都会call和apply的第一个实参，哪怕传入的实参是原始值甚至是null或者undefined。在ECMA3和非严格模式中，传入的null和undefined会被替换成全局对象。<br>如果call和apply的第一个实参是原始类型，那么会先包装成对象。<br>所以以上 <strong>全部false</strong></p>
+</blockquote>
+</blockquote>
+<h3 id="1-bind-amp-call"><a href="#1-bind-amp-call" class="headerlink" title="1. bind &amp; call"></a>1. bind &amp; call</h3><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getThisAndArguments</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> &#123;<span class="attr">this</span>: <span class="keyword">this</span>, <span class="attr">arguments</span>: <span class="built_in">arguments</span>&#125;;</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(getThisAndArguments.bind(<span class="number">1</span>, <span class="number">2</span>).bind(<span class="number">3</span>, <span class="number">4</span>).call(<span class="number">5</span>, <span class="number">6</span>));</div></pre></td></tr></table></figure>
+<blockquote>
+<blockquote>
+<p>bind和call以及apply一样，如果第一个实参是原始类型，会包装成对象做为this的值。bind一旦绑定this之后就不可以再次绑定，所以this最终指向一个Number对象，其原始值1.<br>arguments最终指向一个类似[2,4,6]的Arguments对象。  </p>
+</blockquote>
+</blockquote>
+<h3 id="2-解释一下fn是做什么用的，以及它的声明语句为啥这么长。"><a href="#2-解释一下fn是做什么用的，以及它的声明语句为啥这么长。" class="headerlink" title="2. 解释一下fn是做什么用的，以及它的声明语句为啥这么长。"></a>2. 解释一下fn是做什么用的，以及它的声明语句为啥这么长。</h3><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">var</span> fn = <span class="built_in">Function</span>.prototype.call.bind(<span class="built_in">Array</span>.prototype.forEach);</div><div class="line">fn(<span class="built_in">document</span>.querySelectorAll(<span class="string">'*'</span>), <span class="function"><span class="keyword">function</span>(<span class="params">a</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(a);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<blockquote>
+<blockquote>
+<p>如果说只看代码声明还不知道fn是干什么的话，那么看了fn的调用就可以肯定它是干什么的。<br><strong>不完全准确</strong>地说，bind就是将一个函数作为一个对象的成员函数来执行。所以以上代码等价于以下代码：<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="comment">// 该行代码是废话，可以忽略</span></div><div class="line"><span class="built_in">Array</span>.prototype.forEach.call = <span class="built_in">Function</span>.prototype.call;</div><div class="line"><span class="comment">// </span></div><div class="line"><span class="built_in">Array</span>.prototype.forEach.call(<span class="built_in">document</span>.querySelectorAll(<span class="string">'*'</span>), <span class="function"><span class="keyword">function</span>(<span class="params">a</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(a);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>看到上面的代码相比大家都明白了。  </p>
+</blockquote>
+</blockquote>
+<h3 id="3-Object-amp-Function"><a href="#3-Object-amp-Function" class="headerlink" title="3. Object &amp; Function"></a>3. Object &amp; Function</h3><p>结果分别是？解释一下<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span> <span class="keyword">instanceof</span> <span class="built_in">Function</span>);</div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Function</span> <span class="keyword">instanceof</span> <span class="built_in">Object</span>);</div></pre></td></tr></table></figure></p>
+<blockquote>
+<blockquote>
+<p>因为可以调用<code>new Object()</code>，所以Object肯定是函数。另外任何对象都是Object的实例，包括Object自身。<br>以上答案经过Chrome验证是正确的。  </p>
+</blockquote>
+</blockquote>
+<h2 id="实战篇"><a href="#实战篇" class="headerlink" title="实战篇"></a>实战篇</h2><p>以下题目是比较常见的场景，所以可能已经存在很好的JS库，请尽量不要参考。</p>
+<h3 id="4"><a href="#4" class="headerlink" title="4."></a>4.</h3><p>我们有一个 Node.js 爬虫，和一堆需要它去爬的连接，爬完后用log()记录内容，现在<br>请你改写这例子，控制爬虫并发请求数&lt;=10。如果你能写出一个类似Python<br>multiprocessing.Pool的可复用的东西，有加分噢。<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">var</span> urlArr = [...];</div><div class="line"><span class="keyword">var</span> url = urlArr[<span class="number">0</span>];</div><div class="line">crawl(url, callback(err, response)&#123;</div><div class="line">    log(url, response);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<h3 id="5-多层嵌套的优化"><a href="#5-多层嵌套的优化" class="headerlink" title="5. 多层嵌套的优化"></a>5. 多层嵌套的优化</h3><p>我们要用Nodejs查询若干次数据库，生成一个简单的博客页面，请你把如下例子尽可能改得优雅些。如果你能实现一个可复用的东西，有加分噢~<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line">db.getArticles(<span class="function"><span class="keyword">function</span>(<span class="params">err, articles</span>)</span>&#123;</div><div class="line">  <span class="keyword">if</span>(err) <span class="keyword">return</span> handle(err);</div><div class="line">  db.getTags(<span class="function"><span class="keyword">function</span>(<span class="params">err, tags</span>)</span>&#123;</div><div class="line">    <span class="keyword">if</span>(err) <span class="keyword">return</span> handle(err);</div><div class="line">    db.getCategories(<span class="function"><span class="keyword">function</span>(<span class="params">err, categories</span>)</span>&#123;</div><div class="line">      <span class="keyword">if</span>(err) <span class="keyword">return</span> handle(err);</div><div class="line">      db.getComments(<span class="function"><span class="keyword">function</span>(<span class="params">err, comments</span>)</span>&#123;</div><div class="line">        <span class="keyword">if</span>(err) <span class="keyword">return</span> handle(err);</div><div class="line">        render(<span class="string">'index'</span>, &#123;</div><div class="line">          articles: articles,</div><div class="line">          tags: tags,</div><div class="line">          categories: categories,</div><div class="line">          comments: comments</div><div class="line">        &#125;);</div><div class="line">      &#125;);</div><div class="line">    &#125;);</div><div class="line">  &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<h3 id="6"><a href="#6" class="headerlink" title="6."></a>6.</h3><p>由于历史的原因，我们有一个很傻的异步API：<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="built_in">window</span>.getSomeInfo = <span class="function"><span class="keyword">function</span>(<span class="params">info</span>)</span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(info); <span class="comment">//info.url 是请求的url</span></div><div class="line">&#125;;</div><div class="line"><span class="keyword">var</span> url = <span class="string">'http://www.baidu.com/;</span></div><div class="line"><span class="string">window.external.getSomeInfo(url); //异步执行，请求完成后会调用window.getSomeInfo()</span></div></pre></td></tr></table></figure></p>
+<p>如你所见，这个API没法支持两对及以上的 url-&gt;callback 组合。你能不能改写出一个稍微灵活点的wrapper？  </p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2013/06/22/Some-Interesting-Interactive/" data-toggle="tooltip" data-placement="top"
+                           title="一些有意思的交互设计">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2013/06/09/TotalResults-filed-in-Youtube-Open-API/" data-toggle="tooltip" data-placement="top"
+                           title="Youtube开放API中返回数据不一致">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#语言基础篇"><span class="toc-text">语言基础篇</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#0-this的指代"><span class="toc-text">0. this的指代</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-bind-amp-call"><span class="toc-text">1. bind & call</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-解释一下fn是做什么用的，以及它的声明语句为啥这么长。"><span class="toc-text">2. 解释一下fn是做什么用的，以及它的声明语句为啥这么长。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Object-amp-Function"><span class="toc-text">3. Object & Function</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实战篇"><span class="toc-text">实战篇</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4"><span class="toc-text">4.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-多层嵌套的优化"><span class="toc-text">5. 多层嵌套的优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6"><span class="toc-text">6.</span></a></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 飞鹰走码 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://lichangwei.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','dis9MygqwF8uGzyaxyE3','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="https://avatars1.githubusercontent.com/u/718802?v=4&amp;s=460">
+</body>
+
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="李长伟的博客">
+    <meta name="keyword" content="">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="飞鹰走码" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        李长伟的博客
+        
+    </title>
+
+    <link rel="canonical" href="http://lichangwei.github.io/2013/05/13/HTML-CSS-Interview-Questions/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('//o7bkkhiex.bkt.clouddn.com/lion-blur-bg.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    飞鹰走码
+                </span>
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1></h1>
+                    
+                    <span class="meta">
+                         作者 李长伟
+                        <span>
+                          日期 2013-05-13
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <ol>
+<li><p>####请解释一下什么是语义化的HTML。<br>使用拥有语义的标签，比如h1-h6, article, section, aside, header, footer, nav, address, strong, em等标签，而不是不分清空皂白地统一使用div或者p标签。<br>好处：（1）方便开发人员交流。统一的标签语义，不需要使用class表明用意。也阻止了不同的人使用不同的单词表达同样的含义。<br>（2）对搜索引擎友好。<br>（3）样式加载失败时，浏览器默认样式也使得页面比较清晰。<br>（4）对CSS支持不好甚至不支持的浏览器友好。  </p>
+</li>
+<li><p>####你能描述一下渐进增强和优雅降级之间的不同吗?<br>构建站点的两个方法，都用到了特性检测。<br>渐进增强：Progressive enhancement。先构建站点的最少特性，然后根据浏览器特性追加功能。<br>优雅降级：graceful degradation。先构建站点的完整版本，然后根据浏览器特性进行修复。</p>
+</li>
+<li><p>####为什么利用多个域名来存储网站资源会更有效？<br>浏览器对同一个域的并行连接数是有限制的，当前一般浏览器4到8个，而IE6，7只有2个，如果同时下载同一个域下的很多资源，就会因为此限制而导致资源下载串行。但是使用多个域虽然可以并行下载资源，但是会使得浏览器需要解析更多的域名。所以在这对优缺点之间取一个平衡点。另外，解决此问题的办法并非只有启用多个域这一种方法，还可以合并和压缩JS和CSS，使用雪碧图等等。    </p>
+</li>
+<li><p>####请说出三种减低页面加载时间的方法。（加载时间指感知的时间或者实际加载时间）<br>文件的合并以及压缩（减少了HTTP请求的数量）<br>使用CSS Sprites（减少HTTP请求的数量）<br>使用CDN托管（减少了数据传输时间）<br>使用CSS3，SVG，甚至Canvas替代图片。<br>有效地适度地使用缓存脚本和其他资源</p>
+</li>
+<li><p>####什么是FOUC？你如何来避免FOUC？<br>FOUC全称是Flash Of Unstyled Content，翻译为文档样式闪烁。一般指IE在加载网页的时候，出现短暂的CSS样式失效。<br>问题一：什么时候出现呢？（1）IE浏览器（2）IE的临时文件夹没有缓存过页面的css文件（3）页面head标签里面没有任何link和script标签（4）页面引用样式的方式是采用@import（5）外在因素（比如网速等）<br>问题二：咋解决？在head里面加入一个link或者script标签<br>吐槽：我可能一辈子也不会写出这种代码，也希望面试官不要因为这种题目来拒绝候选人。</p>
+</li>
+<li><p>####描述css reset的作用和用途。<br>浏览器都会有默认样式表，这样保证了页面中即便不写任何样式，浏览器仍然能够清晰地展示出页面内容，并突出重点。  </p>
+</li>
+<li><p>####描述下float和它的工作原理。<br>float最初应用于图文混排，让文字环绕图片。<br>语法为float: left/right/none;<br>float box脱离当前文档流，定位到父元素或者另一个float box的边缘。父元素水平方向空间不足时，向下移动知道可以放下。文档流中inline box环绕float box，block box会和float box重叠，除非使用clear: both/left/right来清除浮动。float box会形成一个新的block formatting context（BFC块状格式化上下文）。float box不会超出所在BFC，也不会和其他BFC重叠。</p>
+</li>
+<li><p>####清除浮动的方法有那些，分别适用于什么情形。<br>clear: both/left/right<br>用于清除相应元素之前的兄弟节点浮动的影响。left和right指浮动方向，both包含left和right两个方向。</p>
+</li>
+<li><p>####解释css sprites，如何使用。<br>将数张小的背景图片拼合成一张大的图片，然后在CSS中结合background-image，background-position，width和height等属性显示某张小的背景图片。<br>网上有不少小工具可以让你上传一些小图片，然后生成一个大图并生成相应的样式表。即可直接使用。<br>优点：减少了图片的请求数量。<br>缺点：（1）不适合需要repeat的背景图片。（2）需要额外的工作来拼合成大图。（3）CSS和图片缓存失效的概率和影响更大。  </p>
+</li>
+<li><p>####你最喜欢的图片替换方法是什么，你如何选择使用。<br>Web-Font, CSS3, SVG, Canvas<br>关于如何选择，首先查看所要兼容的浏览器是否兼容其特性。在三者均支持的很好的情况下，选择优先级从高到低分别是Web-Font, CSS3, SVG, Canvas<br>Web-Font适合单色图片，并且可以通过font属性来设置其大小，颜色等，特别适合用于响应式设计中。<br>CSS3基本可以说是从SVG发展而来的，功能应该还不如SVG，但是其足够简单，所以选择优先级是比较高的。<br>SVG适合需要响应用户行为，比如mousemove等操作的图片，作为矢量图，适合用于响应式设计中。<br>Canvas适合显示动态生成的图表，不需要响应用户行为。  </p>
+</li>
+<li><p>####讨论CSS hacks，条件引用或者其他。 </p>
+</li>
+<li><p>####解释BFC（block formatting context，块状布局上下文）<br>把一组块级box和浮动元素放在一起布局的区域。<br>特点：（1）不折叠边距（margin collapsing），在同一个BFC是折叠边距的其中一个必要条件。（2）浮动元素不会超出它的范围。（3）不会跟其他浮动元素重叠。<br>形成新的BFC的条件：（1）float属性不为none（2）overflow属性不为visible（3）display属性是table-cell、table-caption或inline-block（4）position属性不为static或relative。<br>IE6/7没有BFC概念，但是它们有hasLayout与之相似，可以通过zoom: 1触发。</p>
+</li>
+</ol>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2013/05/13/Unskilled-Interview-Questions/" data-toggle="tooltip" data-placement="top"
+                           title="">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2013/05/12/Javascript-Interview-Questions/" data-toggle="tooltip" data-placement="top"
+                           title="">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 飞鹰走码 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://lichangwei.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','dis9MygqwF8uGzyaxyE3','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="https://avatars1.githubusercontent.com/u/718802?v=4&amp;s=460">
+</body>
+
+</html>

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="李长伟的博客">
+    <meta name="keyword" content="">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="飞鹰走码" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        Javascript编码规范｜李长伟的博客
+        
+    </title>
+
+    <link rel="canonical" href="http://lichangwei.github.io/2014/06/01/javascript-code-guide/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('//o7bkkhiex.bkt.clouddn.com/lion-blur-bg.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    飞鹰走码
+                </span>
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>Javascript编码规范</h1>
+                    
+                    <span class="meta">
+                         作者 李长伟
+                        <span>
+                          日期 2014-06-01
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            Javascript编码规范
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h2 id="1-变量"><a href="#1-变量" class="headerlink" title="1 变量"></a>1 变量</h2><ol>
+<li><p>如非必要，请不要使用全局变量；局部变量应该尽可能缩小其作用域。</p>
+</li>
+<li><p>声明全局变量必须使用<code>window.</code>前缀；声明局部变量必须使用<code>var</code>关键字。比如  </p>
+<figure class="highlight js"><table><tr><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="comment">// 局部变量</span></div><div class="line">  <span class="keyword">var</span> config = &#123;&#125;;</div><div class="line">  <span class="comment">// 全局变量</span></div><div class="line">  <span class="built_in">window</span>.global = &#123;&#125;;</div><div class="line">&#125;)();</div></pre></td></tr></table></figure>
+</li>
+<li><p>同时声明多个变量时，每个变量独立申明。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="comment">// 好的做法</span></div><div class="line"><span class="keyword">var</span> var1 = <span class="number">1</span>;</div><div class="line"><span class="keyword">var</span> var2 = <span class="string">'string'</span>;</div><div class="line"><span class="keyword">var</span> var3 = <span class="number">3</span>;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>以前我们经常看到以下写法，以下做法会导致在末尾新增变量声明或者删除第一个变量声明时不方便。<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="comment">// 不好的做法</span></div><div class="line"><span class="keyword">var</span> var1 = <span class="number">1</span>,</div><div class="line">    var2 = <span class="string">'string'</span>,</div><div class="line">    var3 = <span class="number">3</span>;</div></pre></td></tr></table></figure></p>
+<ol>
+<li>鼓励延迟初始化<figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="string">``</span><span class="string">`</span></div><div class="line"><span class="string">1. 命名规范：命名应能够表达该变量的含义，首字母小写的驼峰格式。比如：</span></div><div class="line"><span class="string">`</span><span class="string">``</span>js</div><div class="line"><span class="keyword">var</span> isInited = <span class="literal">false</span>;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>例外：在循环体内可以使用i, j, k等无意义但是被广泛使用的变量。</p>
+<h2 id="2-常量"><a href="#2-常量" class="headerlink" title="2 常量"></a>2 常量</h2><ol>
+<li>命名规范：命名应能够表达该变量的含义，首字母小写的驼峰格式。比如<code>Math</code>的常量<code>PI</code>,<code>SQRT1_2</code>等等。</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">var</span> SECONDS_IN_A_DAY = <span class="number">60</span> * <span class="number">60</span> * <span class="number">24</span>;</div></pre></td></tr></table></figure>
+<h2 id="3-语句"><a href="#3-语句" class="headerlink" title="3 语句"></a>3 语句</h2><h3 id="3-1-行"><a href="#3-1-行" class="headerlink" title="3.1 行"></a>3.1 行</h3><ol>
+<li>语句必须以分号结束。</li>
+<li>每一行要控制在120字符以内。</li>
+</ol>
+<h3 id="3-2-空格"><a href="#3-2-空格" class="headerlink" title="3.2 空格"></a>3.2 空格</h3><ol>
+<li>数值操作符(如, +/-/*/% 等)两边留空;</li>
+<li>赋值操作符/等价判断符两边留一空格;</li>
+<li>for 循环条件中, 分号后留一空格;</li>
+<li>变量声明语句, 数组值, 对象值及函数参数值中的逗号后留一空格;</li>
+<li>行尾不要有空格;</li>
+<li>逗号和冒号后一定要跟空格;</li>
+<li>点号前后不要出现空格;</li>
+<li>函数名末尾和左括号之间不要出现空格;</li>
+</ol>
+<h3 id="3-3-空行"><a href="#3-3-空行" class="headerlink" title="3.3 空行"></a>3.3 空行</h3><ol>
+<li>函数与函数声明之间，加一空行</li>
+<li>逻辑上独立的代码片段之间，加一空行。</li>
+</ol>
+<h3 id="3-4-缩进"><a href="#3-4-缩进" class="headerlink" title="3.4 缩进"></a>3.4 缩进</h3><ol>
+<li>缩进使用2个空格</li>
+</ol>
+<h3 id="3-5-小括号"><a href="#3-5-小括号" class="headerlink" title="3.5 小括号"></a>3.5 小括号</h3><ol>
+<li><code>if/else if/while/for</code>条件表达式必须有小括号;</li>
+<li>一元操作符(如 <code>delete</code>, <code>typeof</code>, <code>void</code>)或在某些关键词(如<code>return</code>, <code>throw</code>, <code>case</code>, <code>new</code>) 之后, 不要使用括号;</li>
+</ol>
+<h3 id="3-6-大括号"><a href="#3-6-大括号" class="headerlink" title="3.6 大括号"></a>3.6 大括号</h3><ol>
+<li><code>if/else if/else/while/for</code>代码块中必须要有<code>{}</code>。<br>例外：函数体顶部出现的某中条件下函数直接返回的情况：<code>if(typeof arg !== &#39;string&#39;) return false;</code>，这时可以省略大括号并且将条件表达式和代码块写在同一行中。</li>
+</ol>
+<h3 id="3-7-内置对象"><a href="#3-7-内置对象" class="headerlink" title="3.7 内置对象"></a>3.7 内置对象</h3><ol>
+<li>禁止增加，删除或修改内置对象的方法，除非是polyfill（在旧浏览器上实现最新的规范）。</li>
+</ol>
+<h3 id="3-8-with"><a href="#3-8-with" class="headerlink" title="3.8 with"></a>3.8 with</h3><ol>
+<li>禁止使用<code>with</code>，除非用于接续序列化字符串。</li>
+</ol>
+<h3 id="3-9-使用Array-Object直接量"><a href="#3-9-使用Array-Object直接量" class="headerlink" title="3.9 使用Array/Object直接量"></a>3.9 使用Array/Object直接量</h3><ol>
+<li>尽量使用使用Array/Object直接量，避免使用Array/Object构造器</li>
+</ol>
+<h3 id="3-10-字符串"><a href="#3-10-字符串" class="headerlink" title="3.10 字符串"></a>3.10 字符串</h3><ol>
+<li>字符串应使用单引号。</li>
+<li>多行字符串应该使用<code>+</code>或者<code>Array.prototype.join</code>拼接字符串，避免使用<code>\</code>拼接。</li>
+</ol>
+<h2 id="4-注释"><a href="#4-注释" class="headerlink" title="4 注释"></a>4 注释</h2><h3 id="4-1-注释格式"><a href="#4-1-注释格式" class="headerlink" title="4.1 注释格式"></a>4.1 注释格式</h3><ol>
+<li>行级注释<code>// comment</code>主要用与代码行或代码片段</li>
+<li>块状注释<code>/* comment */</code>主要用于函数。<figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="comment">/*</span></div><div class="line"><span class="comment"> * @desc 记忆函数，对于耗时的运算，运算一次以后就讲结果保存起来，下次就直接返回结果。</span></div><div class="line"><span class="comment"> * @param &#123;function&#125; func 运算非常耗时的函数。</span></div><div class="line"><span class="comment"> * @param &#123;object&#125; thisobj func的主体对象</span></div><div class="line"><span class="comment"> * @param &#123;function&#125; serialize 参数序列化函数，将参数序列化为一个字符串。</span></div><div class="line"><span class="comment"> */</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">memorize</span>(<span class="params">func, thisobj, serialize</span>)</span>&#123;&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="4-2-注释书写原则"><a href="#4-2-注释书写原则" class="headerlink" title="4.2 注释书写原则"></a>4.2 注释书写原则</h3><ol>
+<li>在写注释之前，看看是否能够通过修改方法名，函数名让其变得见名知意，从而不需要注释。</li>
+<li>注释应该记录代码不能明显体现出来的思路或你对代码的评价。</li>
+<li>注释和代码一样，同样会占用屏幕空间，同样会分散阅读者的注意力，所以请保持言简意赅。</li>
+<li>修改代码的同时，请修改注释以保证注释的有效性。</li>
+</ol>
+<h3 id="4-3-注释标记"><a href="#4-3-注释标记" class="headerlink" title="4.3 注释标记"></a>4.3 注释标记</h3><ol>
+<li>TODO 还没有完成的逻辑</li>
+<li>FIXME 有错误的逻辑</li>
+</ol>
+<h2 id="5-函数"><a href="#5-函数" class="headerlink" title="5 函数"></a>5 函数</h2><ol>
+<li><p>函数行数不得超过40行，否则考虑拆分成小的函数。</p>
+</li>
+<li><p>函数体内变量声明应尽可能集中在顶部。</p>
+</li>
+<li><p>不要在块作用域中声明函数<br>不要写成:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">if</span> (x) &#123;</div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>虽然有很多JS引擎都支持块做域内声明函数，但它不是ECMAScript规范(见<a href="http://www.ecma-international.org/publications/standards/Ecma-262.htm" target="_blank" rel="external">ECMA-262</a>, 第13和14条)。各个浏览器的实现可能不兼容, 也可能与未来的ECMAScript草案相违背。ECMAScript只允许在脚本的根语句或函数中声明函数，如果确实需要在块中定义函数, 建议使用函数表达式来初始化变量:<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">if</span> (x) &#123;</div><div class="line">  <span class="keyword">var</span> foo = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<ol>
+<li><p>命名规范：命名应能够表达该变量的含义，首字母小写的驼峰格式。比如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">returnTrue</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>Getter/Setter 命名<br>这里单独说明Getter/Setter命名规范，一般情况下不需要使用Getter/Setter方法，直接暴露相应地对象属性即可。如确有必要，请使用getXxx和setXxx命名，对于boolean值，可以使用isXxx/hasXxx/canDoXxx等命名。</p>
+</li>
+</ol>
+<h2 id="6-模块"><a href="#6-模块" class="headerlink" title="6 模块"></a>6 模块</h2><ol>
+<li>建议按照CMD或AMD规范实现模块，并使用seajs或requirejs等库加载或管理模块。<figure class="highlight js"><table><tr><td class="code"><pre><div class="line">define(<span class="function"><span class="keyword">function</span>(<span class="params">require, exports, module</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> $ = <span class="built_in">require</span>(<span class="string">'$'</span>);</div><div class="line">  exports.init = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="comment">// do something</span></div><div class="line">  &#125;;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="7-文件"><a href="#7-文件" class="headerlink" title="7 文件"></a>7 文件</h2><ol>
+<li>命名规范：命名应能表达该文件的作用。全部小写，单词以连字符分隔，比如<code>category-manager.js</code>。</li>
+<li>编码规范：统一使用UTF-8（无BOM）格式。</li>
+</ol>
+<h2 id="8-HTML，CSS和Javascript"><a href="#8-HTML，CSS和Javascript" class="headerlink" title="8 HTML，CSS和Javascript"></a>8 HTML，CSS和Javascript</h2><ol>
+<li>HTML中引用javascript文件时，建议去掉type属性。只有当script标签存放的不是javascript时才需要特别声明。<figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"path/to/js.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></div><div class="line"><span class="javascript">  $(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span></div><div class="line"><span class="javascript">     <span class="comment">// do something</span></span></div><div class="line"><span class="undefined">  &#125;)</span></div><div class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/template"</span>&gt;</span><span class="undefined"></span></div><div class="line"><span class="xml">	<span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;i18n.noData&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></div><div class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>##终极条款</p>
+<ol>
+<li>在修改别人的代码时，应该先学习别人的编码规范，并遵守该规范，如果有的话。</li>
+</ol>
+<p>##参考</p>
+<ol>
+<li><a href="http://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml" target="_blank" rel="external">Google JavaScript Style Guide</a><br><a href="http://codeguide.bootcss.com/" target="_blank" rel="external">http://codeguide.bootcss.com/</a></li>
+</ol>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2014/06/04/css-code-guide/" data-toggle="tooltip" data-placement="top"
+                           title="CSS编码规范">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2014/05/22/how-to-select-category/" data-toggle="tooltip" data-placement="top"
+                           title="讨论一例交互--常用类目">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-变量"><span class="toc-text">1 变量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-常量"><span class="toc-text">2 常量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-语句"><span class="toc-text">3 语句</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-行"><span class="toc-text">3.1 行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-空格"><span class="toc-text">3.2 空格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-空行"><span class="toc-text">3.3 空行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-缩进"><span class="toc-text">3.4 缩进</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-小括号"><span class="toc-text">3.5 小括号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-大括号"><span class="toc-text">3.6 大括号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7-内置对象"><span class="toc-text">3.7 内置对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-8-with"><span class="toc-text">3.8 with</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-9-使用Array-Object直接量"><span class="toc-text">3.9 使用Array/Object直接量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-10-字符串"><span class="toc-text">3.10 字符串</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-注释"><span class="toc-text">4 注释</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-注释格式"><span class="toc-text">4.1 注释格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-注释书写原则"><span class="toc-text">4.2 注释书写原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-注释标记"><span class="toc-text">4.3 注释标记</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-函数"><span class="toc-text">5 函数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-模块"><span class="toc-text">6 模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-文件"><span class="toc-text">7 文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-HTML，CSS和Javascript"><span class="toc-text">8 HTML，CSS和Javascript</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 飞鹰走码 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://lichangwei.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','dis9MygqwF8uGzyaxyE3','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="https://avatars1.githubusercontent.com/u/718802?v=4&amp;s=460">
+</body>
+
+</html>
