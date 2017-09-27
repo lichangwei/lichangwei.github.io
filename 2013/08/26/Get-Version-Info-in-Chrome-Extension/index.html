@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        【翻译】图片优化工具｜李长伟的博客
+        【Chrome Extension】如何获取Extension的版本号｜李长伟的博客
         
     </title>
 
-    <link rel="canonical" href="http://lichangwei.github.io/2013/09/27/Tools-for-Image-Optimization/">
+    <link rel="canonical" href="http://lichangwei.github.io/2013/08/26/Get-Version-Info-in-Chrome-Extension/">
 
     <!-- Bootstrap Core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -136,12 +136,12 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>【翻译】图片优化工具</h1>
+                    <h1>【Chrome Extension】如何获取Extension的版本号</h1>
                     
                     <span class="meta">
                          作者 李长伟
                         <span>
-                          日期 2013-09-27
+                          日期 2013-08-26
                          </span>
                     </span>
                     <div class="tags text-center">
@@ -153,7 +153,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            【翻译】图片优化工具
+            【Chrome Extension】如何获取Extension的版本号
         </span>
     </div>
 </header>
@@ -164,41 +164,17 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <p><a href="http://addyosmani.com/blog/image-optimization-tools/" target="_blank" rel="external">原文地址</a></p>
-<p>As we saw a few weeks ago, the weight of an average web page is now almost 1.5MB (median ~1MB), with &gt; 50% of this being images. It’s a harsh reminder that many of our pages on the web are still quite fat, a big concern for slower mobile data connections.zipjszip</p>
-<p>BigQuery calculated medians for a HTTP Archive run<br>BigQuery calculated medians for a HTTP Archive run thanks to Ilya Grigorik<br>There have been plenty of well documented cases of page weight being heavy, with the Oakley site Brad Frost mentioned in April clocking in at ~ 25MB worth of images alone. Insanity. Just think of this on mobile: slower data, CPU, GPU..and it’s just ONE page.</p>
-<p>Images are a non-trivial problem to solve because they occasionally need to be high-res, but at the same time small enough to not kill your users mobile data cap. My hope is that srcset will help us improve this long-term. Thankfully Blink, WebKit and soon FF will have it.</p>
-<p>The page cost of using images on the web is however not a new problem but we’re at least moving beyond blaming scripts as the main culprit. As a reminder, here’s a quote from Adam Sontag who suggested “One less JPG” as a solution to our bickering about framework sizes back in 2012:</p>
-<p>Tools</p>
-<p>Where possible, it’s best to try automating image optimization so that it’s a first-class citizen in your build chain. To help, I thought I’d share some of the tools I use for this.</p>
-<p>As a general rule run lossy optimizers first, then lossless. Most developers forget that optimizers optimize a particular file rather than the image. This means that it doesn’t make sense to optimize an image file and then resize/crop or convert it as any changes to the file will completely undo lossless optimizations and make lossy ones a lot less effective.</p>
-<p>Grunt tasks</p>
-<p>Grunt is a fantastic task runner I use daily and there are a number of reliable tasks that can assist with image weight reduction:</p>
-<p>Recompressing JPG/PNG/GIF to save on bytes:<br>OptiPNG/jpegtran/gifsicle: grunt-contrib-imagemin<br>ImageOptim-CLI companion: grunt-imageoptim<br>Convert to WebP: grunt-webp<br>Spriting to reduce HTTP requests:<br>grunt-spritefiles<br>grunt-montage<br>Prescaling (normalization) to avoid excessive image resize/decode work:<br>grunt-imageNormalize<br>grunt-image-resize<br>Responsive image generation/handling:<br>Generate multi-resolution images: grunt-responsive-images<br>Clowncar technique: grunt-clowncar<br>Inline images as data URIs (careful as costly on mobile):<br>grunt-image-embed<br>Of course, not everyone uses Grunt so let’s take a look at some individual tools you can use regardless of your tooling choices.</p>
-<p>Individual tools</p>
-<p>Some of the image compressions tools I recommend checking out include:</p>
-<p>PNG:<br>pngcrush<br>optipng<br>advpng<br>For Windows, see pngout and pngwolf.<br>zopfli-png and Pngnq S9 by Kornel<br>PNG Quantizer<br>pngquant ~ recommended<br>pngnq<br>JPG:<br>jpegmini<br>jpegcrush<br>jpegoptim<br>jpgtran<br>GIF:<br>gifsicle<br>The Yeoman team have a Node.js wrapper called node-gifsicle that makes this available as a local dependency on OS X, Linux and Windows in case you’re interested.We have wrappers for optipng, jpegtran, pngquant too.</p>
-<p>SVG<br>SVGO which has a Grunt task called grunt-svgmin<br>SVGCleaner<br>You may also find that removing EXIF data and unneeded color profile information from images also leads to some gains.</p>
-<p>List of tools? Argh. What should I use?</p>
-<p>Image compression expert Kornel Lesiński was kind enough to reach out with some recommendations for what to use based on research and usage of them. If opting for your own tooling chain:</p>
-<p>For JPEG:</p>
-<p>JPEGMini – lossy (30-50% reduction)<br>JPEGMini sets the quality of your JPEG to the lowest setting the human eyes can tolerate. It’s quite good at doing this. If you’re unable to use it, consider manually adjusting the quality as low as possible. Be careful though as you shouldn’t just save all JPEGs at “80%”. The quality setting is only a weak approximation and quality that you actually achieve can vary from image to image.</p>
-<p>JPEGMini doesn’t really have an open-source/CLI equivalent (ImageOptim-CLI scripts it though) but the closest equivalent is adept-jpg-compressor.</p>
-<p>jpegcrush (same as jpegrescan) is lossless (5-10% reduction), beating jpegoptim in 99% of cases. jpegcrush is a Perl script utilizing jpegtran, so there’s little need to use jpegtran separately.<br>For PNG:</p>
-<p>There are 3 steps involved in PNG compression: first lossy conversion (50-70% reduction), then search for optimal filters (5-10%), and then optimal gzip (5-30%).</p>
-<p>pngquant2 provides a competitive filesize and quality compression option for PNG. Windows users can use Tinypng.org which is pngquant2+optipng (and Kraken.io is the same thing again). Note that most “stable” Linux distributions ship pngquant 1.0. This is quite old and offers significantly poorer quality encodes. pngquant is worth using from version 1.6 up.<br>pngnq-s9, pngnq and Photoshop export (if you don’t have alpha) are also decent options worth trying (they’re okay). I would suggest staying away from RIOT, PHP-libgd and if at all possible ImageMagick and IrfanView as they aren’t great at PNG8 and don’t fully support alpha either.</p>
-<p>cryopng is also worth checking out and (if you have time) pngwolf, which was mentioned earlier. Alternatively Optipng or pngcrush.<br>advpng probably has the best speed/compression ratio and I believe that’s what punypng and Kraken.io use too. If you have time, then Zopflipng is also worth considering. It’s quite slow, but beats everything else 95% of the time. PNGOUT is a close second (and pretty slow too).<br>Online tools</p>
-<p>There are also a number of free online tools you can use for optimization including some of those mentioned already: Kraken.io, punypng, smush.it, tinypng and jpegmini. Also check out Spriteme for combining background images into CSS sprites.</p>
-<p>Desktop tools</p>
-<p>If you’re primarily a designer or don’t have a build process setup, please consider at least running your images through tools like ImageOptim or ImageAlpha as they will shave bytes off your images and keep your pages a little more lean.</p>
-<p>You might also find this write-up on image compression for web developers by Colt McAnlis of interest.</p>
-<p>mod_pagespeed</p>
-<p>For those looking for a more automated server-side solution to image optimization, mod_pagespeed is an Apache module created by some of my colleagues at Google to speed up pages to reduce latency and bandwidth. A list of image optimization techniques it supports is available and includes inlining and recompression.</p>
-<p>Others?</p>
-<p>If there are other tools or Grunt tasks you’ve found helpful for image optimization, please feel free to share them. I know that both I and others are always interested in benchmarking new alternatives.</p>
-<p>Wrapping up</p>
-<p>Mobile users are the biggest victims of image bloat on web pages. They take ages to load on slow connections and when used without any optimization can make for a costly user experience.</p>
-<p>Respect your user’s time, try to keep your pages lean and with some luck we’ll make the web just a little bit faster.</p>
+                <p>Chrome中有两种扩展应用类型，一种是Extension，它通过往页面中添加script脚本来达到其目的。另外一种是Packaged Application，它是基于Chrome的本地应用。具体用法以后再总结。  </p>
+<p>这两种扩展都是需要用户手动安装的，也是可以自动更新的。但是有些时候，我们还是需要去检查Extension的版本。下面我们就看看如何去做？  </p>
+<p>首先，我们知道，在编写Extension时，我们都需要写一个<code>manifest.json</code>文件，它里面包含着关于这个Extension的信息。比如<code>name</code>，<code>description</code>，<code>version</code>等很多信息。那么我就可以通过获取该文件来获取本扩展的版本。  </p>
+<p>那么如何获取<code>manifest.json</code>文件呢？  </p>
+<p>首先我们知道Extension中可以通过<code>XMLHttpRequest</code>来获取资源文件，而<code>manifest.json</code>也可以看做是普通的一个资源文件，那么我们就可以通过<code>XMLHttpRequest</code>获取<code>manifest.json</code>。<br><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> url = <span class="string">'manifest.json'</span>;</div><div class="line">  <span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</div><div class="line">  xhr.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> manifest = <span class="built_in">JSON</span>.parse(xhr.response);</div><div class="line">    <span class="keyword">var</span> version = manifest.version;</div><div class="line">    <span class="comment">// do something here</span></div><div class="line">  &#125;;</div><div class="line">  xhr.open(<span class="string">'GET'</span>, url, <span class="literal">true</span>);</div><div class="line">  xhr.send();</div><div class="line">&#125;)();</div></pre></td></tr></table></figure></p>
+<p>以上方法放在Extension的content script中，报如下错误：<code>GET http://[ip]:[port]/manifest.json 404 (Not Found)</code>。这个很容易理解，因为在Extension中，该脚本是通过script标签插入到DOM中执行的。那么我们如何来获取manifest.json的实际路径呢？答案是<code>chrome.extension.getURL</code>，这个API就是根据扩展中资源文件的相对路径来获取其绝对路径。而在Packaged App中则可以直接使用相对路径。所以在Extension中的做法是：<br><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> url = chrome.extension.getURL(<span class="string">'manifest.json'</span>);</div><div class="line">  <span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</div><div class="line">  xhr.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> manifest = <span class="built_in">JSON</span>.parse(xhr.response);</div><div class="line">    <span class="keyword">var</span> version = manifest.version;</div><div class="line">    <span class="comment">// do something here</span></div><div class="line">  &#125;;</div><div class="line">  xhr.open(<span class="string">'GET'</span>, url, <span class="literal">true</span>);</div><div class="line">  xhr.send();</div><div class="line">&#125;)();</div></pre></td></tr></table></figure></p>
+<p>还要记住，我们需要在<code>manifest.json</code>中声明<code>manifest.json</code>是一种可以访问的资源。<br><figure class="highlight json"><table><tr><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"web_accessible_resources"</span>: [<span class="string">"manifest.json"</span>]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>否则我们会看到如下错误：<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Denying load of chrome-extension://ongmmjdilaoifhglgibpinckpckeclch/manifest.json. Resources must be listed in the web_accessible_resources manifest key in order to be loaded by pages outside the extension.</div></pre></td></tr></table></figure></p>
+<p>以上我们把<code>manifest.json</code>当做一个普通的资源文件来访问。那么<code>manifest.json</code>作为一种很关键很通用（所有Extension中都有该文件）的一个配置文件，那么有没有更简单的方法呢？答案是肯定的。在最新的Chrome（v22+）中提供了<code>chrome.runtime.*</code>API，他们提供了获取background页面，manifest.json文件，以及和其他Extension通信的各种API。代码如下：<br><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">var</span> manifest = chrome.runtime.getManifest();</div><div class="line"><span class="keyword">var</span> version = manifest.version;</div><div class="line"><span class="comment">// do something here</span></div></pre></td></tr></table></figure></p>
+<p>很明显，直接使用<code>chrome.runtime.getManifest</code>来获取Extension的版本号，最为简单，代码少，还是同步的。</p>
+<p>总结：文章总结了获取Extension版本号（在<code>manifest.json</code>中）的两种方法，一种把<code>manifest.json</code>当做普通资源文件访问，一种直接使用<code>chrome.runtime.getManifest</code>访问，后者更为简单易用。</p>
 
                 <hr>
                 
@@ -206,14 +182,14 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2013/09/28/A-Beginner's-Guide-to-HTTP-Cache-Headers/" data-toggle="tooltip" data-placement="top"
-                           title="HTTP缓存头部入门指南">&larr; Previous Post</a>
+                        <a href="/2013/09/01/Ways-to-Cross-Domain/" data-toggle="tooltip" data-placement="top"
+                           title="">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2013/09/25/HTML5-Application-Cache-Basic/" data-toggle="tooltip" data-placement="top"
-                           title="HTML5应用缓存基础知识">Next Post &rarr;</a>
+                        <a href="/2013/08/19/Programmer-Dilemma/" data-toggle="tooltip" data-placement="top"
+                           title="程序员困境">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
