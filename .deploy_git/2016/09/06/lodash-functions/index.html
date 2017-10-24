@@ -1,0 +1,2162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="李长伟的博客">
+    <meta name="keyword" content="">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="飞鹰走码" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        Lodash函数以及常见用法｜李长伟的博客
+        
+    </title>
+
+    <link rel="canonical" href="http://lichangwei.github.io/2016/09/06/lodash-functions/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://owxa05m5s.bkt.clouddn.com/lion-blur-bg.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    飞鹰走码
+                </span>
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>Lodash函数以及常见用法</h1>
+                    
+                    <span class="meta">
+                         作者 李长伟
+                        <span>
+                          日期 2016-09-06
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            Lodash函数以及常见用法
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <h2 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h2><p><a href="https://github.com/lodash/lodash" target="_blank" rel="external">Lodash</a>是一款优秀的JavaScript工具库，里面包含了大量的工具函数。在2015年就成为<a href="https://www.npmjs.com/browse/depended" target="_blank" rel="external">被依赖最多的JavaScript库</a>，写这篇文档是最新版是4.17.4，适用于常见浏览器以及Node.js等。  </p>
+<p>这里给出其<a href="https://lodash.com/docs" target="_blank" rel="external">英文文档</a>和<a href="http://lodash.think2011.net/" target="_blank" rel="external">中文文档</a>的链接。其中中文文档的版本较低，但是区别不大，可以参考帮助理解。</p>
+<h2 id="2-常见用法"><a href="#2-常见用法" class="headerlink" title="2 常见用法"></a>2 常见用法</h2><p>在这部分我们介绍一些Lodash的常见的优雅的用法。主要是引起大家的学习兴趣，有更多优雅用法等待大家去发现。</p>
+<h3 id="get获取一个嵌套很深的字段"><a href="#get获取一个嵌套很深的字段" class="headerlink" title="_.get获取一个嵌套很深的字段"></a><code>_.get</code>获取一个嵌套很深的字段</h3><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="comment">//config初始化为null，需要从服务器端获取权限数据</span></div><div class="line"><span class="keyword">let</span> config = <span class="literal">null</span>;</div><div class="line">ajax.get(url, <span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123; <span class="comment">// data = &#123;basic: &#123;delete: true&#125;&#125;</span></div><div class="line">	config = data;</div><div class="line">&#125;);</div><div class="line"><span class="comment">//使用原生JS获取是否有删除权限</span></div><div class="line"><span class="keyword">let</span> isDeletable = <span class="literal">false</span>;</div><div class="line"><span class="keyword">if</span>(config &amp;&amp; config.basic)&#123;</div><div class="line">	isDeletable = config.basic.delete || <span class="literal">false</span>;</div><div class="line">&#125;</div><div class="line"><span class="comment">//使用lodash获取是否有删除权限</span></div><div class="line"><span class="keyword">let</span> isDeletable = _.get(config, <span class="string">'basic.delete'</span>, <span class="literal">false</span>);</div></pre></td></tr></table></figure>
+<p>对应地，可以通过<code>_.set({}, &#39;a.b.c&#39;, 1)</code>创建一个多级嵌套的对象。</p>
+<h3 id="map获取数组中每个对象的特定字段，并形成一个新的数组"><a href="#map获取数组中每个对象的特定字段，并形成一个新的数组" class="headerlink" title="_.map获取数组中每个对象的特定字段，并形成一个新的数组"></a><code>_.map</code>获取数组中每个对象的特定字段，并形成一个新的数组</h3><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="comment">//使用所有用户的idcard字段创建出一个数组</span></div><div class="line"><span class="keyword">let</span> users = [&#123;<span class="attr">idcard</span>: <span class="string">'20160512'</span>, <span class="attr">name</span>: <span class="string">'张三'</span>&#125;, &#123;<span class="attr">idcard</span>: <span class="string">'20160513'</span>, <span class="attr">name</span>: <span class="string">'李四'</span>&#125;];</div><div class="line"><span class="comment">//使用原生JS</span></div><div class="line"><span class="keyword">let</span> idcards = users.map(<span class="function"><span class="keyword">function</span>(<span class="params">user</span>)</span>&#123;</div><div class="line">	<span class="keyword">return</span> user.idcard;</div><div class="line">&#125;);</div><div class="line"><span class="comment">//使用lodash</span></div><div class="line"><span class="keyword">let</span> idcards = _.map(model, <span class="string">'idcard'</span>);</div></pre></td></tr></table></figure>
+<h3 id="pick取出对象的部分字段形成一个新对象"><a href="#pick取出对象的部分字段形成一个新对象" class="headerlink" title="_.pick取出对象的部分字段形成一个新对象"></a><code>_.pick</code>取出对象的部分字段形成一个新对象</h3><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="comment">//在修改密码表单里，用户输入了如下字段并被封装到一个对象中</span></div><div class="line"><span class="keyword">let</span> form = &#123;</div><div class="line">	<span class="string">'password'</span>: <span class="string">'123456'</span>, <span class="comment">//密码</span></div><div class="line">	<span class="string">'repeatPassword'</span>: <span class="string">'123456'</span>, <span class="comment">//重复密码</span></div><div class="line">	<span class="string">'code'</span>: <span class="string">'5489'</span> <span class="comment">//验证码</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">//这里不直接使用delete删除字段，是因为该from对象与DOM进行了绑定。</span></div><div class="line"><span class="comment">//其中重复密码只用来在客户端校验，不需要发送给服务器</span></div><div class="line"><span class="keyword">let</span> data = &#123;&#125;;</div><div class="line"><span class="keyword">let</span> fileds = [<span class="string">'password'</span>, <span class="string">'code'</span>];</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; fileds.length; i++)&#123;</div><div class="line">	data[fields[i]] = form[fields[i]];</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//使用lodash</span></div><div class="line"><span class="keyword">let</span> data = _.pick(form, <span class="string">'password'</span>, <span class="string">'code'</span>);</div></pre></td></tr></table></figure>
+<p>对应地，还有<code>_.omit</code>方法表示删除部分字段形成一个新对象。</p>
+<h3 id="random获取一个随机值"><a href="#random获取一个随机值" class="headerlink" title="_.random获取一个随机值"></a><code>_.random</code>获取一个随机值</h3><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="comment">//获取[90, 100)之内的一个随机值</span></div><div class="line"><span class="keyword">let</span> min = <span class="number">90</span>;</div><div class="line"><span class="keyword">let</span> max = <span class="number">100</span>;</div><div class="line"><span class="comment">//使用原生JS</span></div><div class="line"><span class="keyword">let</span> random = <span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * (max - min)) + min;</div><div class="line"><span class="comment">//使用lodash</span></div><div class="line"><span class="keyword">let</span> random = _.random(min, max);</div></pre></td></tr></table></figure>
+<p>类似地，<code>_.sample([&#39;a&#39;, &#39;b&#39;, &#39;c&#39;])</code>可以从数组中随机取出一个项目。</p>
+<h3 id="clamp将一个数字修改成区间中的一个值"><a href="#clamp将一个数字修改成区间中的一个值" class="headerlink" title="_.clamp将一个数字修改成区间中的一个值"></a><code>_.clamp</code>将一个数字修改成区间中的一个值</h3><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="comment">//使用原生JS</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">applyRange</span>(<span class="params">number</span>)</span>&#123;</div><div class="line">	number = <span class="built_in">Math</span>.max(number, <span class="keyword">this</span>.props.min);</div><div class="line">	number = <span class="built_in">Math</span>.min(number, <span class="keyword">this</span>.props.max);</div><div class="line">	<span class="keyword">return</span> number;</div><div class="line">&#125;</div><div class="line"><span class="comment">//使用lodash</span></div><div class="line"><span class="keyword">let</span> number = _.clamp(number, min, max);</div></pre></td></tr></table></figure>
+<h3 id="once确保一个函数只会执行一次"><a href="#once确保一个函数只会执行一次" class="headerlink" title="_.once确保一个函数只会执行一次"></a><code>_.once</code>确保一个函数只会执行一次</h3><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="comment">//使用原生JS</span></div><div class="line"><span class="keyword">let</span> inited = <span class="literal">false</span>;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">init</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="keyword">if</span>(inited) <span class="keyword">return</span>;</div><div class="line">	<span class="comment">// init code</span></div><div class="line">&#125;</div><div class="line"><span class="comment">//使用lodash</span></div><div class="line"><span class="keyword">let</span> init = _.once(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">	<span class="comment">// init code</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="chain链式操作"><a href="#chain链式操作" class="headerlink" title="_.chain链式操作"></a><code>_.chain</code>链式操作</h3><p>链接调用让代码更加整洁；避免了中间变量，避免了错误引用，让代码质量更有保证；<code>_.chain</code>还提供了延迟计算特性，在显式或隐式调用<code>value()</code>方法之前是不进行任何计算的，通过合并大大降低迭代次数。<br>下面是<code>lodash</code>的官方文档中的一个例子。<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">var</span> users = [</div><div class="line">  &#123; <span class="string">'user'</span>: <span class="string">'barney'</span>,  <span class="string">'age'</span>: <span class="number">36</span> &#125;,</div><div class="line">  &#123; <span class="string">'user'</span>: <span class="string">'fred'</span>,    <span class="string">'age'</span>: <span class="number">40</span> &#125;,</div><div class="line">  &#123; <span class="string">'user'</span>: <span class="string">'pebbles'</span>, <span class="string">'age'</span>: <span class="number">1</span> &#125;</div><div class="line">];</div><div class="line"></div><div class="line"><span class="keyword">var</span> youngest = _.chain(users)</div><div class="line">  .sortBy(<span class="string">'age'</span>)</div><div class="line">  .map(<span class="function"><span class="keyword">function</span>(<span class="params">chr</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> chr.user + <span class="string">' is '</span> + chr.age;</div><div class="line">  &#125;)</div><div class="line">  .first()</div><div class="line">  .value();</div><div class="line"><span class="comment">// → 'pebbles is 1'</span></div></pre></td></tr></table></figure></p>
+<h2 id="3-模块"><a href="#3-模块" class="headerlink" title="3 模块"></a>3 模块</h2><p>Lodash的工具函数很多，可以分为以下几类：数组（Array），集合（Collection），函数（Function），Lang（Lang），数学（Math），数字（Number），对象（Object），字符串（String），未分类工具函数（Util）。下面将会按类别介绍常见工具函数。</p>
+<h2 id="4-数组"><a href="#4-数组" class="headerlink" title="4 数组"></a>4 数组</h2><h3 id="获取子数组"><a href="#获取子数组" class="headerlink" title="获取子数组"></a>获取子数组</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#slice" target="_blank" rel="external">slice</a></td>
+<td>获取元素第m-n(不包含)个元素</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#tail" target="_blank" rel="external">tail</a></td>
+<td>获取出第一个元素之外的其他元素</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#initial" target="_blank" rel="external">initial</a></td>
+<td>获取出最后一个元素之外的其他元素</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#take" target="_blank" rel="external">take</a></td>
+<td>从左侧开始获取任意数量的元素</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#takeRight" target="_blank" rel="external">takeRight</a></td>
+<td>从右侧开始获取任意数量的元素</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#takeWhile" target="_blank" rel="external">takeWhile</a></td>
+<td>从左侧开始获取任意数量的元素，直到断言返回假值</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#takeRightWhile" target="_blank" rel="external">takeRightWhile</a></td>
+<td>从右侧开始获取任意数量的元素，直到断言返回假值</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#drop" target="_blank" rel="external">drop</a></td>
+<td>丢掉前面几个元素，得到剩余元素</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#dropWhile" target="_blank" rel="external">dropWhile</a></td>
+<td>丢掉前面几个元素知道迭代器返回假值，得到剩余元素</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#dropRight" target="_blank" rel="external">dropRight</a></td>
+<td>丢掉后面几个元素，得到剩余元素</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#dropRightWhile" target="_blank" rel="external">dropRightWhile</a></td>
+<td>丢掉后面几个元素知道迭代器返回假值，得到剩余元素</td>
+</tr>
+</tbody>
+</table>
+<h3 id="数组常见操作"><a href="#数组常见操作" class="headerlink" title="数组常见操作"></a>数组常见操作</h3><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>不修改原数组</th>
+<th>修改原数组</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>移除</td>
+<td><a href="https://lodash.com/docs/#without" target="_blank" rel="external">without</a></td>
+<td><a href="https://lodash.com/docs/#pull" target="_blank" rel="external">pull</a></td>
+</tr>
+<tr>
+<td>相减</td>
+<td><a href="https://lodash.com/docs/#difference" target="_blank" rel="external">difference</a></td>
+<td><a href="https://lodash.com/docs/#pullAll" target="_blank" rel="external">pullAll</a></td>
+</tr>
+<tr>
+<td>相减</td>
+<td><a href="https://lodash.com/docs/#differenceBy" target="_blank" rel="external">differenceBy</a></td>
+<td><a href="https://lodash.com/docs/#pullAllBy" target="_blank" rel="external">pullAllBy</a></td>
+</tr>
+<tr>
+<td>相减</td>
+<td><a href="https://lodash.com/docs/#differenceWith" target="_blank" rel="external">differenceWith</a></td>
+<td><a href="https://lodash.com/docs/#pullAllWith" target="_blank" rel="external">pullAllWith</a></td>
+</tr>
+<tr>
+<td>反转</td>
+<td></td>
+<td><a href="https://lodash.com/docs/#reverse" target="_blank" rel="external">reverse</a></td>
+</tr>
+<tr>
+<td>裁剪</td>
+<td><a href="https://lodash.com/docs/#at" target="_blank" rel="external">at</a></td>
+<td><a href="https://lodash.com/docs/#pullAt" target="_blank" rel="external">pullAt</a></td>
+</tr>
+<tr>
+<td>过滤</td>
+<td><a href="https://lodash.com/docs/#filter" target="_blank" rel="external">filter</a></td>
+<td><a href="https://lodash.com/docs/#remove" target="_blank" rel="external">remove</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="数组常见操作变种函数-by-with"><a href="#数组常见操作变种函数-by-with" class="headerlink" title="数组常见操作变种函数 by, with"></a>数组常见操作变种函数 by, with</h3><p>有些函数还可以稍微变化一下，接受不同的参数，提供更多灵活性。  </p>
+<table>
+<thead>
+<tr>
+<th>作用</th>
+<th>函数名</th>
+<th>by</th>
+<th>with</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>相减</td>
+<td><a href="https://lodash.com/docs/#difference" target="_blank" rel="external">difference</a></td>
+<td><a href="https://lodash.com/docs/#differenceBy" target="_blank" rel="external">differenceBy</a></td>
+<td><a href="https://lodash.com/docs/#differenceWith" target="_blank" rel="external">differenceWith</a></td>
+</tr>
+<tr>
+<td>交集</td>
+<td><a href="https://lodash.com/docs/#intersection" target="_blank" rel="external">intersection</a></td>
+<td><a href="https://lodash.com/docs/#intersectionBy" target="_blank" rel="external">intersectionBy</a></td>
+<td><a href="https://lodash.com/docs/#intersectionWith" target="_blank" rel="external">intersectionWith</a></td>
+</tr>
+<tr>
+<td>并集</td>
+<td><a href="https://lodash.com/docs/#union" target="_blank" rel="external">union</a></td>
+<td><a href="https://lodash.com/docs/#unionBy" target="_blank" rel="external">unionBy</a></td>
+<td><a href="https://lodash.com/docs/#unionWith" target="_blank" rel="external">unionWith</a></td>
+</tr>
+<tr>
+<td>异或</td>
+<td><a href="https://lodash.com/docs/#xor" target="_blank" rel="external">xor</a></td>
+<td><a href="https://lodash.com/docs/#xorBy" target="_blank" rel="external">xorBy</a></td>
+<td><a href="https://lodash.com/docs/#xorWith" target="_blank" rel="external">xorWith</a></td>
+</tr>
+<tr>
+<td>相减</td>
+<td><a href="https://lodash.com/docs/#pullAll" target="_blank" rel="external">pullAll</a></td>
+<td><a href="https://lodash.com/docs/#pullAllBy" target="_blank" rel="external">pullAllBy</a></td>
+<td><a href="https://lodash.com/docs/#pullAllWith" target="_blank" rel="external">pullAllWith</a>，跟<a href="https://lodash.com/docs/#difference" target="_blank" rel="external">difference</a>不同的是，<a href="https://lodash.com/docs/#pullAll" target="_blank" rel="external">pullAll</a>修改原数组</td>
+</tr>
+<tr>
+<td>去重</td>
+<td><a href="https://lodash.com/docs/#uniq" target="_blank" rel="external">uniq</a></td>
+<td><a href="https://lodash.com/docs/#uniqBy" target="_blank" rel="external">uniqBy</a></td>
+<td><a href="https://lodash.com/docs/#uniqWith" target="_blank" rel="external">uniqWith</a></td>
+</tr>
+<tr>
+<td>去重</td>
+<td><a href="https://lodash.com/docs/#sortedUniq" target="_blank" rel="external">sortedUniq</a></td>
+<td><a href="https://lodash.com/docs/#sortedUniqBy" target="_blank" rel="external">sortedUniqBy</a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="获取数组某个位置上的元素"><a href="#获取数组某个位置上的元素" class="headerlink" title="获取数组某个位置上的元素"></a>获取数组某个位置上的元素</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>主要参数-返回值</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#head" target="_blank" rel="external">head</a></td>
+<td>数组=&gt;元素</td>
+<td>返回数组的第一个元素，和<a href="https://lodash.com/docs/#first" target="_blank" rel="external">first</a>相同</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#last" target="_blank" rel="external">last</a></td>
+<td>数组=&gt;元素</td>
+<td>返回数组的最后一个元素，和<a href="https://lodash.com/docs/#head" target="_blank" rel="external">head</a>相反</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#nth" target="_blank" rel="external">nth</a></td>
+<td>数组=&gt;元素</td>
+<td>返回数组中某个位置上的元素</td>
+</tr>
+</tbody>
+</table>
+<h3 id="检测元素在数组中的索引"><a href="#检测元素在数组中的索引" class="headerlink" title="检测元素在数组中的索引"></a>检测元素在数组中的索引</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#indexOf" target="_blank" rel="external">indexOf</a></td>
+<td>获取元素在数组中的索引</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#sortedIndexOf" target="_blank" rel="external">sortedIndexOf</a></td>
+<td>和<a href="https://lodash.com/docs/#indexOf" target="_blank" rel="external">indexOf</a>功能一致，只是通过二分搜索方法</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#lastIndexOf" target="_blank" rel="external">lastIndexOf</a></td>
+<td>获取元素在数组中的索引，最后一次出现</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#sortedLastIndexOf" target="_blank" rel="external">sortedLastIndexOf</a></td>
+<td>和<a href="https://lodash.com/docs/#lastIndexOf" target="_blank" rel="external">lastIndexOf</a>功能一致，只是通过二分搜索方法</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#findIndex" target="_blank" rel="external">findIndex</a></td>
+<td>寻找元素位置</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#findLastIndex" target="_blank" rel="external">findLastIndex</a></td>
+<td>寻找元素位置，从后往前</td>
+</tr>
+</tbody>
+</table>
+<h3 id="检测元素在插在有序数组的什么位置"><a href="#检测元素在插在有序数组的什么位置" class="headerlink" title="检测元素在插在有序数组的什么位置"></a>检测元素在插在有序数组的什么位置</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#sortedIndex" target="_blank" rel="external">sortedIndex</a></td>
+<td>通过二分搜索判断元素应该插在数组的哪个位置</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#sortedIndexBy" target="_blank" rel="external">sortedIndexBy</a></td>
+<td>同上，可以额外提供一个迭代器函数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#sortedLastIndex" target="_blank" rel="external">sortedLastIndex</a></td>
+<td>和<a href="https://lodash.com/docs/#sortedIndex" target="_blank" rel="external">sortedIndex</a>类似，但是从右边开始</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#sortedLastIndexBy" target="_blank" rel="external">sortedLastIndexBy</a></td>
+<td>同上，可以额外提供一个迭代器函数</td>
+</tr>
+</tbody>
+</table>
+<h3 id="将数组拍平"><a href="#将数组拍平" class="headerlink" title="将数组拍平"></a>将数组拍平</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>主要参数-返回值</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#" target="_blank" rel="external">flatten</a></td>
+<td>高维数组=&gt;低维数组</td>
+<td>将数组拍平</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#flattenDeep" target="_blank" rel="external">flattenDeep</a></td>
+<td>高维数组=&gt;数组</td>
+<td>将数组拍平</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#flattenDepth" target="_blank" rel="external">flattenDepth</a></td>
+<td>高维数组=&gt;低维数组</td>
+<td>将数组拍平</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Zip"><a href="#Zip" class="headerlink" title="Zip"></a>Zip</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>主要参数-返回值</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#zip" target="_blank" rel="external">zip</a></td>
+<td>多个数组=&gt;二维数组</td>
+<td>可以理解为二维数组的行列互换</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#zipWith" target="_blank" rel="external">zipWith</a></td>
+<td>多个数组=&gt;数组</td>
+<td>同上，但是可以自由处理行列互换后的数组中的每个数组元素</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#zipObject" target="_blank" rel="external">zipObject</a></td>
+<td>两个数组=&gt;对象</td>
+<td>把keys和values数组组成一个新对象</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#zipObjectDeep" target="_blank" rel="external">zipObjectDeep</a></td>
+<td>两个数组=&gt;对象</td>
+<td>同上，递归地处理属性名</td>
+</tr>
+</tbody>
+</table>
+<h3 id="未分类函数"><a href="#未分类函数" class="headerlink" title="未分类函数"></a>未分类函数</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>主要参数-返回值</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#chunk" target="_blank" rel="external">chunk</a></td>
+<td>数组=&gt;二维数组</td>
+<td>分段形成二维数组</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#compact" target="_blank" rel="external">compact</a></td>
+<td>数组=&gt;数组</td>
+<td>移除假值</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#concat" target="_blank" rel="external">concat</a></td>
+<td>多个数组=&gt;数组</td>
+<td>连接多个数组形成一个数组</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#fill" target="_blank" rel="external">fill</a></td>
+<td>数组=&gt;数组</td>
+<td>填充数组</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#fromPairs" target="_blank" rel="external">fromPairs</a></td>
+<td>二维数组=&gt;对象</td>
+<td>将键值数组变成对象。和<a href="https://lodash.com/docs/#toPairs" target="_blank" rel="external">toPairs</a>相反</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#join" target="_blank" rel="external">join</a></td>
+<td>数组=&gt;字符串</td>
+<td>拼接数组元素成一个字符串</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-集合"><a href="#5-集合" class="headerlink" title="5 集合"></a>5 集合</h2><p>为什么区分集合函数和数组函数？<br>集合函数不单单适用于数组，还适用于字符串，对象，类数组对象（比如Arguments，NodeList等）。字符串是字符的集合，对象是属性值的集合。类数组对象是通过“<a href="https://zh.wikipedia.org/wiki/%E9%B8%AD%E5%AD%90%E7%B1%BB%E5%9E%8B" target="_blank" rel="external">鸭子类型</a>”工作的，所以如果你传入一个拥有<code>length</code>字段并且值为数字的对象，这个对象会被当做一个数组处理。具体请参考<a href="http://underscorejs.org/#collections" target="_blank" rel="external">Underscore.js</a>文档。</p>
+<p>范例：<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">printKeyVal</span>(<span class="params">val, key</span>)</span>&#123;</div><div class="line">	<span class="built_in">console</span>.log(key, val);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//普通对象</span></div><div class="line">_.each(&#123;<span class="string">'a'</span>: <span class="number">1</span>&#125;, printKeyVal);</div><div class="line"><span class="comment">//打印结果</span></div><div class="line"><span class="comment">// a 1</span></div><div class="line"></div><div class="line"><span class="comment">//拥有值为数字的length字段</span></div><div class="line">_.each(&#123;<span class="string">'a'</span>: <span class="number">1</span>, <span class="string">'length'</span>: <span class="number">2</span>&#125;, printKeyVal);</div><div class="line"><span class="comment">//打印结果</span></div><div class="line"><span class="comment">// 0 undefined</span></div><div class="line"><span class="comment">// 1 undefined</span></div></pre></td></tr></table></figure></p>
+<p>下面将分类介绍集合相关函数。</p>
+<h3 id="遍历"><a href="#遍历" class="headerlink" title="遍历"></a>遍历</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#each" target="_blank" rel="external">each</a></td>
+<td>同<a href="https://lodash.com/docs/#forEach" target="_blank" rel="external">forEach</a></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#eachRight" target="_blank" rel="external">eachRight</a></td>
+<td>同<a href="https://lodash.com/docs/#forEachRight" target="_blank" rel="external">forEachRight</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#" target="_blank" rel="external">sortBy</a></td>
+<td>排序</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#orderBy" target="_blank" rel="external">orderBy</a></td>
+<td>同<a href="https://lodash.com/docs/#" target="_blank" rel="external">sortBy</a>，还可以指定正序倒序</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#shuffle" target="_blank" rel="external">shuffle</a></td>
+<td>返回一个打乱顺序的新数组</td>
+</tr>
+</tbody>
+</table>
+<h3 id="过滤"><a href="#过滤" class="headerlink" title="过滤"></a>过滤</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#filter" target="_blank" rel="external">filter</a></td>
+<td>创建一个新数组，包含了所有让断言为真的元素</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#reject" target="_blank" rel="external">reject</a></td>
+<td>创建一个新数组，包含了所有让断言为假的元素</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#partition" target="_blank" rel="external">partition</a></td>
+<td>根据断言真假将一个集合分成两个集合</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Map之后再flatten"><a href="#Map之后再flatten" class="headerlink" title="Map之后再flatten"></a>Map之后再flatten</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#flatMap" target="_blank" rel="external">flatMap</a></td>
+<td><a href="https://lodash.com/docs/#map" target="_blank" rel="external">map</a>之后再<a href="https://lodash.com/docs/#flatten" target="_blank" rel="external">flatten</a></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#flatMapDeep" target="_blank" rel="external">flatMapDeep</a></td>
+<td><a href="https://lodash.com/docs/#map" target="_blank" rel="external">map</a>之后再<a href="https://lodash.com/docs/#flattenDeep" target="_blank" rel="external">flattenDeep</a></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#flatMapDepth" target="_blank" rel="external">flatMapDepth</a></td>
+<td><a href="https://lodash.com/docs/#map" target="_blank" rel="external">map</a>之后再<a href="https://lodash.com/docs/#flattenDepth" target="_blank" rel="external">flattenDepth</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="寻找元素"><a href="#寻找元素" class="headerlink" title="寻找元素"></a>寻找元素</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#find" target="_blank" rel="external">find</a></td>
+<td>找到第一个让断言为真的元素</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#findLast" target="_blank" rel="external">findLast</a></td>
+<td>同上，逆序</td>
+</tr>
+</tbody>
+</table>
+<h3 id="随机取值"><a href="#随机取值" class="headerlink" title="随机取值"></a>随机取值</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#sample" target="_blank" rel="external">sample</a></td>
+<td>从集合中随机选出一个元素</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#sampleSize" target="_blank" rel="external">sampleSize</a></td>
+<td>从集合中随机选出n个元素</td>
+</tr>
+</tbody>
+</table>
+<h3 id="迭代"><a href="#迭代" class="headerlink" title="迭代"></a>迭代</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#reduce" target="_blank" rel="external">reduce</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#reduceRight" target="_blank" rel="external">reduceRight</a></td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h3 id="分组计数"><a href="#分组计数" class="headerlink" title="分组计数"></a>分组计数</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#countBy" target="_blank" rel="external">countBy</a></td>
+<td>返回一个对象，属性名是迭代器的返回值，属性值该返回值出现的次数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#groupBy" target="_blank" rel="external">groupBy</a></td>
+<td>返回一个对象，属性名是迭代器的返回值，属性值是一个包含了相应元素的数组</td>
+</tr>
+</tbody>
+</table>
+<h3 id="未分类"><a href="#未分类" class="headerlink" title="未分类"></a>未分类</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#keyBy" target="_blank" rel="external">keyBy</a></td>
+<td>返回一个对象，属性名是迭代器的返回值，属性值是元素本身</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#" target="_blank" rel="external">some</a></td>
+<td>对于集合中的每个元素，是否至少其一返回真值</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#every" target="_blank" rel="external">every</a></td>
+<td>对于集合中的每个元素，是否都返回真值</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#includes" target="_blank" rel="external">includes</a></td>
+<td>判断元素是不是在数组中，判断某个值是不是某个对象的属性值，判断一个字符串是不是包含在另一个字符串中</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#map" target="_blank" rel="external">map</a></td>
+<td>对集合的数组</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#invokeMap" target="_blank" rel="external">invokeMap</a></td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h2 id="6-对象"><a href="#6-对象" class="headerlink" title="6 对象"></a>6 对象</h2><h3 id="仅需要部分字段"><a href="#仅需要部分字段" class="headerlink" title="仅需要部分字段"></a>仅需要部分字段</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#omit" target="_blank" rel="external">omit</a></td>
+<td>通过忽略某些字段创建一个新对象</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#omitBy" target="_blank" rel="external">omitBy</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#pick" target="_blank" rel="external">pick</a></td>
+<td>通过指定某些字段创建一个新对象</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#pickBy" target="_blank" rel="external">pickBy</a></td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h3 id="合并对象"><a href="#合并对象" class="headerlink" title="合并对象"></a>合并对象</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#assign" target="_blank" rel="external">assign</a></td>
+<td>合并对象</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#assignWith" target="_blank" rel="external">assignWith</a></td>
+<td>有条件地合并对象</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#extend" target="_blank" rel="external">extend</a></td>
+<td>合并对象，包括原型链上的属性</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#extendWith" target="_blank" rel="external">extendWith</a></td>
+<td>有条件地合并对象，包括原型链上的属性</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#assignIn" target="_blank" rel="external">assignIn</a></td>
+<td>别名<code>extend</code></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#assignInWith" target="_blank" rel="external">assignInWith</a></td>
+<td>别名<code>extendWith</code></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#defaults" target="_blank" rel="external">defaults</a></td>
+<td>合并对象，将后面参数的属性付给第一个参数，如果第一个参数没有相应属性的话</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#defaultsDeep" target="_blank" rel="external">defaultsDeep</a></td>
+<td>递归地合并对象，将后面参数的属性付给第一个参数，如果第一个参数没有相应属性的话</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#merge" target="_blank" rel="external">merge</a></td>
+<td>递归地合并对象，将后面参数的属性付给第一个参数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#mergeWith" target="_blank" rel="external">mergeWith</a></td>
+<td>同<a href="https://lodash.com/docs/#merge" target="_blank" rel="external">merge</a>，额外接受一个customizer参数</td>
+</tr>
+</tbody>
+</table>
+<h3 id="键值列表"><a href="#键值列表" class="headerlink" title="键值列表"></a>键值列表</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#keys" target="_blank" rel="external">keys</a></td>
+<td>创建一个数组，包含对象中所有的属性</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#keysIn" target="_blank" rel="external">keysIn</a></td>
+<td>创建一个数组，包含对象中所有的属性（包含原型链上的）</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#functions" target="_blank" rel="external">functions</a></td>
+<td>创建一个数组，包含对象中所有值为函数的属性</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#functionsIn" target="_blank" rel="external">functionsIn</a></td>
+<td>创建一个数组，包含对象中所有值为函数的属性（包含原型链上的）</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#values" target="_blank" rel="external">values</a></td>
+<td>创建一个数组，包含对象中所有的属性值</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#valuesIn" target="_blank" rel="external">valuesIn</a></td>
+<td>创建一个数组，包含对象中所有的属性值（包含原型链上的）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="赋值取值"><a href="#赋值取值" class="headerlink" title="赋值取值"></a>赋值取值</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#at" target="_blank" rel="external">at</a></td>
+<td>获取对象的一组属性路径的值，肯定不会报错</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#get" target="_blank" rel="external">get</a></td>
+<td>获取对象的某个属性路径的值，肯定不会报错</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#result" target="_blank" rel="external">result</a></td>
+<td>同<a href="https://lodash.com/docs/#get" target="_blank" rel="external">get</a>，但是如果属性值是函数的话，自动执行该函数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#set" target="_blank" rel="external">set</a></td>
+<td>设置对象的某个属性路径的值</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#setWith" target="_blank" rel="external">setWith</a></td>
+<td>设置对象的某个属性路径的值，遇到不存在的中间对象，使用数组呢？还是使用对象呢？等等</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#update" target="_blank" rel="external">update</a></td>
+<td>同<a href="https://lodash.com/docs/#set" target="_blank" rel="external">set</a>，只是接受一个函数作为参数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#updateWith" target="_blank" rel="external">updateWith</a></td>
+<td>同<a href="https://lodash.com/docs/#setWith" target="_blank" rel="external">setWith</a>，只是接受一个函数作为参数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#unset" target="_blank" rel="external">unset</a></td>
+<td>删除对象的某个属性路径</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#invoke" target="_blank" rel="external">invoke</a></td>
+<td>调用对象中某个属性路径上的函数，肯定不会报错</td>
+</tr>
+</tbody>
+</table>
+<h3 id="键值数组"><a href="#键值数组" class="headerlink" title="键值数组"></a>键值数组</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#entries" target="_blank" rel="external">entries</a></td>
+<td>{‘a’:1}=&gt;[[‘a’,1]]。别名<code>toPairs</code></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#entriesIn" target="_blank" rel="external">entriesIn</a></td>
+<td>同上，但是包含原型链上的属性。别名<code>toPairsIn</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="键值变换"><a href="#键值变换" class="headerlink" title="键值变换"></a>键值变换</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#mapKeys" target="_blank" rel="external">mapKeys</a></td>
+<td>对对象中所有属性名做某种处理之后形成一个新对象</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#mapValues" target="_blank" rel="external">mapValues</a></td>
+<td>对对象中所有属性值做某种处理之后形成一个新对象</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#invert" target="_blank" rel="external">invert</a></td>
+<td>将对象中的属性名和属性值互换转成一个新对象</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#invertBy" target="_blank" rel="external">invertBy</a></td>
+<td>同<a href="https://lodash.com/docs/#invert" target="_blank" rel="external">invert</a>，但是转换以后的属性值是原属性值组成的数组</td>
+</tr>
+</tbody>
+</table>
+<h3 id="键值遍历"><a href="#键值遍历" class="headerlink" title="键值遍历"></a>键值遍历</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#forIn" target="_blank" rel="external">forIn</a></td>
+<td>遍历对象上的所有属性，包含原型链上的。</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#forInRight" target="_blank" rel="external">forInRight</a></td>
+<td>遍历对象上的所有属性，包含原型链上的。</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#forOwn" target="_blank" rel="external">forOwn</a></td>
+<td>遍历对象上的所有属性，不包含原型链上的。</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#forOwnRight" target="_blank" rel="external">forOwnRight</a></td>
+<td>遍历对象上的所有属性，不包含原型链上的。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="寻找属性"><a href="#寻找属性" class="headerlink" title="寻找属性"></a>寻找属性</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#findKey" target="_blank" rel="external">findKey</a></td>
+<td>同<a href="https://lodash.com/docs/#find" target="_blank" rel="external">find</a>类似，但是匹配的是对象的属性值，返回的是对象的属性名</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#findLastKey" target="_blank" rel="external">findLastKey</a></td>
+<td>同<a href="https://lodash.com/docs/#findKey" target="_blank" rel="external">findKey</a>类似，但是匹配的是对象的属性值，返回的是对象的属性名</td>
+</tr>
+</tbody>
+</table>
+<h3 id="判断属性是否存在"><a href="#判断属性是否存在" class="headerlink" title="判断属性是否存在"></a>判断属性是否存在</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#has" target="_blank" rel="external">has</a></td>
+<td>判断对象上是否拥有某个属性，不包含原型链上的</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#hasIn" target="_blank" rel="external">hasIn</a></td>
+<td>判断对象上是否拥有某个属性，包含原型链上的</td>
+</tr>
+</tbody>
+</table>
+<h3 id="转换对象或数组"><a href="#转换对象或数组" class="headerlink" title="转换对象或数组"></a>转换对象或数组</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#transform" target="_blank" rel="external">transform</a></td>
+<td>同<a href="https://lodash.com/docs/#reduce" target="_blank" rel="external">reduce</a>，但是其迭代器函数返回的是布尔值，如果返回false，则停止迭代</td>
+</tr>
+</tbody>
+</table>
+<h3 id="创建新对象"><a href="#创建新对象" class="headerlink" title="创建新对象"></a>创建新对象</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#create" target="_blank" rel="external">create</a></td>
+<td>创建一个对象，并指定其原型和属性</td>
+</tr>
+</tbody>
+</table>
+<h2 id="7-函数"><a href="#7-函数" class="headerlink" title="7. 函数"></a>7. 函数</h2><h3 id="修改参数"><a href="#修改参数" class="headerlink" title="修改参数"></a>修改参数</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#ary" target="_blank" rel="external">ary</a></td>
+<td>创建一个包裹函数，只将前n个参数传递给原函数。</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#unary" target="_blank" rel="external">unary</a></td>
+<td>创建一个包裹函数，只将第一个参数传递给原函数。</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#flip" target="_blank" rel="external">flip</a></td>
+<td>创建一个包裹函数，将参数逆序之后传递给原函数。</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#rearg" target="_blank" rel="external">rearg</a></td>
+<td>创建一个包裹函数，调整参数顺序之后在传递给原函数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#rest" target="_blank" rel="external">rest</a></td>
+<td>创建一个包裹函数，将参数合成数组之后传递给原函数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#spread" target="_blank" rel="external">spread</a></td>
+<td>创建一个包裹函数，将数组参数展开之后传给原函数，跟<a href="https://lodash.com/docs/#rest" target="_blank" rel="external">rest</a>相反</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#overArgs" target="_blank" rel="external">overArgs</a></td>
+<td>创建一个包裹函数，将参数做处理之后再传递给原函数。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="修改结果"><a href="#修改结果" class="headerlink" title="修改结果"></a>修改结果</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#negate" target="_blank" rel="external">negate</a></td>
+<td>创建一个包裹函数，返回原函数结果的非。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="缓存结果"><a href="#缓存结果" class="headerlink" title="缓存结果"></a>缓存结果</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#memoize" target="_blank" rel="external">memoize</a></td>
+<td>创建一个包裹函数，会缓存计算结果</td>
+</tr>
+</tbody>
+</table>
+<h3 id="降频调用"><a href="#降频调用" class="headerlink" title="降频调用"></a>降频调用</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#debounce" target="_blank" rel="external">debounce</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#throttle" target="_blank" rel="external">throttle</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="延迟调用"><a href="#延迟调用" class="headerlink" title="延迟调用"></a>延迟调用</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#defer" target="_blank" rel="external">defer</a></td>
+<td>类似<code>setTimeout(fn,0)</code>，可以指定参数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#delay" target="_blank" rel="external">delay</a></td>
+<td>类似<code>setTimeout(fn,x)</code>，可以指定参数</td>
+</tr>
+</tbody>
+</table>
+<h3 id="延迟调用-1"><a href="#延迟调用-1" class="headerlink" title="延迟调用"></a>延迟调用</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#once" target="_blank" rel="external">once</a></td>
+<td>创建一个包裹函数，确保原函数只被执行一次。</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#before" target="_blank" rel="external">before</a></td>
+<td>创建一个包裹函数，确保原函数只被执行n次。</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#after" target="_blank" rel="external">after</a></td>
+<td>创建一个包裹函数，调用包裹函数时只有n次之后才会调用目标函数</td>
+</tr>
+</tbody>
+</table>
+<h3 id="固定参数"><a href="#固定参数" class="headerlink" title="固定参数"></a>固定参数</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#wrap" target="_blank" rel="external">wrap</a></td>
+<td>创建一个包裹函数，固定原函数的第一个参数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#partial" target="_blank" rel="external">partial</a></td>
+<td>创建一个包裹函数，固定原函数若干个参数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#partialRight" target="_blank" rel="external">partialRight</a></td>
+<td>创建一个包裹函数，固定原函数若干个参数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#bind" target="_blank" rel="external">bind</a></td>
+<td>创建一个包裹函数，固定原函数若干个参数，并指定this对象</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#bindKey" target="_blank" rel="external">bindKey</a></td>
+<td>和<a href="https://lodash.com/docs/#bind" target="_blank" rel="external">bind</a>功能类似，但是能够处理尚未创建或被重写的函数，有点事件代理的感觉。</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#curry" target="_blank" rel="external">curry</a></td>
+<td>创建一个包裹函数，可以传入任意数量的参数，如果参数不完整，则返回一个接受余下参数的新函数，否则，调用原函数获得计算结果。</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#curryRight" target="_blank" rel="external">curryRight</a></td>
+<td>同上，逆序</td>
+</tr>
+</tbody>
+</table>
+<h2 id="8-字符串"><a href="#8-字符串" class="headerlink" title="8. 字符串"></a>8. 字符串</h2><h3 id="书写格式"><a href="#书写格式" class="headerlink" title="书写格式"></a>书写格式</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#startCase" target="_blank" rel="external">startCase</a></td>
+<td>每个单词首字母大写，多用于标题</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#camelCase" target="_blank" rel="external">camelCase</a></td>
+<td>小驼峰</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#kebabCase" target="_blank" rel="external">kebabCase</a></td>
+<td>小写连字符</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#snakeCase" target="_blank" rel="external">snakeCase</a></td>
+<td>小写下划线</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#upperCase" target="_blank" rel="external">upperCase</a></td>
+<td>大写加空格</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#lowerCase" target="_blank" rel="external">lowerCase</a></td>
+<td>小写加空格</td>
+</tr>
+</tbody>
+</table>
+<h3 id="大写小写"><a href="#大写小写" class="headerlink" title="大写小写"></a>大写小写</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#capitalize" target="_blank" rel="external">capitalize</a></td>
+<td>首字母大写，其余小写</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#upperFirst" target="_blank" rel="external">upperFirst</a></td>
+<td>首字母大写，其余不变</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#lowerFirst" target="_blank" rel="external">lowerFirst</a></td>
+<td>首字母小写，其余不变</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#lowerFirst" target="_blank" rel="external">toUpper</a></td>
+<td>大写</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#toLower" target="_blank" rel="external">toLower</a></td>
+<td>小写</td>
+</tr>
+</tbody>
+</table>
+<h3 id="打头结尾"><a href="#打头结尾" class="headerlink" title="打头结尾"></a>打头结尾</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#endsWith" target="_blank" rel="external">endsWith</a></td>
+<td>是不是以特定字符串结尾</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#startsWith" target="_blank" rel="external">startsWith</a></td>
+<td>是不是以特定字符串打头</td>
+</tr>
+</tbody>
+</table>
+<h3 id="转义"><a href="#转义" class="headerlink" title="转义"></a>转义</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#escape" target="_blank" rel="external">escape</a></td>
+<td>转义 &amp;&lt;&gt;”‘，与<a href="https://lodash.com/docs/#unescape" target="_blank" rel="external">unescape</a>相反</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#escapeRegExp" target="_blank" rel="external">escapeRegExp</a></td>
+<td>转义正则表达式中的特殊字符：^$.*+?()[]{}\</td>
+</tr>
+</tbody>
+</table>
+<h3 id="补全抹掉"><a href="#补全抹掉" class="headerlink" title="补全抹掉"></a>补全抹掉</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#pad" target="_blank" rel="external">pad</a></td>
+<td>使用某个字符串将特定字符串扩充至指定长度，类似地还有<a href="https://lodash.com/docs/#padStart" target="_blank" rel="external">padStart</a>，<a href="https://lodash.com/docs/#padEnd" target="_blank" rel="external">padEnd</a></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#trim" target="_blank" rel="external">trim</a></td>
+<td>去除字符串两边的特殊字符（默认为空格），类似地还有<a href="https://lodash.com/docs/#trimStart" target="_blank" rel="external">trimStart</a>，<a href="https://lodash.com/docs/#trimEnd" target="_blank" rel="external">trimEnd</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="未分类-1"><a href="#未分类-1" class="headerlink" title="未分类"></a>未分类</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#parseInt" target="_blank" rel="external">parseInt</a></td>
+<td>转成整型</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#repeat" target="_blank" rel="external">repeat</a></td>
+<td>将某个字符串重复n遍</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#replace" target="_blank" rel="external">replace</a></td>
+<td>替换字符串</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#split" target="_blank" rel="external">split</a></td>
+<td>拆分字符串</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#template" target="_blank" rel="external">template</a></td>
+<td>简单模板引擎</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#truncate" target="_blank" rel="external">truncate</a></td>
+<td>截断字符串</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#words" target="_blank" rel="external">words</a></td>
+<td>将字符串拆分成单词，可以指定拆分模式</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#deburr" target="_blank" rel="external">deburr</a></td>
+<td>基本拉丁字母</td>
+</tr>
+</tbody>
+</table>
+<h2 id="9-数字"><a href="#9-数字" class="headerlink" title="9. 数字"></a>9. 数字</h2><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>主要参数-返回值</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#clamp" target="_blank" rel="external">clamp</a></td>
+<td>数字=&gt;数字</td>
+<td>将数字限定在一个范围内</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#inRange" target="_blank" rel="external">inRange</a></td>
+<td>数字=&gt;布尔</td>
+<td>判断数字是否在某个区间里</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#random" target="_blank" rel="external">random</a></td>
+<td>区间=&gt;数字</td>
+<td>随机获取一个值，可以通过第三个参数指定是不是返回小数</td>
+</tr>
+</tbody>
+</table>
+<h2 id="10-数学"><a href="#10-数学" class="headerlink" title="10. 数学"></a>10. 数学</h2><h3 id="加减乘除"><a href="#加减乘除" class="headerlink" title="加减乘除"></a>加减乘除</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>主要参数-返回值</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#add" target="_blank" rel="external">add</a></td>
+<td>两个数字 =&gt; 数字</td>
+<td>返回两个数字的和</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#subtract" target="_blank" rel="external">subtract</a></td>
+<td>两个数字 =&gt; 数字</td>
+<td>返回两个数字的差</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#multiply" target="_blank" rel="external">multiply</a></td>
+<td>两个数字 =&gt; 数字</td>
+<td>返回两个数字的积</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#divide" target="_blank" rel="external">divide</a></td>
+<td>两个数字 =&gt; 数字</td>
+<td>返回两个数字的商</td>
+</tr>
+</tbody>
+</table>
+<h3 id="和，最大值，最小值，平均值"><a href="#和，最大值，最小值，平均值" class="headerlink" title="和，最大值，最小值，平均值"></a>和，最大值，最小值，平均值</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>主要参数-返回值</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#sum" target="_blank" rel="external">sum</a></td>
+<td>数组 =&gt; 数字</td>
+<td>返回数组中的各数字之和</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#max" target="_blank" rel="external">max</a></td>
+<td>数组 =&gt; 数字</td>
+<td>返回数组中的最大值</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#min" target="_blank" rel="external">min</a></td>
+<td>数组 =&gt; 数字</td>
+<td>返回数组中的最小值</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#mean" target="_blank" rel="external">mean</a></td>
+<td>数组 =&gt; 数字</td>
+<td>返回数组中的平均值</td>
+</tr>
+</tbody>
+</table>
+<h3 id="数字精度"><a href="#数字精度" class="headerlink" title="数字精度"></a>数字精度</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>主要参数-返回值</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#ceil" target="_blank" rel="external">ceil</a></td>
+<td>数字 =&gt; 数字</td>
+<td>向上取整，可以指定精度</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#floor" target="_blank" rel="external">floor</a></td>
+<td>数字 =&gt; 数字</td>
+<td>向下取整，可以指定精度</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#round" target="_blank" rel="external">round</a></td>
+<td>数字 =&gt; 数字</td>
+<td>四舍五入取整，可以指定精度</td>
+</tr>
+</tbody>
+</table>
+<h2 id="11-语言"><a href="#11-语言" class="headerlink" title="11. 语言"></a>11. 语言</h2><h3 id="数值比较"><a href="#数值比较" class="headerlink" title="数值比较"></a>数值比较</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#eq" target="_blank" rel="external">eq</a></td>
+<td>等价于<code>===</code></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isEqual" target="_blank" rel="external">isEqual</a></td>
+<td>深度比较对象是否相等</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isEqualWith" target="_blank" rel="external">isEqualWith</a></td>
+<td>深度比较对象是否相等，可以定义相等比较函数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#gt" target="_blank" rel="external">gt</a></td>
+<td>大于</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#lt" target="_blank" rel="external">lt</a></td>
+<td>小于</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#gte" target="_blank" rel="external">gte</a></td>
+<td>大于等于</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#lte" target="_blank" rel="external">lte</a></td>
+<td>小于等于</td>
+</tr>
+</tbody>
+</table>
+<h3 id="类型判断"><a href="#类型判断" class="headerlink" title="类型判断"></a>类型判断</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#isArguments" target="_blank" rel="external">isArguments</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isArray" target="_blank" rel="external">isArray</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isArrayBuffer" target="_blank" rel="external">isArrayBuffer</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isArrayLike" target="_blank" rel="external">isArrayLike</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isArrayLikeObject" target="_blank" rel="external">isArrayLikeObject</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isBoolean" target="_blank" rel="external">isBoolean</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isBuffer" target="_blank" rel="external">isBuffer</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isDate" target="_blank" rel="external">isDate</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isElement" target="_blank" rel="external">isElement</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isEmpty" target="_blank" rel="external">isEmpty</a></td>
+<td>判断是否有可遍历的属性</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isError" target="_blank" rel="external">isError</a></td>
+<td>错误</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isFinite" target="_blank" rel="external">isFinite</a></td>
+<td>是否是有限的数字，基于Number.isFinite</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isFunction" target="_blank" rel="external">isFunction</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isInteger" target="_blank" rel="external">isInteger</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isLength" target="_blank" rel="external">isLength</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isMap" target="_blank" rel="external">isMap</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isMatch" target="_blank" rel="external">isMatch</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isMatchWith" target="_blank" rel="external">isMatchWith</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isNaN" target="_blank" rel="external">isNaN</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isNative" target="_blank" rel="external">isNative</a></td>
+<td>原生函数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isNil" target="_blank" rel="external">isNil</a></td>
+<td>等价于 <code>_.isNull(val)</code> &#124;&#124; <code>_.isUndefined(val)</code></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isNull" target="_blank" rel="external">isNull</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isNumber" target="_blank" rel="external">isNumber</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isObject" target="_blank" rel="external">isObject</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isObjectLike" target="_blank" rel="external">isObjectLike</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isPlainObject" target="_blank" rel="external">isPlainObject</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isRegExp" target="_blank" rel="external">isRegExp</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isSafeInteger" target="_blank" rel="external">isSafeInteger</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#" target="_blank" rel="external">isSet</a></td>
+<td>isSet</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isString" target="_blank" rel="external">isString</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isSymbol" target="_blank" rel="external">isSymbol</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isTypedArray" target="_blank" rel="external">isTypedArray</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isUndefined" target="_blank" rel="external">isUndefined</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isWeakMap" target="_blank" rel="external">isWeakMap</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#isWeakSet" target="_blank" rel="external">isWeakSet</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#castArray" target="_blank" rel="external">castArray</a></td>
+<td>强制转给数组</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#toArray" target="_blank" rel="external">toArray</a></td>
+<td>转成数组，对象调用Object.values，字符串转成字符数组</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#toFinite" target="_blank" rel="external">toFinite</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#toInteger" target="_blank" rel="external">toInteger</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#toLength" target="_blank" rel="external">toLength</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#toNumber" target="_blank" rel="external">toNumber</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#toPlainObject" target="_blank" rel="external">toPlainObject</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#toSafeInteger" target="_blank" rel="external">toSafeInteger</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#toString" target="_blank" rel="external">toString</a></td>
+<td>转成字符串，</td>
+</tr>
+</tbody>
+</table>
+<h3 id="复制对象"><a href="#复制对象" class="headerlink" title="复制对象"></a>复制对象</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#clone" target="_blank" rel="external">clone</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#cloneDeep" target="_blank" rel="external">cloneDeep</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#cloneDeepWith" target="_blank" rel="external">cloneDeepWith</a></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#cloneWith" target="_blank" rel="external">cloneWith</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="检测对象"><a href="#检测对象" class="headerlink" title="检测对象"></a>检测对象</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#conformsTo" target="_blank" rel="external">conformsTo</a></td>
+<td>判断一个对象的字段是否满足一些条件</td>
+</tr>
+</tbody>
+</table>
+<h2 id="12-工具"><a href="#12-工具" class="headerlink" title="12. 工具"></a>12. 工具</h2><h3 id="总是返回某个参数的函数"><a href="#总是返回某个参数的函数" class="headerlink" title="总是返回某个参数的函数"></a>总是返回某个参数的函数</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#constant" target="_blank" rel="external">constant</a></td>
+<td>创建一个包裹函数，总是返回第一个参数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#nthArg" target="_blank" rel="external">nthArg</a></td>
+<td>创建一个包裹函数，总是返回第n个参数</td>
+</tr>
+</tbody>
+</table>
+<h3 id="总是返回某个特定值的函数"><a href="#总是返回某个特定值的函数" class="headerlink" title="总是返回某个特定值的函数"></a>总是返回某个特定值的函数</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#noop" target="_blank" rel="external">noop</a></td>
+<td>总是返回<code>undefined</code>的函数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#stubArray" target="_blank" rel="external">stubArray</a></td>
+<td>总是返回空数组的函数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#stubObject" target="_blank" rel="external">stubObject</a></td>
+<td>总是返回空对象的函数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#stubString" target="_blank" rel="external">stubString</a></td>
+<td>总是返回空字符串的函数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#stubTrue" target="_blank" rel="external">stubTrue</a></td>
+<td>总是返回<code>true</code>的函数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#stubFalse" target="_blank" rel="external">stubFalse</a></td>
+<td>总是返回<code>false</code>的函数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#identity" target="_blank" rel="external">identity</a></td>
+<td>总是返回第一个参数</td>
+</tr>
+</tbody>
+</table>
+<h3 id="获取对象的属性值或者调用对象的函数"><a href="#获取对象的属性值或者调用对象的函数" class="headerlink" title="获取对象的属性值或者调用对象的函数"></a>获取对象的属性值或者调用对象的函数</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#method" target="_blank" rel="external">method</a></td>
+<td><a href="https://lodash.com/docs/#invoke" target="_blank" rel="external">_.invoke(object, path, [args])</a>预设<code>path</code>和<code>args</code>两个参数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#methodOf" target="_blank" rel="external">methodOf</a></td>
+<td><a href="https://lodash.com/docs/#invoke" target="_blank" rel="external">_.invoke(object, path, [args])</a>预设<code>object</code>和<code>args</code>两个参数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#property" target="_blank" rel="external">property</a></td>
+<td><a href="https://lodash.com/docs/#invoke" target="_blank" rel="external">_.get(object, path)</a>预设<code>path参数，不同的是缺少</code>defaultValue`参数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#propertyOf" target="_blank" rel="external">propertyOf</a></td>
+<td><a href="https://lodash.com/docs/#invoke" target="_blank" rel="external">_.get(object, path)</a>预设<code>object</code>参数，不同的是缺少<code>defaultValue</code>参数</td>
+</tr>
+</tbody>
+</table>
+<h3 id="判断对象是否满足某些条件"><a href="#判断对象是否满足某些条件" class="headerlink" title="判断对象是否满足某些条件"></a>判断对象是否满足某些条件</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#conforms" target="_blank" rel="external">conforms</a></td>
+<td>创建一个包裹函数，判断一个对象的字段是否满足某个函数。<code>conforms</code>意思是遵守。</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#matches" target="_blank" rel="external">matches</a></td>
+<td>创建一个包裹函数，判断一个对象的字段是否等于某个值，使用<a href="https://lodash.com/docs/#isEqual" target="_blank" rel="external">isEqual</a>判断是否相等。跟<a href="https://lodash.com/docs/#isMatch" target="_blank" rel="external">isMatch</a>类似</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#matchesProperty" target="_blank" rel="external">matchesProperty</a></td>
+<td>创建一个包裹函数，判断一个对象特定字段是否等于某个值，使用<a href="https://lodash.com/docs/#isEqual" target="_blank" rel="external">isEqual</a>判断是否相等。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="把多个操作合成一个操作"><a href="#把多个操作合成一个操作" class="headerlink" title="把多个操作合成一个操作"></a>把多个操作合成一个操作</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#flow" target="_blank" rel="external">flow</a></td>
+<td>把一组函数串起来形成一个新函数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#flowRight" target="_blank" rel="external">flowRight</a></td>
+<td>同上，倒序</td>
+</tr>
+</tbody>
+</table>
+<h3 id="批量进行多个操作"><a href="#批量进行多个操作" class="headerlink" title="批量进行多个操作"></a>批量进行多个操作</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#over" target="_blank" rel="external">over</a></td>
+<td>创建一个新函数，并将参数传递给预先指定的一组函数，并返回其结果</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#overEvery" target="_blank" rel="external">overEvery</a></td>
+<td>跟<code>over</code>类似，判断是不是所有函数都返回真值</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#overSome" target="_blank" rel="external">overSome</a></td>
+<td>跟<code>over</code>类似，判断是不是至少一个函数返回真值</td>
+</tr>
+</tbody>
+</table>
+<h3 id="等差数列"><a href="#等差数列" class="headerlink" title="等差数列"></a>等差数列</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#range" target="_blank" rel="external">range</a></td>
+<td>生成等差数列，可以指定步长，步长可以是小数，也可以是负数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#rangeRight" target="_blank" rel="external">rangeRight</a></td>
+<td>这个基本可以忽略，功能完成可以由<a href="https://lodash.com/docs/#range" target="_blank" rel="external">range</a>代替。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="其他未分类"><a href="#其他未分类" class="headerlink" title="其他未分类"></a>其他未分类</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#attempt" target="_blank" rel="external">attempt</a></td>
+<td>使用try-catch包裹函数，如果出错返回错误对象</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#bindAll" target="_blank" rel="external">bindAll</a></td>
+<td>将一个对象的多个函数中的this固定为该对象</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#cond" target="_blank" rel="external">cond</a></td>
+<td>创建一个拥有复杂if-else的函数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#defaultTo" target="_blank" rel="external">defaultTo</a></td>
+<td>如果第一个参数为NaN,null,undefined，则返回第二个参数，否则返回第一个参数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#iteratee" target="_blank" rel="external">iteratee</a></td>
+<td>创建一个迭代函数</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#noConflict" target="_blank" rel="external">noConflict</a></td>
+<td>如果<code>_</code>被占用，可以使用该方法</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#runInContext" target="_blank" rel="external">runInContext</a></td>
+<td>创建一个<code>lodash</code>镜像对象，可以扩展修改该对象</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#mixin" target="_blank" rel="external">mixin</a></td>
+<td>给一个对象的原型添加属性或方法，一般配合<a href="https://lodash.com/docs/#runInContext" target="_blank" rel="external">runInContext</a>扩展<code>lodash</code>。</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#times" target="_blank" rel="external">times</a></td>
+<td>执行函数n次，传入参数为index</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#toPath" target="_blank" rel="external">toPath</a></td>
+<td>‘a[0].b.c’=&gt;[‘a’,’0’,’b’,’c’]</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#uniqueId" target="_blank" rel="external">uniqueId</a></td>
+<td>生成唯一ID，可以指定前缀</td>
+</tr>
+</tbody>
+</table>
+<h2 id="13-链式"><a href="#13-链式" class="headerlink" title="13. 链式"></a>13. 链式</h2><h3 id="链式调用的好处"><a href="#链式调用的好处" class="headerlink" title="链式调用的好处"></a>链式调用的好处</h3><p>省略了中间变量，让代码更加简洁，更加安全。<br>链式调用可以优化成惰性求值（延迟计算），让代码更加高效。</p>
+<h3 id="value"><a href="#value" class="headerlink" title="_(value)"></a>_(value)</h3><p>创建一个经过lodash包装过后的对象会启用隐式链，直到调用了不支持链接调用的函数或者主动调用<code>value</code>方法解除链式调用。<br>作用类似于<a href="https://lodash.com/docs/#chain" target="_blank" rel="external">chain</a></p>
+<h3 id="lodash包装对象上的特殊函数"><a href="#lodash包装对象上的特殊函数" class="headerlink" title="lodash包装对象上的特殊函数"></a>lodash包装对象上的特殊函数</h3><table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://lodash.com/docs/#prototype-tap" target="_blank" rel="external">tap</a></td>
+<td>可以在链式调用中插入普通方法，直接修改中间结果，也可以仅仅是用于调试打印中间结果</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#prototype-thru" target="_blank" rel="external">thru</a></td>
+<td>同<a href="https://lodash.com/docs/#tap" target="_blank" rel="external">tap</a>，但是使用函数的返回值作为中间结果</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#prototype-commit" target="_blank" rel="external">commit</a></td>
+<td>立即执行链式调用中尚未进行的操作</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#prototype-next" target="_blank" rel="external">next</a></td>
+<td>获得包装对象的下一个值</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#prototype-plant" target="_blank" rel="external">plant</a></td>
+<td>复制一个链式调用，并传入初始值</td>
+</tr>
+<tr>
+<td><a href="https://lodash.com/docs/#prototype-value" target="_blank" rel="external">value</a></td>
+<td>结束链式调用，并计算结果。别名<code>valueOf</code>，<code>toJSON</code></td>
+</tr>
+</tbody>
+</table>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2017/03/03/chrome-developer-tool-device-mode/" data-toggle="tooltip" data-placement="top"
+                           title="Chrome 开发者工具 - 设备模式">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2016/07/04/css3-html5-feature-compatibility-survey/" data-toggle="tooltip" data-placement="top"
+                           title="主要CSS3，HTML5特性兼容性调查">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-简介"><span class="toc-text">1 简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-常见用法"><span class="toc-text">2 常见用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#get获取一个嵌套很深的字段"><span class="toc-text">_.get获取一个嵌套很深的字段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#map获取数组中每个对象的特定字段，并形成一个新的数组"><span class="toc-text">_.map获取数组中每个对象的特定字段，并形成一个新的数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pick取出对象的部分字段形成一个新对象"><span class="toc-text">_.pick取出对象的部分字段形成一个新对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#random获取一个随机值"><span class="toc-text">_.random获取一个随机值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#clamp将一个数字修改成区间中的一个值"><span class="toc-text">_.clamp将一个数字修改成区间中的一个值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#once确保一个函数只会执行一次"><span class="toc-text">_.once确保一个函数只会执行一次</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#chain链式操作"><span class="toc-text">_.chain链式操作</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-模块"><span class="toc-text">3 模块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-数组"><span class="toc-text">4 数组</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#获取子数组"><span class="toc-text">获取子数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数组常见操作"><span class="toc-text">数组常见操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数组常见操作变种函数-by-with"><span class="toc-text">数组常见操作变种函数 by, with</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#获取数组某个位置上的元素"><span class="toc-text">获取数组某个位置上的元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#检测元素在数组中的索引"><span class="toc-text">检测元素在数组中的索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#检测元素在插在有序数组的什么位置"><span class="toc-text">检测元素在插在有序数组的什么位置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#将数组拍平"><span class="toc-text">将数组拍平</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Zip"><span class="toc-text">Zip</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#未分类函数"><span class="toc-text">未分类函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-集合"><span class="toc-text">5 集合</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#遍历"><span class="toc-text">遍历</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#排序"><span class="toc-text">排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#过滤"><span class="toc-text">过滤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Map之后再flatten"><span class="toc-text">Map之后再flatten</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#寻找元素"><span class="toc-text">寻找元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#随机取值"><span class="toc-text">随机取值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#迭代"><span class="toc-text">迭代</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分组计数"><span class="toc-text">分组计数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#未分类"><span class="toc-text">未分类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-对象"><span class="toc-text">6 对象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#仅需要部分字段"><span class="toc-text">仅需要部分字段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#合并对象"><span class="toc-text">合并对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#键值列表"><span class="toc-text">键值列表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#赋值取值"><span class="toc-text">赋值取值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#键值数组"><span class="toc-text">键值数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#键值变换"><span class="toc-text">键值变换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#键值遍历"><span class="toc-text">键值遍历</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#寻找属性"><span class="toc-text">寻找属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#判断属性是否存在"><span class="toc-text">判断属性是否存在</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#转换对象或数组"><span class="toc-text">转换对象或数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建新对象"><span class="toc-text">创建新对象</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-函数"><span class="toc-text">7. 函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#修改参数"><span class="toc-text">修改参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改结果"><span class="toc-text">修改结果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缓存结果"><span class="toc-text">缓存结果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#降频调用"><span class="toc-text">降频调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#延迟调用"><span class="toc-text">延迟调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#延迟调用-1"><span class="toc-text">延迟调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#固定参数"><span class="toc-text">固定参数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-字符串"><span class="toc-text">8. 字符串</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#书写格式"><span class="toc-text">书写格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#大写小写"><span class="toc-text">大写小写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#打头结尾"><span class="toc-text">打头结尾</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#转义"><span class="toc-text">转义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#补全抹掉"><span class="toc-text">补全抹掉</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#未分类-1"><span class="toc-text">未分类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-数字"><span class="toc-text">9. 数字</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-数学"><span class="toc-text">10. 数学</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#加减乘除"><span class="toc-text">加减乘除</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#和，最大值，最小值，平均值"><span class="toc-text">和，最大值，最小值，平均值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数字精度"><span class="toc-text">数字精度</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-语言"><span class="toc-text">11. 语言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数值比较"><span class="toc-text">数值比较</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#类型判断"><span class="toc-text">类型判断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#类型转换"><span class="toc-text">类型转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#复制对象"><span class="toc-text">复制对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#检测对象"><span class="toc-text">检测对象</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-工具"><span class="toc-text">12. 工具</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#总是返回某个参数的函数"><span class="toc-text">总是返回某个参数的函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总是返回某个特定值的函数"><span class="toc-text">总是返回某个特定值的函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#获取对象的属性值或者调用对象的函数"><span class="toc-text">获取对象的属性值或者调用对象的函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#判断对象是否满足某些条件"><span class="toc-text">判断对象是否满足某些条件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#把多个操作合成一个操作"><span class="toc-text">把多个操作合成一个操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#批量进行多个操作"><span class="toc-text">批量进行多个操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#等差数列"><span class="toc-text">等差数列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他未分类"><span class="toc-text">其他未分类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-链式"><span class="toc-text">13. 链式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#链式调用的好处"><span class="toc-text">链式调用的好处</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#value"><span class="toc-text">_(value)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#lodash包装对象上的特殊函数"><span class="toc-text">lodash包装对象上的特殊函数</span></a></li></ol></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 飞鹰走码 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://lichangwei.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    var _baId = 'b1cbd873d9c466a6c24f70c7ab90056c';
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?" + _baId;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','jKpsnJjixMaVpfnXVc3L','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="https://avatars1.githubusercontent.com/u/718802?v=4&amp;s=460">
+</body>
+
+</html>

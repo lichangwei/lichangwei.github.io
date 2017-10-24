@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="李长伟的博客">
+    <meta name="keyword" content="">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="飞鹰走码" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        HTML5应用缓存基础知识｜李长伟的博客
+        
+    </title>
+
+    <link rel="canonical" href="http://lichangwei.github.io/2013/09/25/HTML5-Application-Cache-Basic/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://owxa05m5s.bkt.clouddn.com/lion-blur-bg.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    飞鹰走码
+                </span>
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>HTML5应用缓存基础知识</h1>
+                    
+                    <span class="meta">
+                         作者 李长伟
+                        <span>
+                          日期 2013-09-25
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            HTML5应用缓存基础知识
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <p>下面简单的介绍一下应用缓存的基本知识：</p>
+<h2 id="1-应用缓存的作用"><a href="#1-应用缓存的作用" class="headerlink" title="1. 应用缓存的作用"></a>1. 应用缓存的作用</h2><p>让浏览器内WebApp像本地应用一样，多数或者全部资源都保存在本地，在没有网络，或者服务器宕掉的情况下，仍然能够使用大多数或者全部功能。有三个特点：离线浏览，更快的速度，以及减轻服务器负担。  </p>
+<h2 id="2-使用了应用缓存的页面的加载流程"><a href="#2-使用了应用缓存的页面的加载流程" class="headerlink" title="2. 使用了应用缓存的页面的加载流程"></a>2. 使用了应用缓存的页面的加载流程</h2><p>当浏览器访问一个包含了应用缓存的页面时，</p>
+<ol>
+<li>如果应用缓存已经存在，那么直接使用应用缓存，并且仅仅加载<code>manifest</code>文件，判断该文件是否和缓存中的<code>manifest</code>文件是否相同，如果相同，则什么也不做，如果有任何一点不同，则重新加载<code>manifest</code>文件中列出的一系列缓存文件，并且在此过程中，会触发一些列的事件，可以通过监听这些时间，来重新加载该页面，以使用网站的最新版本。，</li>
+<li>否则浏览器加载文档，然后获取<code>manifest</code>文件列出的CACHE和FALLBACK文件，生成第一版的应用缓存。  </li>
+</ol>
+<h2 id="3-使用方法："><a href="#3-使用方法：" class="headerlink" title="3. 使用方法："></a>3. 使用方法：</h2><h3 id="1-创建manifest文件"><a href="#1-创建manifest文件" class="headerlink" title="1. 创建manifest文件"></a>1. 创建<code>manifest</code>文件</h3><p>以下是<code>manifest</code>文件的模板<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">CACHE MANIFEST</div><div class="line"># verison 1</div><div class="line">CACHE:</div><div class="line">path/to/cached/file/a.html</div><div class="line">path/to/cached/file/b.js</div><div class="line">NETWORK:</div><div class="line">path/to/network/request/a</div><div class="line">path/to/network/folder/b</div><div class="line">FALLBACK:</div><div class="line">path/to/network/request/c path/to/fallback/file/c</div><div class="line">path/to/network/folder/d path/to/fallback/file/d</div></pre></td></tr></table></figure></p>
+<p><code>manifest</code>文件对路径，文件名和后缀名没有限制。但是一般推荐放在项目根目录下面，因为在<code>manifest</code>文件里面定义的相对路径是相对于<code>manifest</code>文件的，而不是引用该<code>manifest</code>文件的html页面。后缀名虽然没有限制，但是该文件的MIME类型必须是<code>text/cache-manifest</code>，因此假如后缀名是<code>manifest</code>，那么必须做如下配置：<br>Apache： 在相应的<code>.htaccess</code>文件中增加 <code>AddType text/cache-manifest .manifest</code><br>Nginx： 在<code>mime.types</code>文件中加上<code>text/cache-manifest manifest</code>;</p>
+<p>第一行必须是<code>CACHE MANIFEST</code>；<br>第二行建议是注释，标明当前<code>manifest</code>文件版本。注释以<code>#</code>开始。为什么要有这样一个注释呢，这是因为浏览器在判断是否需要更新应用缓存时，是根据当前获得的<code>manifest</code>文件内容和缓存中的<code>manifest</code>文件内容有没有不同，如有不同，才会更新应用缓存。有时候我们仅仅更改某个文件的内容，但是<code>manifest</code>文件却不需要更改，但是如果不更改，那么浏览器就不会去获取新的资源文件。所以一个最佳实践就是一旦有文件修改，总是去更新<code>manifest</code>文件中的版本号。<br>在以后的若干行中，可以是<br>1）空白行<br>2）注释行<br>3）段落标题 可以是<code>CACHE:</code>，<code>NETWORK:</code>或<code>FALLBACK:</code>，可以出现零次或多次。<br>4）段落数据<br>CACHE段落以<code>CACHE:</code>段落标题（可省略）开始，每行都是一个URL，表示该资源要被缓存起来。不允许使用通配符<code>*</code>。<br>NETWORK段落以<code>NETWORK:</code>段落标题开始，每行都是一个URL，代表一条资源或者该资源目录下的一组子资源，表示这些资源总是从互联网获取。<br>FALLBACK段落以<code>FALLBACK:</code>段落标题开始，每行都包含两个URL，第一个URL是资源地址，代表一条资源或者该资源目录下的一组子资源，表示这些资源总是从互联网获取，第二个URL是后备资源地址，该资源会放入应用缓存中。如果前者获取失败，则从应用缓存获取后备资源替代。  </p>
+<h3 id="2-引入manifest文件"><a href="#2-引入manifest文件" class="headerlink" title="2. 引入manifest文件"></a>2. 引入<code>manifest</code>文件</h3><figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">manifest</span>=<span class="string">"example.manifest"</span>&gt;</span> </div><div class="line">  ...</div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="3-前面已经提到，需要给manifest文件设置正确的MIME类型"><a href="#3-前面已经提到，需要给manifest文件设置正确的MIME类型" class="headerlink" title="3. 前面已经提到，需要给manifest文件设置正确的MIME类型"></a>3. 前面已经提到，需要给<code>manifest</code>文件设置正确的MIME类型</h3><h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><h3 id="1-自动缓存包含manifest文件的HTML页面"><a href="#1-自动缓存包含manifest文件的HTML页面" class="headerlink" title="1. 自动缓存包含manifest文件的HTML页面"></a>1. 自动缓存包含<code>manifest</code>文件的HTML页面</h3><p>这一点是有必要的，因为如果不缓存该页面，该页面必须通过网络加载，这样就不能达到离线应用的目的。如果你只想缓存这些资源，减少网络资源请求，并不想做成离线应用，那么你可以在页面中增加一个隐藏的iframe，并且该iframe正确地引用了<code>manifest</code>文件。  </p>
+<h3 id="2-一旦manifest文件文件内容有变化，那么所有的缓存文件都必须被重新加载一次"><a href="#2-一旦manifest文件文件内容有变化，那么所有的缓存文件都必须被重新加载一次" class="headerlink" title="2. 一旦manifest文件文件内容有变化，那么所有的缓存文件都必须被重新加载一次"></a>2. 一旦<code>manifest</code>文件文件内容有变化，那么所有的缓存文件都必须被重新加载一次</h3><p>这是应用缓存的一个巨大缺陷，不过可以结合localStorage实现一个更加灵活的缓存系统，即实现了离线应用，又避免的资源的全量更新。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://developer.mozilla.org/zh-CN/docs/HTML/Using_the_application_cache" target="_blank" rel="external">MDN</a></p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2013/09/27/Tools-for-Image-Optimization/" data-toggle="tooltip" data-placement="top"
+                           title="【翻译】图片优化工具">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2013/09/24/Web-Page-Optimization/" data-toggle="tooltip" data-placement="top"
+                           title="网页性能优化">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-应用缓存的作用"><span class="toc-text">1. 应用缓存的作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-使用了应用缓存的页面的加载流程"><span class="toc-text">2. 使用了应用缓存的页面的加载流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-使用方法："><span class="toc-text">3. 使用方法：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-创建manifest文件"><span class="toc-text">1. 创建manifest文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-引入manifest文件"><span class="toc-text">2. 引入manifest文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-前面已经提到，需要给manifest文件设置正确的MIME类型"><span class="toc-text">3. 前面已经提到，需要给manifest文件设置正确的MIME类型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#注意事项"><span class="toc-text">注意事项</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-自动缓存包含manifest文件的HTML页面"><span class="toc-text">1. 自动缓存包含manifest文件的HTML页面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-一旦manifest文件文件内容有变化，那么所有的缓存文件都必须被重新加载一次"><span class="toc-text">2. 一旦manifest文件文件内容有变化，那么所有的缓存文件都必须被重新加载一次</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 飞鹰走码 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://lichangwei.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    var _baId = 'b1cbd873d9c466a6c24f70c7ab90056c';
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?" + _baId;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','jKpsnJjixMaVpfnXVc3L','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="https://avatars1.githubusercontent.com/u/718802?v=4&amp;s=460">
+</body>
+
+</html>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="李长伟的博客">
+    <meta name="keyword" content="">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="飞鹰走码" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        透过用户的要求理解用户的关切｜李长伟的博客
+        
+    </title>
+
+    <link rel="canonical" href="http://lichangwei.github.io/2013/09/16/Why-the-User-Need-this-Feature/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://owxa05m5s.bkt.clouddn.com/lion-blur-bg.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    飞鹰走码
+                </span>
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>透过用户的要求理解用户的关切</h1>
+                    
+                    <span class="meta">
+                         作者 李长伟
+                        <span>
+                          日期 2013-09-16
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            透过用户的要求理解用户的关切
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <p>先介绍一下项目背景：公司生产了一些电视机和照相机，同时公开了一些接口，允许开发者基于此开发一些第三方应用。有些开发者可能没有电视机和照相机真机，或者团队中真机不足，为了能够是他们顺利地进行开发，所以我们开发一款软件，让开发者可以申请虚拟设备。该软件中实现了SSDP协议让第三方应用发现虚拟设备。  </p>
+<p>前些天，Tony作为用户又作为项目的负责人提出一个要求：不能让一个账号同时在两个电脑（或者浏览器）上登录。这下可难倒了我们外包团队。他们的开发人员W找到我，说这个该怎么做呢？W也提出一种方案，就是使用WebSocket，对于不支持WebSocket的浏览器使用轮询来作为fallback方案。这个方案可以使用现有的socketio库来轻松实现。  </p>
+<p>首先讲一下，不让一个账号同时两处登录，这样做的站点一般有聊天室等，有了这样的限制以后，一个用户在某个浏览器上登录以后，再不退出的情况下直接关闭浏览器，用户就不能在其他浏览器上登录了，直到Session过期。Session自动过期时间可长可短，一般是半个小时。用户体验非常不好，更好的策略是，后登录的把先登录的踢掉。  </p>
+<p>以前我在J2EE企业级应用框架时实现了这样的功能，虽然实现了，但是还没有在任何一个项目中实际使用了。实现了，更多是为了功能的完备性。还有一点，在一个实现了完整的认证授权系统中，实现这样的功能是非常简单的。实现的方法如下：  </p>
+<ol>
+<li><p>首次成功登录以后，会再数据库的Session表中添加一条记录。字段一般包括Session ID，用户ID，Cookie，登录时间，最后操作时间（初始化为登录时间）。  </p>
+</li>
+<li><p>以后用户没操作一次，都会修改Session表中的最后登录时间。这个在J2EE中一般通过filter实现。并且服务器端会定期执行一个任务，清除Session表中过期Session。一个Session何时过期，一般判断条件是当前距离最后操作时间大于半个小时（可配置）。  </p>
+</li>
+<li><p>当用户再次登录时，首先判断用户名和密码是否正确，如果正确，然后用户是否已经在别处登录，即Session表是否有该用户的未过期Session，如果是，则给用户一个错误提示，否则才判定位登录成功。  </p>
+</li>
+</ol>
+<p>在我们当前的应用中，服务器端语言使用的Node，框架是Express。Session管理我们可以使用的是Express自带的Session中间件。代码如下：<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</div><div class="line"><span class="keyword">var</span> app = <span class="keyword">new</span> express();</div><div class="line">app.use(express.session());</div></pre></td></tr></table></figure></p>
+<p>Express的Session中间件没有API可以得到用户是否已经在别处登录。另外一个问题就是即便我们自己实现Session控制，那么也是不可取的，因为项目特殊性，用户在登录以后就加在几乎所有的资源，也只有在登录，申请设备和获取已申请设备清单时才会发送一个服务器端的请求。之后用户只需要按下启动按钮，之后虚拟设备就运行在Web App中了，第三方应用就可以通过SSDP协议发现设备并与该设备进行HTTP通信了。以后只有部分静态资源文件会从Node Server上获取之后，就没有其他的请求了。所以自从获取已申请设备清单以后，就没有会修改最后操作时间的请求了。  </p>
+<p>W给出的一个方案：使用socketio，保持与服务器端通信。可行倒是可行，但是我们要为了一个需求大动干戈吗？这个要划一个问号。然后我跟W说，我去跟Tony商量一下，看看他的目的是什么，再决定怎么做。  </p>
+<p>在跟Tony的交流中，发现他有过这样的经历：开发阶段两个人使用了同一个账号同时登录，这两个浏览器中自然有着同样的设备列表，然后都启动了某个设备，这时候在局域网中就有了两个有着同样UUID的虚拟设备，他们IP不同，设别描述文件地址也不同，设备状态也不同。有些SSDP客户端会因此而崩溃掉。所以他想让一个账号不能同时在两处登录就能解决该问题了。  </p>
+<p>我告诉Tony，既然你是为了解决这样的问题，那么我们能否换个思路，让每个浏览器上的设备UUID都不相同，在生成UUID时，不仅加入设备ID，还加入浏览器所在电脑的IP，时间戳，随机值等。这样一来，团队成员可以共享一个账号，在同一个局域网中也可以独立使用，互不影响。然后Tony认同了这一做法。到此，这个需求就这么解决了，仅仅修改一下UUID的生成算法。  </p>
+<p>在上面的案例中，可以发现，用户提出的要求可能只是他们所关切的问题的一个表象，或者是他们认为的这个问题的一个解决方案。我们不能仅仅局限于此，而要透过他们的要求去探索他们真正关切的问题。  </p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2013/09/17/innertext-vs-textcontent/" data-toggle="tooltip" data-placement="top"
+                           title="innerText vs textContent">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2013/09/12/Five-Helpful-Tips-When-Using-RequireJS/" data-toggle="tooltip" data-placement="top"
+                           title="【翻译】RequireJS的五个有用的小技巧">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 飞鹰走码 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://lichangwei.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    var _baId = 'b1cbd873d9c466a6c24f70c7ab90056c';
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?" + _baId;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','jKpsnJjixMaVpfnXVc3L','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="https://avatars1.githubusercontent.com/u/718802?v=4&amp;s=460">
+</body>
+
+</html>

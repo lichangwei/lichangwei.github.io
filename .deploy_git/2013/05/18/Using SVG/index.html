@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="李长伟的博客">
+    <meta name="keyword" content="">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="飞鹰走码" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        【翻译】使用SVG｜李长伟的博客
+        
+    </title>
+
+    <link rel="canonical" href="http://lichangwei.github.io/2013/05/18/Using SVG/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://owxa05m5s.bkt.clouddn.com/lion-blur-bg.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    飞鹰走码
+                </span>
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>【翻译】使用SVG</h1>
+                    
+                    <span class="meta">
+                         作者 李长伟
+                        <span>
+                          日期 2013-05-18
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            【翻译】使用SVG
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <p><a href="http://css-tricks.com/using-svg/" target="_blank" rel="external">原文地址：css-tricks.com</a>  </p>
+<p>SVG是一种矢量图片格式。字面意为可伸缩矢量图形（Scalable Vector Graphics）。也就是你通过Adobe Illustrator做出来的东西。在网页中可以很简单地使用SVG，但是有些东西是你应该了解的。  </p>
+<h3 id="为什么要使用SVG？"><a href="#为什么要使用SVG？" class="headerlink" title="为什么要使用SVG？"></a>为什么要使用SVG？</h3><ol>
+<li>压缩量好，文件小</li>
+<li>高保真伸缩到任意尺寸（除了尺寸很小的情况下会失真）</li>
+<li>适合视网膜屏（retina）显示</li>
+<li>Design control like interactivity and filters</li>
+</ol>
+<p>###Getting some SVG to work with<br>下图是在Adobe Illustrator中设计的一只鹬鸵站在一个椭圆上。<br><img src="http://cdn.css-tricks.com/wp-content/uploads/2013/03/kiwi.png" alt="kiwi.png"><br>Notice the artboard is cropped up right agains the edges of the design. Canvas matters in SVG just like it would in PNG or JPG.  </p>
+<p>在Adobe Illusatrator可以将图形直接保存为SVG文件。<br><img src="http://cdn.css-tricks.com/wp-content/uploads/2013/03/save-as-svg.png" alt="save-as-svg.png"><br>保存时，你会看到另一个关于SVG选项的对话框。关于这个对话框，我了解的不多。这里有一个<a href="http://www.w3.org/TR/SVGMobile/" target="_blank" rel="external">SVG说明书</a>。SVG1.1可以正常工作。<br><img src="http://cdn.css-tricks.com/wp-content/uploads/2013/03/svg-options.png" alt="svg-options.png"><br>最有趣的是你可以按下OK保存文件，也可以按下“SVG Code…”通过TextEdit（在Mac上）打开SVG代码。<br><img src="http://cdn.css-tricks.com/wp-content/uploads/2013/03/svg-code.png" alt="svg-code.png"></p>
+<h3 id="当做img使用SVG"><a href="#当做img使用SVG" class="headerlink" title="当做img使用SVG"></a>当做img使用SVG</h3><p>如果刚才我将SVG保存到一个文件中，那么我现在可以将它用在一个img标签中。<br><figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"kiwi.svg"</span> <span class="attr">alt</span>=<span class="string">"Kiwi standing on oval"</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>在Illustrator中，绘图板大小是612x502px。<br><img src="http://cdn.css-tricks.com/wp-content/uploads/2013/03/artboard.png" alt="artboard.png"><br>以下是该图片在网页中显示尺寸。你可以选择img节点并修改其width或者height来改变其大小，就跟PNG或JPG图片一样。<a href="http://codepen.io/chriscoyier/pen/evcBu" target="_blank" rel="external">这儿</a>有一个例子。<br><img src="http://s.cdpn.io/3/kiwi.svg" alt="kiwi.svg"></p>
+<h3 id="浏览器支持情况"><a href="#浏览器支持情况" class="headerlink" title="浏览器支持情况"></a>浏览器支持情况</h3><p>这样使用SVG要注意<a href="http://caniuse.com/#feat=svg-img" target="_blank" rel="external">它的浏览器支持情况</a>总体来讲，除了IE8及以下，Android2.3及以下都支持的很好。  </p>
+<p>如果你想使用SVG，但是又要支持这些不支持SVG的浏览器，你有一些选择，在<a href="http://css-tricks.com/workshop-notes-webstock-13/" target="_blank" rel="external">包含</a>了一些我使用过的一些技术。  </p>
+<p>一个方法是通过Modernizr测试是否支持冰替换img的src属性。<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">if</span> (!Modernizr.svg) &#123;</div><div class="line">  $(<span class="string">".logo img"</span>).attr(<span class="string">"src"</span>, <span class="string">"images/logo.png"</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>David Bushell提出了一个<a href="http://dbushell.com/2013/02/04/a-primer-to-front-end-svg-hacking/" target="_blank" rel="external">更简单的方法</a>。如果可以在标签中使用javascript。<br><figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">"image.svg"</span> <span class="attr">onerror</span>=<span class="string">"this.onerror=null; this.src='image.png'"</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p><a href="http://benhowdle.im/svgeezy/" target="_blank" rel="external">SVGeezy</a>也很有用，在以下文章中我们会讲到更多的fallback技术。  </p>
+<h3 id="作为background-image使用SVG"><a href="#作为background-image使用SVG" class="headerlink" title="作为background-image使用SVG"></a>作为background-image使用SVG</h3><p>跟将SVG作为img使用一样简单，也可以将它作为backgorund-image。<br><figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"/"</span> <span class="attr">class</span>=<span class="string">"logo"</span>&gt;</span></div><div class="line">  Kiwi Corp</div><div class="line"><span class="tag">&lt;/<span class="name">a</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-class">.logo</span> &#123;</div><div class="line">  <span class="attribute">display</span>: block;</div><div class="line">  <span class="attribute">text-indent</span>: -<span class="number">9999px</span>;</div><div class="line">  <span class="attribute">width</span>: <span class="number">100px</span>;</div><div class="line">  <span class="attribute">height</span>: <span class="number">82px</span>;</div><div class="line">  <span class="attribute">background</span>: <span class="built_in">url</span>(kiwi.svg);</div><div class="line">  <span class="attribute">background-size</span>: <span class="number">100px</span> <span class="number">82px</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>[未完]</p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2013/05/25/Reduce-reflow-repaint/" data-toggle="tooltip" data-placement="top"
+                           title="在DOM操作中，如何减少reflow或repaint">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2013/05/17/jQuery-Interview-Questions/" data-toggle="tooltip" data-placement="top"
+                           title="">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#为什么要使用SVG？"><span class="toc-text">为什么要使用SVG？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#当做img使用SVG"><span class="toc-text">当做img使用SVG</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#浏览器支持情况"><span class="toc-text">浏览器支持情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#作为background-image使用SVG"><span class="toc-text">作为background-image使用SVG</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 飞鹰走码 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://lichangwei.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    var _baId = 'b1cbd873d9c466a6c24f70c7ab90056c';
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?" + _baId;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','jKpsnJjixMaVpfnXVc3L','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="https://avatars1.githubusercontent.com/u/718802?v=4&amp;s=460">
+</body>
+
+</html>

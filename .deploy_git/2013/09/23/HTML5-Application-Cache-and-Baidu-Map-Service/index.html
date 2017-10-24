@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="李长伟的博客">
+    <meta name="keyword" content="">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="飞鹰走码" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        HTML5应用缓存与百度地图服务｜李长伟的博客
+        
+    </title>
+
+    <link rel="canonical" href="http://lichangwei.github.io/2013/09/23/HTML5-Application-Cache-and-Baidu-Map-Service/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://owxa05m5s.bkt.clouddn.com/lion-blur-bg.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    飞鹰走码
+                </span>
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>HTML5应用缓存与百度地图服务</h1>
+                    
+                    <span class="meta">
+                         作者 李长伟
+                        <span>
+                          日期 2013-09-23
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            HTML5应用缓存与百度地图服务
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <p>本文假设你基本了解HTML5应用缓存。</p>
+<p>前几天，一个同事联系到我，说他们项目想使用HTML5的应用缓存，但是遇到了脚本执行错误问题，但是如果去掉manifest配置，即不使用应用缓存，则一切正常运行。我让他将项目代码简化一下，剥离业务相关部分，然后打包发给我。  </p>
+<p>在浏览器中打开该页面以后，发现如下两个错误：<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Uncaught ReferenceError: BMap is not defined index.html:18</div><div class="line">GET http://api.map.baidu.com/getscript?v=1.5&amp;ak=24fddd5bf8d6cbe100c40dfa9aed10d2&amp;services=&amp;t=20130916115231</div></pre></td></tr></table></figure></p>
+<p>以上两个错误很明显是脚本加载失败造成的。  </p>
+<p>通过代码可以看到，项目中使用了百度地图，使用方法是引入一个<code>script</code>标签.<br><figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"http://api.map.baidu.com/api?v=1.5&amp;ak=24fddd5bf8d6cbe100c40dfa9aed10d2"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>以上<code>script</code>标签从服务器端获取的代码是：<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="built_in">window</span>.BMap_loadScriptTime = (<span class="keyword">new</span> <span class="built_in">Date</span>).getTime();</div><div class="line">  <span class="built_in">document</span>.write(<span class="string">'&lt;script type="text/javascript" src="http://api.map.baidu.com/getscript?v=1.5&amp;ak=24fddd5bf8d6cbe100c40dfa9aed10d2&amp;services=&amp;t=20130916115231"&gt;&lt;/script&gt;'</span>);</div><div class="line">&#125;)();</div></pre></td></tr></table></figure></p>
+<p>我们可以看到它使用了<code>document.write</code>方法，插入另一个<code>script</code>标签。然而在<code>manifest</code>文件中，却没有说明该脚本应该如何处理。<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">CACHE MANIFEST</div><div class="line">NETWORK:</div><div class="line">http://api.map.baidu.com/api?v=1.5&amp;ak=24fddd5bf8d6cbe100c40dfa9aed10d2</div></pre></td></tr></table></figure></p>
+<p>这时候浏览器尝试从应用缓存中寻找<code>http://api.map.baidu.com/getscript?v=1.5&amp;ak=24fddd5bf8d6cbe100c40dfa9aed10d2&amp;services=&amp;t=20130916115231</code>却没有找到，所以脚本加载失败。因为这个脚本网址不是公开API的一部分，今天是这个URL，明天也许就是另一个URL了，所以我们不能写在<code>manifest</code>文件里面。再者地图相关资源肯定不适合应用缓存，一是我们不能枚举需要调用的脚本，图片和其他资源，从而罗列在<code>CACHE:</code>配置中，二是应用缓存在每个域下只有25M的配额，甚至更少。那么对于这种不固定的网址或者不可枚举的网址该怎么处理呢？</p>
+<p>这时候我们有两种做法，第一种比较简单，在<code>manifest</code>文件中NETWORK一栏中使用<code>*</code>这个通配符，表示如果某个URL没有显式定义出来，则从互联网上获取该资源。于是<code>manifest</code>文件就变成：  </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">NETWORK:</div><div class="line">*</div><div class="line">```  </div><div class="line"></div><div class="line">另外一种做法就是将这些不固定的网址（在这里，是百度地图服务）封装在一个固定地址的页面中，不使用应用缓存，并且通过iframe元素引入。  </div><div class="line">比如：</div></pre></td></tr></table></figure>
+<p>NETWORK:<br>map.html<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">其中map.html负责渲染地图，并且不使用应用缓存。  </div><div class="line"></div><div class="line">现在问题看似解决了，但是我们的目的是使用应用缓存，那么当百度地图服务不可用（没有网络或者百度地图服务宕掉）时，打开页面是怎样的呢？我关闭了网络连接后，刷新页面，看到是一个块空白，以及如下错误：</div></pre></td></tr></table></figure></p>
+<p>Application Cache Error event: Manifest fetch failed (-1) <a href="http://192.168.0.100/github/map/map.manifest" target="_blank" rel="external">http://192.168.0.100/github/map/map.manifest</a> map.html:1<br>Uncaught ReferenceError: BMap is not defined map.html:18<br>GET <a href="http://api.map.baidu.com/api?v=1.5&amp;ak=24fddd5bf8d6cbe100c40dfa9aed10d2" target="_blank" rel="external">http://api.map.baidu.com/api?v=1.5&amp;ak=24fddd5bf8d6cbe100c40dfa9aed10d2</a><br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line"></div><div class="line">直接给用户一个空白的地图似乎不是那么友好，更好的一种做法就是在使用一张静态的百度地图的截图代替，或者通过文字告诉用户，地图加载失败。  </div><div class="line"></div><div class="line">这时候有两种做法，一种做法是判断BMap是否定义，如果已定义则认为百度地图服务可用，否则认为不可用，此时可以提示用户地图服务不可用。这种做法很简单，这就不多说了。另一种做法更加适合上面使用iframe的情形，使用用应用缓存中的FALLBACK配置项。在FALLBACK配置中，每一行包括两个URL，用空格分隔。第一个URL是正常情况下的资源地址，第二个URL是后备资源地址，当前者不可用时，由后者顶上。  </div><div class="line"></div><div class="line">使用FALLBACK时，我们可以定义一个nomap.html作为百度地图API的后备处理方案。代码如下：</div></pre></td></tr></table></figure></p>
+<p>FALLBACK:<br>map.html nomap.html<br>```</p>
+<blockquote>
+<p><strong>FALLBACK有个坑，就是FALLBACK中配置中第一个URL不能出现在NETWORK中，否则FALLBACK配置可能失效。</strong>  </p>
+</blockquote>
+<h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><ol>
+<li>可以使用<code>NETWORK</code>中统配符<code>*</code>来告诉浏览器，对于那些未显式指定的资源总是从网络上获取。  </li>
+<li>对于<code>iframe</code>让应用的一部分使用应用缓存，另一部分不使用。  </li>
+<li>配合<code>FALLBACK</code>，可以让网络不可用时或者服务不可用时，界面更加友好。  </li>
+</ol>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2013/09/24/Web-Page-Optimization/" data-toggle="tooltip" data-placement="top"
+                           title="网页性能优化">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2013/09/23/Browser-Cache/" data-toggle="tooltip" data-placement="top"
+                           title="">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#总结："><span class="toc-text">总结：</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 飞鹰走码 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://lichangwei.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    var _baId = 'b1cbd873d9c466a6c24f70c7ab90056c';
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?" + _baId;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','jKpsnJjixMaVpfnXVc3L','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="https://avatars1.githubusercontent.com/u/718802?v=4&amp;s=460">
+</body>
+
+</html>

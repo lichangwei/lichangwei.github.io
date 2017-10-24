@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="李长伟的博客">
+    <meta name="keyword" content="">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="飞鹰走码" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        npm install时连接超时的解决办法｜李长伟的博客
+        
+    </title>
+
+    <link rel="canonical" href="http://lichangwei.github.io/2013/10/11/Connect-Timeout-When-Npm-Install/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://owxa05m5s.bkt.clouddn.com/lion-blur-bg.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    飞鹰走码
+                </span>
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>npm install时连接超时的解决办法</h1>
+                    
+                    <span class="meta">
+                         作者 李长伟
+                        <span>
+                          日期 2013-10-11
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            npm install时连接超时的解决办法
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <p>今天在电脑上安装node-inspector，用于在浏览器中调试node。但是却遇到了如下连接超时错误。<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo npm install -g node-inspector</div><div class="line">npm http GET https://registry.npmjs.org/node-inspector</div><div class="line">npm http GET https://registry.npmjs.org/node-inspector</div><div class="line">npm http GET https://registry.npmjs.org/node-inspector</div><div class="line">npm ERR! Error: connect ETIMEDOUT</div><div class="line">npm ERR!     at errnoException (net.js:863:11)</div><div class="line">...</div></pre></td></tr></table></figure></p>
+<p>想到可能是伟大的长城在作怪，所以首先想到的是加上代理，这里使用的是Goagent。因为下载过程中使用的https协议，所以设置的应该是https-proxy。设置方法如下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">npm config set https-proxy http://127.0.0.1:8087</div></pre></td></tr></table></figure></p>
+<p>依然失败，报错如下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo npm install -g node-inspector</div><div class="line">GET https://registry.npmjs.org/node-inspector</div><div class="line">npm http GET https://registry.npmjs.org/node-inspector</div><div class="line">npm http GET https://registry.npmjs.org/node-inspector</div><div class="line">npm ERR! Error: UNABLE_TO_VERIFY_LEAF_SIGNATURE</div><div class="line">npm ERR!     at SecurePair.&lt;anonymous&gt; (tls.js:1271:32)</div></pre></td></tr></table></figure></p>
+<p>根据以上错误，猜测应该是代理出现问题，网站证书无法验证。既然https协议走不通，那么是否可以使用http协议呢？有些网站都同时支持这两种协议，比如cdn.staticfile.org，cdnjs.com等CDN服务。向谷哥寻求帮忙才找到了答案，可以使用如下命令设置：<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">npm config set registry &quot;http://registry.npmjs.org/&quot;</div></pre></td></tr></table></figure></p>
+<p>还是失败，报错如下：<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo npm install -g node-inspector</div><div class="line">npm http GET http://registry.npmjs.org/node-inspector</div><div class="line">npm http GET http://registry.npmjs.org/node-inspector</div><div class="line">npm http GET http://registry.npmjs.org/node-inspector</div><div class="line">npm ERR! Error: connect ETIMEDOUT</div><div class="line">npm ERR!     at errnoException (net.js:863:11)</div></pre></td></tr></table></figure></p>
+<p>长城真是密不透风啊！为http设置代理：<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">npm config set proxy http://127.0.0.1:8087</div></pre></td></tr></table></figure></p>
+<p>然后终于看到亲切的<code>200</code>字眼。<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">sudo npm install -g node-inspector</div><div class="line">npm http GET http://registry.npmjs.org/node-inspector</div><div class="line">npm http 200 http://registry.npmjs.org/node-inspector</div><div class="line">npm http GET http://registry.npmjs.org/node-inspector/-/node-inspector-0.5.0.tgz</div><div class="line">npm http 200 http://registry.npmjs.org/node-inspector/-/node-inspector-0.5.0.tgz</div><div class="line">npm http GET http://registry.npmjs.org/strong-data-uri</div><div class="line">npm http GET http://registry.npmjs.org/async</div></pre></td></tr></table></figure></p>
+<p>以上就是今天遇到的通过<code>npm install</code>安装node包时遇到的问题以及解决过程。在遇到这些问题之前，还不知道<code>npm config</code>命令。所以在这里简单复习一下。<br>在控制台中输入<code>npm config</code>：得到如下结果：<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">npm config</div><div class="line">npm ERR! Usage:</div><div class="line">npm ERR! npm config set &lt;key&gt; &lt;value&gt;</div><div class="line">npm ERR! npm config get [&lt;key&gt;]</div><div class="line">npm ERR! npm config delete &lt;key&gt;</div><div class="line">npm ERR! npm config list</div><div class="line">npm ERR! npm config edit</div><div class="line">npm ERR! npm set &lt;key&gt; &lt;value&gt;</div><div class="line">npm ERR! npm get [&lt;key&gt;]</div><div class="line">npm ERR! not ok code 0</div></pre></td></tr></table></figure></p>
+<p><code>npm config</code>命令的使用方法都列出来了。如果想看到完全的信息，还是使用<code>npm help config</code>命令吧。这个命令会通过<code>vim</code>打开一个<code>npm config</code>命令的说明书，非常详尽，包括所有命令，各种类型的配置的优先级（比如命令行参数<code>--proxy http://server:port</code>优先级最高，文章中我们使用的方法是修改用户配置，优先级与命令行参数相比较低。）以及所有的配置选项（比如文章中我们修改了proxy，https-proxy和registry.）。说明书篇幅很长，不再赘述。</p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2013/11/23/Good-UI-2/" data-toggle="tooltip" data-placement="top"
+                           title="【翻译】优秀的用户界面设计（二）">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2013/09/28/A-Beginner's-Guide-to-HTTP-Cache-Headers/" data-toggle="tooltip" data-placement="top"
+                           title="HTTP缓存头部入门指南">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 飞鹰走码 2017
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://lichangwei.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    var _baId = 'b1cbd873d9c466a6c24f70c7ab90056c';
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?" + _baId;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','jKpsnJjixMaVpfnXVc3L','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="https://avatars1.githubusercontent.com/u/718802?v=4&amp;s=460">
+</body>
+
+</html>
