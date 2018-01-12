@@ -18,10 +18,10 @@ POST http://192.168.1.199:7999/sony/3/accessControl HTTP/1.1
 HTTP/1.1 401 Unauthorized
 WWW-Authenticate: Basic realm="Private Page"
 ```  
-![显示PIN码](../images/WWW-Authentication-1.png)
+![显示PIN码](../../../../images/WWW-Authentication-1.png)
   
 3. 浏览器收到401未认证错误，将会显示一个如下登录框。并显示出服务器端给的提示信息`Private Page`.  
-![浏览器显示登录框](../images/WWW-Authentication-2.png)  
+![浏览器显示登录框](../../../../images/WWW-Authentication-2.png)  
 用户在密码一栏中输入PIN码之后点击登录，浏览器将会重新再发一次请求。这次请求跟上次请求唯一不同就是多了一个header。
 ```
 POST http://192.168.1.199:7999/sony/3/accessControl HTTP/1.1
