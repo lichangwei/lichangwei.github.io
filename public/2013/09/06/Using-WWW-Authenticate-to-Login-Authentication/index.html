@@ -172,7 +172,7 @@
 </li>
 </ol>
 <ol>
-<li>电视机没有收到认证信息，创建PIN码并显示在电视机上（如下图），返回401未认证错误。<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">HTTP/1.1 401 Unauthorized</div><div class="line">WWW-Authenticate: Basic realm=&quot;Private Page&quot;</div><div class="line">```  </div><div class="line">![显示PIN码](../images/WWW-Authentication-1.png)</div><div class="line">  </div><div class="line">3. 浏览器收到401未认证错误，将会显示一个如下登录框。并显示出服务器端给的提示信息`Private Page`.  </div><div class="line">![浏览器显示登录框](../images/WWW-Authentication-2.png)  </div><div class="line">用户在密码一栏中输入PIN码之后点击登录，浏览器将会重新再发一次请求。这次请求跟上次请求唯一不同就是多了一个header。</div></pre></td></tr></table></figure>
+<li>电视机没有收到认证信息，创建PIN码并显示在电视机上（如下图），返回401未认证错误。<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">HTTP/1.1 401 Unauthorized</div><div class="line">WWW-Authenticate: Basic realm=&quot;Private Page&quot;</div><div class="line">```  </div><div class="line">![显示PIN码](../../../../images/WWW-Authentication-1.png)</div><div class="line">  </div><div class="line">3. 浏览器收到401未认证错误，将会显示一个如下登录框。并显示出服务器端给的提示信息`Private Page`.  </div><div class="line">![浏览器显示登录框](../../../../images/WWW-Authentication-2.png)  </div><div class="line">用户在密码一栏中输入PIN码之后点击登录，浏览器将会重新再发一次请求。这次请求跟上次请求唯一不同就是多了一个header。</div></pre></td></tr></table></figure>
 </li>
 </ol>
 <p>POST <a href="http://192.168.1.199:7999/sony/3/accessControl" target="_blank" rel="external">http://192.168.1.199:7999/sony/3/accessControl</a> HTTP/1.1<br>Authorization: Basic OjgyNzU=<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">我们在Chrome的控制台执行以下代码`atob(&apos;OjgyNzU=&apos;)`，可以看到结果是`:8275`，也就是`: + PIN`。也许你已经猜到了，Authorization的值就是`Basic base64(&lt;username&gt;:&lt;password&gt;)`。  </div><div class="line"></div><div class="line">4. 电视机收到带有Authorization头部的请求以后，调用类似`atob`的方法解码，得到PIN码判断是否正确，如果正确则验证成功，如果不正确则继续返回和第2步一样的响应。在这里，我们输入了正确的PIN码，所以服务器端返回了200状态吗。</div></pre></td></tr></table></figure></p>
@@ -184,14 +184,14 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2013/09/11/Software-Product-Quality-Cannot-be-rely-on-Test/" data-toggle="tooltip" data-placement="top"
-                           title="">&larr; Previous Post</a>
+                        <a href="/2013/09/06/Using-Redirect-to-Login-and-Authentication/" data-toggle="tooltip" data-placement="top"
+                           title="使用页面跳转完成登录和认证">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2013/09/06/Using-Redirect-to-Login-and-Authentication/" data-toggle="tooltip" data-placement="top"
-                           title="使用页面跳转完成登录和认证">Next Post &rarr;</a>
+                        <a href="/2013/09/01/Ways-to-Cross-Domain/" data-toggle="tooltip" data-placement="top"
+                           title="">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -287,7 +287,7 @@
 
                 </ul>
                 <p class="copyright text-muted">
-                    Copyright &copy; 飞鹰走码 2017
+                    Copyright &copy; 飞鹰走码 2018
                     <br>
                     <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
                     <br>

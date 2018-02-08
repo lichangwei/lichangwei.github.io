@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="李长伟的博客">
+    <meta name="keyword" content="">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="飞鹰走码" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        IIS的URL重写（反向代理）｜李长伟的博客
+        
+    </title>
+
+    <link rel="canonical" href="http://lichangwei.github.io/2018/01/12/iis-url-rewrite/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://owxa05m5s.bkt.clouddn.com/lion-blur-bg.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    飞鹰走码
+                </span>
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>IIS的URL重写（反向代理）</h1>
+                    
+                    <span class="meta">
+                         作者 李长伟
+                        <span>
+                          日期 2018-01-12
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            IIS的URL重写（反向代理）
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <p>以前我使用过<code>Apache</code>或<code>Nginx</code>实现反向代理，但是目前后端使用的是<code>.Net</code>语言，服务器操作系统是<code>Windows Server</code>，并且后端应用程序就部署在<code>IIS</code>上，因此不打算再安装<code>Nginx</code>，改为使用<code>IIS</code>。</p>
+<p>在操作过程中，遇到各种问题也耽误了不少时间，现在将一些操作流程记录下来，以备再用。</p>
+<h2 id="项目简介"><a href="#项目简介" class="headerlink" title="项目简介"></a>项目简介</h2><p>项目采用前后端分离方式开发，两个代码仓库，并部署为两个应用。后端接口地址全部以<code>/api</code>打头，方便简化转发规则。现在就需要在前端应用中将<code>/api</code>打头的请求转至后端应用。</p>
+<h2 id="IIS默认不支持反向代理，需要额外安装插件"><a href="#IIS默认不支持反向代理，需要额外安装插件" class="headerlink" title="IIS默认不支持反向代理，需要额外安装插件"></a>IIS默认不支持反向代理，需要额外安装插件</h2><p>很难想象<code>IIS</code>(Internet Infomation Service)竟然不默认支持反向代理，需要安装官方提供的两个插件。<br>安装插件：</p>
+<ol>
+<li><a href="https://www.iis.net/downloads/microsoft/application-request-routing" target="_blank" rel="external">Application Request Routing</a></li>
+<li><a href="https://www.iis.net/downloads/microsoft/url-rewrite" target="_blank" rel="external">URL Rewrite</a><br>安装完成之后重新启动一下<code>IIS</code>.</li>
+</ol>
+<h2 id="启用反向代理功能"><a href="#启用反向代理功能" class="headerlink" title="启用反向代理功能"></a>启用反向代理功能</h2><ol>
+<li>双击<code>IIS</code>根目录，双击<code>Application Request Routing Cache</code>，双击右侧的<code>Server Proxy Settings</code>。<br><img src="../../../../images/iis-url-rewrite/1.click-iis-root-select-arr.png" alt=""><br><img src="../../../../images/iis-url-rewrite/2.server-proxy-setting.png" alt=""></li>
+<li>勾选<code>Enable proxy</code><br><img src="../../../../images/iis-url-rewrite/3.enable-proxy.png" alt=""></li>
+</ol>
+<h2 id="添加入站规则"><a href="#添加入站规则" class="headerlink" title="添加入站规则"></a>添加入站规则</h2><ol>
+<li>点击前端应用，双击<code>URL Rewrite</code> -&gt; <code>Add Rules</code>(新建规则) -&gt; <code>Blank rule</code>(空白规则)<br><img src="../../../../images/iis-url-rewrite/4.select-url-rewrite.png" alt=""></li>
+<li><p>填写入站规则信息<br><img src="../../../../images/iis-url-rewrite/5.add-rule.png" alt=""></p>
+</li>
+<li><p>填写转发条件<br><img src="../../../../images/iis-url-rewrite/6.add-condition.png" alt=""></p>
+</li>
+<li><p>填写操作部分<br><img src="../../../../images/iis-url-rewrite/7.add-operation.png" alt=""></p>
+</li>
+<li><p>点击右侧应用</p>
+</li>
+</ol>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>反向代理的配置相比<code>Nginx</code>等复杂太多了，还需要额外理解IIS自己定义的一些概念，比如入站规则等。相信大部分刚毕业的同学跟我一样，一度特别喜欢有操作界面的软件，随着对系统掌握程度的增加，这个想法会慢慢的逆转。</p>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/10/24/shared-cookie/" data-toggle="tooltip" data-placement="top"
+                           title="Cookie 的共享规则">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#项目简介"><span class="toc-text">项目简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IIS默认不支持反向代理，需要额外安装插件"><span class="toc-text">IIS默认不支持反向代理，需要额外安装插件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#启用反向代理功能"><span class="toc-text">启用反向代理功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加入站规则"><span class="toc-text">添加入站规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最后"><span class="toc-text">最后</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 飞鹰走码 2018
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://lichangwei.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    var _baId = 'b1cbd873d9c466a6c24f70c7ab90056c';
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?" + _baId;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','jKpsnJjixMaVpfnXVc3L','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="https://avatars1.githubusercontent.com/u/718802?v=4&amp;s=460">
+</body>
+
+</html>

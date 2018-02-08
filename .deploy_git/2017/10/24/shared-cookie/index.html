@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="李长伟的博客">
+    <meta name="keyword" content="">
+    <meta name="theme-color" content="#600090">
+    <meta name="msapplication-navbutton-color" content="#600090">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#600090">
+    <link rel="shortcut icon" href="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-person-128.png">
+    <link rel="alternate" type="application/atom+xml" title="飞鹰走码" href="/atom.xml">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
+    <title>
+        
+        Cookie 的共享规则｜李长伟的博客
+        
+    </title>
+
+    <link rel="canonical" href="http://lichangwei.github.io/2017/10/24/shared-cookie/">
+
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/blog-style.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="/css/syntax.css">
+</head>
+
+<style>
+
+    header.intro-header {
+        background-image: url('http://owxa05m5s.bkt.clouddn.com/lion-blur-bg.jpg')
+    }
+</style>
+<!-- hack iOS CSS :active style -->
+<body ontouchstart="" class="animated fadeIn">
+<!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
+" data-ishome = "false" >
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand animated pulse" href="/">
+                <span class="brand-logo">
+                    飞鹰走码
+                </span>
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <!-- Known Issue, found by Hux:
+            <nav>'s height woule be hold on by its content.
+            so, when navbar scale out, the <nav> will cover tags.
+            also mask any touch event of tags, unfortunately.
+        -->
+        <!-- /.navbar-collapse -->
+        <div id="huxblog_navbar">
+            <div class="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+					
+                    
+					
+					
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- /.container -->
+</nav>
+<script>
+    // Drop Bootstarp low-performance Navbar
+    // Use customize navbar with high-quality material design animation
+    // in high-perf jank-free CSS3 implementation
+//    var $body   = document.body;
+    var $toggle = document.querySelector('.navbar-toggle');
+    var $navbar = document.querySelector('#huxblog_navbar');
+    var $collapse = document.querySelector('.navbar-collapse');
+
+    $toggle.addEventListener('click', handleMagic)
+    function handleMagic(e){
+        if ($navbar.className.indexOf('in') > 0) {
+        // CLOSE
+            $navbar.className = " ";
+            // wait until animation end.
+            setTimeout(function(){
+                // prevent frequently toggle
+                if($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = "0px"
+                }
+            },400)
+        }else{
+        // OPEN
+            $collapse.style.height = "auto"
+            $navbar.className += " in";
+        }
+    }
+</script>
+
+<!-- Main Content -->
+
+<!--only post-->
+
+
+<img class="wechat-title-img"
+     src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
+
+
+<style>
+    
+    header.intro-header {
+        background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')
+    }
+
+    
+</style>
+
+<header class="intro-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <div class="post-heading">
+                    <h1>Cookie 的共享规则</h1>
+                    
+                    <span class="meta">
+                         作者 李长伟
+                        <span>
+                          日期 2017-10-24
+                         </span>
+                    </span>
+                    <div class="tags text-center">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="post-title-haojen">
+        <span>
+            Cookie 的共享规则
+        </span>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <!-- Post Container -->
+            <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
+                <blockquote>
+<p>今天是1024程序猿的节日，今天不加班，回家加俩菜。</p>
+</blockquote>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>昨天同事报出一个问题，给某家客户部署测试环境时遇到一个问题，他们访问该测试环境时完全正常，但是客户却不能访问。这是为什么呢？</p>
+<p>原来是这样的，测试环境部署在阿里云上，包括两个系统，称他们分别是系统A和系统B吧。系统A通过<code>https://customer.exmaple.com</code> 访问，系统B作为系统A的子系统以<code>iframe</code>方式嵌入到系统A，并且通过<code>https://customer.exmaple.com:8010</code>访问。部署完成之后我们同事正常访问，但是客户能访问系统A，但是不能访问被<code>iframe</code>嵌入系统B。通过浏览器控制台可以看到报错.</p>
+<blockquote>
+<p>Fialed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED.</p>
+</blockquote>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>从报错的信息上看，隧道连接失败，隧道还不通，也就是请求就没有发送到服务器端去。我很快注意到系统B使用<code>https</code>协议和8010端口，并猜想会不会<code>https</code>协议必须使用443端口。我部署<code>https</code>系统较少，没有看到或留意非443端口的<code>https</code>应用。但是这个猜测很快被同事证明是错误的，因为我们的另外一个客户也是这样部署的，但是能够正常访问，突然感觉自己的网络方面的知识还是很欠缺的，其实这个也是很容易推断出来的，因为<code>https</code>协议就是在http协议的基础上加了SSL。http协议支持的端口<code>https</code>也应该支持。</p>
+<p>请求根本就没有发送到服务器端去，不可能是服务器端的问题，这也被另一个现象佐证：我们同事可以正常访问。可以确定是客户网络问题，考虑到8010端口的<code>https</code>实在少见，猜测是客户网络设置中禁止了非443端口的<code>https</code>协议，那么怎么解决这个问题呢？让用户调整网络设置当然是最简单的，但是客户公司是整个集团统一设置的网络安全策略，想修改一定要有足够理由才行，在这之前还是想想有没有其他方案吧。</p>
+<p>如果系统A和系统B使用相同的<code>https</code>协议，相同的443端口，但是不同的域名呢？很快就找到CTO申请了一个<code>customer-s.example.com</code>，部署之后发现上面的错误没有了，系统B的页面可以访问了，但是页面还是出不来，系统B的请求大多报错了。</p>
+<blockquote>
+<p>Uncaught Type Error: Cannot read property ‘job’ of undefined</p>
+</blockquote>
+<p>从浏览器端的错误信息可以看出该页面没有给出合适的初始化数据。经过后端同事诊断之后发现是系统A的<code>Cookie</code>没有带过去，所以请求出现错误。啊？这是什么道理？访问系统B为什么要让浏览器自动带上系统A设置的<code>Cookie</code>？</p>
+<p>原来系统A和系统B并没有实现单点登录，而是系统A在即将打开系统B的<code>iframe</code>时，首先调用系统B的登录接口换取登录<code>URL</code>和<code>token</code>，并在<code>iframe</code>中打开系统B，系统B的后端没有完备的数据给客户端使用，还会通过<code>http</code>请求从系统A中获取数据，而系统A不知道系统B的服务器端程序要获取哪个用户的数据，怎么办呢？</p>
+<p>猜测故事是这样的，开发阶段两个系统使用相同的localhost域名使用不同的端口，同时部署在本地，调试系统B的服务器端代码时发现原来可以获得系统A设置的<code>Cookie</code>，那我把系统A的<code>Cookie</code>带上去访问系统A的接口，模拟了一个浏览器请求，不就可以系统A获取当前用户的数据了吗？这样也就不需要系统A单独为系统B开发接口了，就这么办了。这里不去评价糟糕的设计，乱七八糟的设计最终也算是跑通了。</p>
+<p>终于说到了这篇文章的主题了，<code>Cookie</code>的作用域是整个域名，跨协议（<code>HTTP</code>或<code>HTTPS</code>，可以指定<code>Cookie</code>仅适用于<code>HTTPS</code>），跨端口共享。了解更详细内容请参考<a href="https://tools.ietf.org/html/rfc6265#section-8.5" target="_blank" rel="external">RFC6265</a>。这是我以前没有注意到的，又长知识了。</p>
+<p>由于解耦两个系统的工作量较大，目前还是采取跟客户沟通，对<code>HTTPS</code>协议开放某个非433的端口。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li>在解决问题过程中暴露了我两个知识点上的欠缺。<ol>
+<li><code>HTTPS</code>协议和<code>HTTP</code>协议一样，可以绑定在不同的端口上。</li>
+<li><code>Cookie</code>的作用域是整个域名，跨协议跨端口共享。</li>
+</ol>
+</li>
+<li>在遇到复杂系统通信时，需要做一些架构评审，防止出现上面提到的很不专业的处理方法。</li>
+</ol>
+
+                <hr>
+                
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="/2018/01/12/iis-url-rewrite/" data-toggle="tooltip" data-placement="top"
+                           title="IIS的URL重写（反向代理）">&larr; Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="/2017/06/30/callback-hell-and-async-program/" data-toggle="tooltip" data-placement="top"
+                           title="【Node系列】回调地狱和异步编程">Next Post &rarr;</a>
+                    </li>
+                    
+                </ul>
+
+                
+
+                
+
+
+                <!--加入新的评论系统-->
+                
+            </div>
+
+            <div class="hidden-xs col-sm-3 toc-col">
+                <div class="toc-wrap">
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题"><span class="toc-text">问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决"><span class="toc-text">解决</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Sidebar Container -->
+
+            <div class="
+                col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
+                <!-- Featured Tags -->
+                
+                <section>
+                    <!-- no hr -->
+                    <h5 class="text-center">
+                        <a href="/tags/">FEATURED TAGS</a>
+                    </h5>
+                    <div class="tags">
+                        
+                    </div>
+                </section>
+                
+
+                <!-- Friends Blog -->
+                
+            </div>
+        </div>
+
+    </div>
+</article>
+
+
+
+
+
+
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
+                <br>
+                <ul class="list-inline text-center">
+                
+                
+                    <li>
+                        <a target="_blank" href="https://twitter.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+                
+
+                
+
+                
+
+                
+                    <li>
+                        <a target="_blank"  href="https://github.com/lichangwei">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                
+
+                
+
+                </ul>
+                <p class="copyright text-muted">
+                    Copyright &copy; 飞鹰走码 2018
+                    <br>
+                    <span id="busuanzi_container_site_pv" style="font-size: 12px;">PV: <span id="busuanzi_value_site_pv"></span> Times</span>
+                    <br>
+                    Theme by <a href="https://haojen.github.io/">Haojen Ma</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/js/blog.js"></script>
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- jquery.tagcloud.js -->
+<script>
+    // only load tagcloud.js in tag.html
+    if($('#tag_cloud').length !== 0){
+        async("http://lichangwei.github.io/js/jquery.tagcloud.js",function(){
+            $.fn.tagcloud.defaults = {
+                //size: {start: 1, end: 1, unit: 'em'},
+                color: {start: '#bbbbee', end: '#0085a1'},
+            };
+            $('#tag_cloud a').tagcloud();
+        })
+    }
+</script>
+
+<!--fastClick.js -->
+<script>
+    async("//cdn.bootcss.com/fastclick/1.0.6/fastclick.min.js", function(){
+        var $nav = document.querySelector("nav");
+        if($nav) FastClick.attach($nav);
+    })
+</script>
+
+<!-- Google Analytics -->
+
+
+
+<!-- Baidu Tongji -->
+
+<script>
+    var _baId = 'b1cbd873d9c466a6c24f70c7ab90056c';
+    // Originial
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?" + _baId;
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+
+
+<!-- swiftype -->
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+  (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+  e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install','jKpsnJjixMaVpfnXVc3L','2.0.0');
+</script>
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<!--wechat title img-->
+<img class="wechat-title-img" src="https://avatars1.githubusercontent.com/u/718802?v=4&amp;s=460">
+</body>
+
+</html>
