@@ -2,7 +2,7 @@
 <html lang="en">
 
 <!-- Head tag -->
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -43,8 +43,8 @@
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="" class="animated fadeIn">
 <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
-" data-ishome = "false" >
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
+" data-ishome="false">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header page-scroll">
@@ -58,6 +58,7 @@
                 <span class="brand-logo">
                     飞鹰走码
                 </span>
+                's Blog
             </a>
         </div>
 
@@ -118,8 +119,7 @@
 <!--only post-->
 
 
-<img class="wechat-title-img"
-     src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
+<img class="wechat-title-img" src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
 
 
 <style>
@@ -164,7 +164,7 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <p>在<a href="https://developers.google.com/youtube/2.0/reference?hl=en" target="_blank" rel="external">Youtube的开放API</a>中，totalResults字段只是近似值，而不是准确值。比如返回的totalResults为48，但是只返回46条记录。所以应用中不能依赖该字段来确定总共有多少页，然后允许用户直接跳到最后一页。因为最后一页很有可能就不存在。  </p>
+                <p>在<a href="https://developers.google.com/youtube/2.0/reference?hl=en" target="_blank" rel="noopener">Youtube的开放API</a>中，totalResults字段只是近似值，而不是准确值。比如返回的totalResults为48，但是只返回46条记录。所以应用中不能依赖该字段来确定总共有多少页，然后允许用户直接跳到最后一页。因为最后一页很有可能就不存在。  </p>
 <p>为什么会出现这种情况呢？我们从以下几个概念开始说起。  </p>
 <h2 id="CAP理论"><a href="#CAP理论" class="headerlink" title="CAP理论"></a>CAP理论</h2><p>CAP理论由Eric Brewer教授提出：在设计和部署分布式应用时，存在以下三个核心的系统需求：一致性（<strong>C</strong>onsistency），可用性（<strong>A</strong>vailability）和分区容错性（<strong>P</strong>artition Tolerance）， <strong>针对特定数据，最多只能同时满足两个</strong>。<br><strong>一致性</strong>：又称为原子性或者事务性。表示一组操作是不可分割的，要么全部完成，不会出现部分完成的情况。<br><strong>可用性</strong>：是指系统能够很好的为用户服务，不会出现操作失败或者访问超时等用户体验不好的情况。可以通过数据冗余，负载均衡等手段实现。<br><strong>分区容错性</strong>：一个良好的分布式系统，在其中一个或者几个节点宕掉的情况下仍然能够工作。  </p>
 <p>从这里可以大胆的猜测，Youtube系统应该舍弃了一致性，保证了可用性和分区容错性。  </p>
@@ -178,14 +178,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2013/06/20/Javascript-Trick/" data-toggle="tooltip" data-placement="top"
-                           title="Javascript的坑">&larr; Previous Post</a>
+                        <a href="/2013/06/20/Javascript-Trick/" data-toggle="tooltip" data-placement="top" title="Javascript的坑">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2013/06/07/essay/" data-toggle="tooltip" data-placement="top"
-                           title="强迫注册和注册强迫症">Next Post &rarr;</a>
+                        <a href="/2013/06/07/essay/" data-toggle="tooltip" data-placement="top" title="强迫注册和注册强迫症">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -197,6 +195,9 @@
 
                 <!--加入新的评论系统-->
                 
+
+                
+
             </div>
 
             <div class="hidden-xs col-sm-3 toc-col">
@@ -268,7 +269,7 @@
 
                 
                     <li>
-                        <a target="_blank"  href="https://github.com/lichangwei">
+                        <a target="_blank" href="https://github.com/lichangwei">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-github fa-stack-1x fa-inverse"></i>

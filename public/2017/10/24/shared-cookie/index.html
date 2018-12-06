@@ -2,7 +2,7 @@
 <html lang="en">
 
 <!-- Head tag -->
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -43,8 +43,8 @@
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="" class="animated fadeIn">
 <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
-" data-ishome = "false" >
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
+" data-ishome="false">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header page-scroll">
@@ -58,6 +58,7 @@
                 <span class="brand-logo">
                     飞鹰走码
                 </span>
+                's Blog
             </a>
         </div>
 
@@ -118,8 +119,7 @@
 <!--only post-->
 
 
-<img class="wechat-title-img"
-     src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
+<img class="wechat-title-img" src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
 
 
 <style>
@@ -181,7 +181,7 @@
 <p>从浏览器端的错误信息可以看出该页面没有给出合适的初始化数据。经过后端同事诊断之后发现是系统A的<code>Cookie</code>没有带过去，所以请求出现错误。啊？这是什么道理？访问系统B为什么要让浏览器自动带上系统A设置的<code>Cookie</code>？</p>
 <p>原来系统A和系统B并没有实现单点登录，而是系统A在即将打开系统B的<code>iframe</code>时，首先调用系统B的登录接口换取登录<code>URL</code>和<code>token</code>，并在<code>iframe</code>中打开系统B，系统B的后端没有完备的数据给客户端使用，还会通过<code>http</code>请求从系统A中获取数据，而系统A不知道系统B的服务器端程序要获取哪个用户的数据，怎么办呢？</p>
 <p>猜测故事是这样的，开发阶段两个系统使用相同的localhost域名使用不同的端口，同时部署在本地，调试系统B的服务器端代码时发现原来可以获得系统A设置的<code>Cookie</code>，那我把系统A的<code>Cookie</code>带上去访问系统A的接口，模拟了一个浏览器请求，不就可以系统A获取当前用户的数据了吗？这样也就不需要系统A单独为系统B开发接口了，就这么办了。这里不去评价糟糕的设计，乱七八糟的设计最终也算是跑通了。</p>
-<p>终于说到了这篇文章的主题了，<code>Cookie</code>的作用域是整个域名，跨协议（<code>HTTP</code>或<code>HTTPS</code>，可以指定<code>Cookie</code>仅适用于<code>HTTPS</code>），跨端口共享。了解更详细内容请参考<a href="https://tools.ietf.org/html/rfc6265#section-8.5" target="_blank" rel="external">RFC6265</a>。这是我以前没有注意到的，又长知识了。</p>
+<p>终于说到了这篇文章的主题了，<code>Cookie</code>的作用域是整个域名，跨协议（<code>HTTP</code>或<code>HTTPS</code>，可以指定<code>Cookie</code>仅适用于<code>HTTPS</code>），跨端口共享。了解更详细内容请参考<a href="https://tools.ietf.org/html/rfc6265#section-8.5" target="_blank" rel="noopener">RFC6265</a>。这是我以前没有注意到的，又长知识了。</p>
 <p>由于解耦两个系统的工作量较大，目前还是采取跟客户沟通，对<code>HTTPS</code>协议开放某个非433的端口。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
 <li>在解决问题过程中暴露了我两个知识点上的欠缺。<ol>
@@ -198,14 +198,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2018/01/12/iis-url-rewrite/" data-toggle="tooltip" data-placement="top"
-                           title="IIS的URL重写（反向代理）">&larr; Previous Post</a>
+                        <a href="/2018/01/12/iis-url-rewrite/" data-toggle="tooltip" data-placement="top" title="IIS的URL重写（反向代理）">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2017/06/30/callback-hell-and-async-program/" data-toggle="tooltip" data-placement="top"
-                           title="【Node系列】回调地狱和异步编程">Next Post &rarr;</a>
+                        <a href="/2017/06/30/callback-hell-and-async-program/" data-toggle="tooltip" data-placement="top" title="【Node系列】回调地狱和异步编程">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -217,6 +215,9 @@
 
                 <!--加入新的评论系统-->
                 
+
+                
+
             </div>
 
             <div class="hidden-xs col-sm-3 toc-col">
@@ -288,7 +289,7 @@
 
                 
                     <li>
-                        <a target="_blank"  href="https://github.com/lichangwei">
+                        <a target="_blank" href="https://github.com/lichangwei">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-github fa-stack-1x fa-inverse"></i>

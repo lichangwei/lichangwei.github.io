@@ -2,7 +2,7 @@
 <html lang="en">
 
 <!-- Head tag -->
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -43,8 +43,8 @@
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="" class="animated fadeIn">
 <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
-" data-ishome = "false" >
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
+" data-ishome="false">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header page-scroll">
@@ -58,6 +58,7 @@
                 <span class="brand-logo">
                     飞鹰走码
                 </span>
+                's Blog
             </a>
         </div>
 
@@ -118,8 +119,7 @@
 <!--only post-->
 
 
-<img class="wechat-title-img"
-     src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
+<img class="wechat-title-img" src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
 
 
 <style>
@@ -175,11 +175,11 @@
 <li>【建议】属性书写顺序<br>显示属性<br> display, position, float<br>盒模型属性<br> width, max-width, min-width,<br> height, max-height, min-height,<br> border<br> margin, margin-top, margin-right, margin-bottom, margin-left,<br> padding, padding-top, padding-right, padding-bottom, padding-left,<br>文本属性(color, font, text-decoration, text-align, vertical-align, white-space, other text, content)</li>
 <li></li>
 <li>（由于性能问题）不许使用表达式<code>expression</code>，请使用Javascript替代。</li>
-<li>【建议】在模块的开头和结尾通过注释。<figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="comment">/* XX模块 开始*/</span></div><div class="line"><span class="comment">/* XX模块 结束*/</span></div></pre></td></tr></table></figure>
+<li>【建议】在模块的开头和结尾通过注释。<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="comment">/* XX模块 开始*/</span></span><br><span class="line"><span class="comment">/* XX模块 结束*/</span></span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p><a href="http://blog.segmentfault.com/tychio/1190000000531277" target="_blank" rel="external">http://blog.segmentfault.com/tychio/1190000000531277</a></p>
-<p>CSS命名规范<br>一、类名 !important<br>全部采用中划线命名法<br>  <a rel="external" href="javascript:void(0);" class="titleMore" target="_blank">More</a>  // 错误<br>  <a rel="external" href="javascript:void(0);" class="title-more" target="_blank">More</a>  // 正确<br>二、文件名 !important<br>CSS文件名统一采用小写字母加下划线的方式，单词之间用中划线(-)分割, 不允许出现大写或者其他符号。正确的如：feedback-send.css<br>CSS文件默认情况下的编码必须采用 utf-8（无bom），其他编码方式均不可！！！（某些专门给中文用户使用的网页中的CSS除外）</p>
+<p><a href="http://blog.segmentfault.com/tychio/1190000000531277" target="_blank" rel="noopener">http://blog.segmentfault.com/tychio/1190000000531277</a></p>
+<p>CSS命名规范<br>一、类名 !important<br>全部采用中划线命名法<br>  <a rel="noopener" href="javascript:void(0);" class="titleMore" target="_blank">More</a>  // 错误<br>  <a rel="noopener" href="javascript:void(0);" class="title-more" target="_blank">More</a>  // 正确<br>二、文件名 !important<br>CSS文件名统一采用小写字母加下划线的方式，单词之间用中划线(-)分割, 不允许出现大写或者其他符号。正确的如：feedback-send.css<br>CSS文件默认情况下的编码必须采用 utf-8（无bom），其他编码方式均不可！！！（某些专门给中文用户使用的网页中的CSS除外）</p>
 <p>书写规范<br>一. 不得在css中使用expression !important<br>//由于性能的问题，不准使用 (通过重置触发该 Expression 的 CSS 属性来优化性能，但是也可能有其他问题)，请用js代替<br>.header {height:expression(document.documentElement.height)}  </p>
 <p>五. CSS选择符组<br>如果是选择符组，则这些选择符(selector)各占一行<br>.style1,<br>.style2 {background:url(xxx.gif) no-repeat ;}</p>
 <p>七. 采用属性缩写方式<br>.style {margin:10px 5px; font:normal 12px/1.5 Verdana; color:#F60; }  //颜色值能简写的使用简写<br>属性缩写所代表的意思请点击 这里<br>七. 写成一行<br>.yellowish-btn,.yellow-btn{display:inline-block;zoom:1;border:0 none;background:none;}<br>.yellowish-btn:hover,.yellow-btn:hover {text-decoration:none;}<br>.yellowish-btn input,.yellow-btn input, .yellowish-btn button,.yellow-btn button {float:left;width:100%;border:0 none;}<br>.yellowish-btn input, .yellowish-btn button {height:27px;color:#7A2D01;}<br>为了方便区域阅读，属性写成一行。</p>
@@ -243,14 +243,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2014/06/05/html-code-guide/" data-toggle="tooltip" data-placement="top"
-                           title="设计规范">&larr; Previous Post</a>
+                        <a href="/2014/06/05/html-code-guide/" data-toggle="tooltip" data-placement="top" title="设计规范">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2014/06/01/javascript-code-guide/" data-toggle="tooltip" data-placement="top"
-                           title="Javascript编码规范">Next Post &rarr;</a>
+                        <a href="/2014/06/01/javascript-code-guide/" data-toggle="tooltip" data-placement="top" title="Javascript编码规范">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -262,6 +260,9 @@
 
                 <!--加入新的评论系统-->
                 
+
+                
+
             </div>
 
             <div class="hidden-xs col-sm-3 toc-col">
@@ -333,7 +334,7 @@
 
                 
                     <li>
-                        <a target="_blank"  href="https://github.com/lichangwei">
+                        <a target="_blank" href="https://github.com/lichangwei">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-github fa-stack-1x fa-inverse"></i>

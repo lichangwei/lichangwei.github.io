@@ -2,7 +2,7 @@
 <html lang="en">
 
 <!-- Head tag -->
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -43,8 +43,8 @@
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="" class="animated fadeIn">
 <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
-" data-ishome = "false" >
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
+" data-ishome="false">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header page-scroll">
@@ -58,6 +58,7 @@
                 <span class="brand-logo">
                     飞鹰走码
                 </span>
+                's Blog
             </a>
         </div>
 
@@ -118,8 +119,7 @@
 <!--only post-->
 
 
-<img class="wechat-title-img"
-     src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
+<img class="wechat-title-img" src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
 
 
 <style>
@@ -205,7 +205,7 @@
 </ul>
 <p><img src="http://static.zybuluo.com/lichangwei/krz2ci9gli2120g2g2afbrfi/show-media-queries.png" alt="show-media-queries.png-139.6kB"></p>
 <p><strong>显示设备外框</strong><br>只有当你选择了某些设备（比如 iPhone 6）之后才能启用该特性，启用以后你将能够看到页面被放在设备外壳里面。<br><img src="http://static.zybuluo.com/lichangwei/akjj90o538yceskczug4lwkr/www.google.com-%28iPhone%206%29.png" alt="www.google.com-(iPhone 6).png-34.9kB"></p>
-<p><strong>显示媒体查询</strong><br><a href="https://developers.google.com/web/fundamentals/design-and-ui/responsive/fundamentals/use-media-queries" target="_blank" rel="external">媒体查询</a>是响应式设计的重要组成部分，通过点击<code>Show media queries</code>可以看到媒体查询查看器，该工具会检测你样式中的媒体查询，并在顶部标尺中将其显示成彩色条。<br><img src="http://static.zybuluo.com/lichangwei/am40nh3xrcat33n5itno5y3h/media-query-inspector-ruler.png" alt="media-query-inspector-ruler.png-6.9kB"></p>
+<p><strong>显示媒体查询</strong><br><a href="https://developers.google.com/web/fundamentals/design-and-ui/responsive/fundamentals/use-media-queries" target="_blank" rel="noopener">媒体查询</a>是响应式设计的重要组成部分，通过点击<code>Show media queries</code>可以看到媒体查询查看器，该工具会检测你样式中的媒体查询，并在顶部标尺中将其显示成彩色条。<br><img src="http://static.zybuluo.com/lichangwei/am40nh3xrcat33n5itno5y3h/media-query-inspector-ruler.png" alt="media-query-inspector-ruler.png-6.9kB"></p>
 <ul>
 <li>蓝色代表最大宽度<code>max-width</code></li>
 <li>绿色代表宽度区间<code>min-width ~ max-width</code></li>
@@ -216,8 +216,8 @@
 <p><strong>显示设备像素比</strong><br>如果你想通过非视网膜屏设备模拟视网膜屏设备，或者反过来，那么这个功能就是为你准备的。设备像素比就是逻辑像素和物理像素的比例。视网膜屏设备比如<code>Nexus 6P</code>比一般设备的像素密度更高，这会影响视觉内容的清晰度和大小。<br>下面这些Web上的案例会受到设备像素比的影响：</p>
 <ul>
 <li>CSS媒体查询：<br> <code>@media (-webkit-min-device-pixel-ratio: 2) { ... }</code></li>
-<li>CSS<a href="http://dev.w3.org/csswg/css-images/# image-set-notation" target="_blank" rel="external"><code>image-set</code></a></li>
-<li><code>img</code>的<a href="https://developers.google.com/web/fundamentals/design-and-ui/media/images/images-in-markup" target="_blank" rel="external"><code>srcset</code></a>属性</li>
+<li>CSS<a href="http://dev.w3.org/csswg/css-images/# image-set-notation" target="_blank" rel="noopener"><code>image-set</code></a></li>
+<li><code>img</code>的<a href="https://developers.google.com/web/fundamentals/design-and-ui/media/images/images-in-markup" target="_blank" rel="noopener"><code>srcset</code></a>属性</li>
 <li><code>window.devicePixelRatio</code>属性</li>
 </ul>
 <p>在真正的视网膜屏上，低DPI（每英寸点数）资源看起来像素化，而高DPI的资源看起来很清晰，为了能够在标准的显示器上模拟这中效果，可以将DPR设置成2并缩放视窗，一个2X资源看起来仍然清晰，而1X的资源看起来就会像素化。</p>
@@ -229,10 +229,10 @@
 <li>打开开发者工具主菜单</li>
 <li>点击<code>Customize and control DevTools</code>- <code>More tools</code> - <code>Sensors</code>菜单项<br><img src="http://static.zybuluo.com/lichangwei/37dklb3tf2etn9t0miuyet6i/navigate-to-sensors.png" alt="navigate-to-sensors.png-17.9kB"></li>
 </ol>
-<h3 id="3-1-模拟地理定位"><a href="#3-1-模拟地理定位" class="headerlink" title="3.1 模拟地理定位"></a>3.1 模拟地理定位</h3><p>移动设备一般使用GPS芯片进行定位，在传感器面板中，你可以使用<a href="http://www.w3.org/TR/geolocation-API/" target="_blank" rel="external">地理定位 API</a>模拟位置。你可以使用预置的几个城市或手动输入经度纬度，甚至还可以模拟定位失败的情况，这里有一个地理定位API的<a href="https://jsfiddle.net/lichangwei/mc0ep3u9/" target="_blank" rel="external">例子</a>，可以实验一下。<br><img src="http://static.zybuluo.com/lichangwei/4p8rz2bqkqfi2no661kz26et/geolocation.png" alt="geolocation.png-32.4kB"></p>
-<h3 id="3-2-模拟重力感应（加速度）"><a href="#3-2-模拟重力感应（加速度）" class="headerlink" title="3.2 模拟重力感应（加速度）"></a>3.2 模拟重力感应（加速度）</h3><p><img src="http://static.zybuluo.com/lichangwei/qoclusfnvrctjib2ih1ilfo9/orientation.png" alt="orientation.png-16kB"><br>在浏览器中打开以下链接实验以下吧。<a href="https://www.ikdoeict.be/apps/leercentrum/courses/ws1-cws-course-materials/demos/06_html5_js/orientation.html" target="_blank" rel="external">重力感应代码示例</a>，切换方位看看页面如何变化。</p>
+<h3 id="3-1-模拟地理定位"><a href="#3-1-模拟地理定位" class="headerlink" title="3.1 模拟地理定位"></a>3.1 模拟地理定位</h3><p>移动设备一般使用GPS芯片进行定位，在传感器面板中，你可以使用<a href="http://www.w3.org/TR/geolocation-API/" target="_blank" rel="noopener">地理定位 API</a>模拟位置。你可以使用预置的几个城市或手动输入经度纬度，甚至还可以模拟定位失败的情况，这里有一个地理定位API的<a href="https://jsfiddle.net/lichangwei/mc0ep3u9/" target="_blank" rel="noopener">例子</a>，可以实验一下。<br><img src="http://static.zybuluo.com/lichangwei/4p8rz2bqkqfi2no661kz26et/geolocation.png" alt="geolocation.png-32.4kB"></p>
+<h3 id="3-2-模拟重力感应（加速度）"><a href="#3-2-模拟重力感应（加速度）" class="headerlink" title="3.2 模拟重力感应（加速度）"></a>3.2 模拟重力感应（加速度）</h3><p><img src="http://static.zybuluo.com/lichangwei/qoclusfnvrctjib2ih1ilfo9/orientation.png" alt="orientation.png-16kB"><br>在浏览器中打开以下链接实验以下吧。<a href="https://www.ikdoeict.be/apps/leercentrum/courses/ws1-cws-course-materials/demos/06_html5_js/orientation.html" target="_blank" rel="noopener">重力感应代码示例</a>，切换方位看看页面如何变化。</p>
 <h2 id="4-参考资料"><a href="#4-参考资料" class="headerlink" title="4 参考资料"></a>4 参考资料</h2><ol>
-<li><a href="https://developers.google.com/web/tools/chrome-devtools/" target="_blank" rel="external">Chrome开发者工具官方介绍</a>，以上大部分内容来自该文档，部分甚至仅仅做了翻译，强烈推荐大家经常到该网站看看。</li>
+<li><a href="https://developers.google.com/web/tools/chrome-devtools/" target="_blank" rel="noopener">Chrome开发者工具官方介绍</a>，以上大部分内容来自该文档，部分甚至仅仅做了翻译，强烈推荐大家经常到该网站看看。</li>
 </ol>
 
                 <hr>
@@ -241,14 +241,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2017/05/04/react-patterns/" data-toggle="tooltip" data-placement="top"
-                           title="【翻译】React模式">&larr; Previous Post</a>
+                        <a href="/2017/05/04/react-patterns/" data-toggle="tooltip" data-placement="top" title="【翻译】React模式">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2016/09/06/lodash-functions/" data-toggle="tooltip" data-placement="top"
-                           title="Lodash函数以及常见用法">Next Post &rarr;</a>
+                        <a href="/2016/09/06/lodash-functions/" data-toggle="tooltip" data-placement="top" title="Lodash函数以及常见用法">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -260,6 +258,9 @@
 
                 <!--加入新的评论系统-->
                 
+
+                
+
             </div>
 
             <div class="hidden-xs col-sm-3 toc-col">
@@ -331,7 +332,7 @@
 
                 
                     <li>
-                        <a target="_blank"  href="https://github.com/lichangwei">
+                        <a target="_blank" href="https://github.com/lichangwei">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-github fa-stack-1x fa-inverse"></i>

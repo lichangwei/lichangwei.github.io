@@ -2,7 +2,7 @@
 <html lang="en">
 
 <!-- Head tag -->
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -43,8 +43,8 @@
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="" class="animated fadeIn">
 <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
-" data-ishome = "false" >
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
+" data-ishome="false">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header page-scroll">
@@ -58,6 +58,7 @@
                 <span class="brand-logo">
                     飞鹰走码
                 </span>
+                's Blog
             </a>
         </div>
 
@@ -118,8 +119,7 @@
 <!--only post-->
 
 
-<img class="wechat-title-img"
-     src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
+<img class="wechat-title-img" src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
 
 
 <style>
@@ -165,7 +165,7 @@
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
                 <p>本文结合CDN行为，探索HTTP缓存头部。如果你正要了解怎么书写缓存头部以适应现代WEB，或者你很好奇你周围的人都在谈论什么，那么你可以阅读本文。  </p>
-<p>如果你已经了解了缓存头部的好处，并且想了解更多，那么我推荐你去查看<a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html" target="_blank" rel="external">W3文档</a>。  </p>
+<p>如果你已经了解了缓存头部的好处，并且想了解更多，那么我推荐你去查看<a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html" target="_blank" rel="noopener">W3文档</a>。  </p>
 <h4 id="缓存头部能做什么？"><a href="#缓存头部能做什么？" class="headerlink" title="缓存头部能做什么？"></a>缓存头部能做什么？</h4><p>简单地说，缓存能让你将Web资源保存在通往用户浏览器的每一个远程节点。当然浏览器本身也维护着一个私有缓存，它让浏览器不用每次都从服务器获取资源。  </p>
 <p>配置缓存，对于节省站点流量是非常重要的，一个经济的站点可以减少带宽支出，或者希望保持Web专业开发者的声誉，你必须了解缓存的作用以及如何使用。  </p>
 <p>对于这些资源文件，比如你公司的logo，站点的favicon，以及那些核心的各个请求之间通用的CSS，告诉浏览器将此文件的备份保存一段时间，是非常安全的。如果你的用户是一个后座上的小孩，总是不停的问：“我们到了吗？”，你很可能会告诉他，“没有，20分钟以后才到，请不要再问了。”  </p>
@@ -195,23 +195,23 @@
 <p>no-transform<br>“Transform into what?”, you’re surely asking. Some proxies will convert image formats and other documents to improve performance. Presumably this was thought to be a feature that you should have to opt out of. If you don’t like the idea of your CDN making automated guesses about how your content should be encoded or formatted, I suggest including this header.</p>
 <p>proxy-revalidate<br>Essentially the same as the “must-revalidate” directive, except it’s just for the shared caches. Why didn’t they call it “s-mustrevalidate”? I’m sure there exists a mailing list somewhere where you could find that debate, but for now, just know that like “s-maxage”, this directive is designed for intermediary proxies and not user agents. The idea here is that you validate each end-user only once between the proxy and their agent, but each new user should revalidate back to the server. I suspect if your service requires this feature, you probably already know about it.</p>
 <p>As always, you should check out the spec for these settings if you need any clarification.</p>
-<ol>
+<ol start="2">
 <li>expires</li>
 </ol>
 <p>Back in the day, this was the standard way to specify when an asset expired, and is just a basic date-time stamp. It is still fairly useful for older user agents, which cryptowebologists assure us still roam in the uncharted territories. On most modern systems, the “cache-control” headers “max-age” and “s-maxage” will take precedence, but it’s always good practice to set a matching value here for compatibility. Just make sure you format the date correctly, or it will be evaluated as an expired date:</p>
 <p>Thu, 01 Dec 1983 20:00:00 GMT<br>Try to avoid setting the value to more than one year out as that breaks the specification, (see below for a discussion on cache time settings).</p>
-<ol>
+<ol start="3">
 <li>etag</li>
 </ol>
 <p>Short for “entity-tag”, the etag is a unique identifier for the resource being requested, typically comprised of the hash of that resource, or a hash of the timestamp the resource was updated. Basically, this lets a client ask smarter questions of the CDNs, like “give me X if it’s different than the etag I already have.”</p>
 <p>There’s a neat trick you can do with etags, which is to make them weak validators. This basically tells the user that although they are not the same, the two resources are functionally equivalent. Support for this feature is considered optional though, so you will want to do some testing with your providers, (discussed below).</p>
-<ol>
+<ol start="4">
 <li>vary</li>
 </ol>
 <p>Oh wow. This one is fun. The “vary” header is extremely powerful, but can trip up what would otherwise be a simple caching scheme. IE has had issues handling the “vary” header in the past, and at one point, even Chrome was handling this in a funny way. Essentially, “vary” lets the caches know which of the headers to use to figure out if they have a valid cache for a request; if a cache were a giant key-value store, adding “vary” fields appends those values to the key, thus changing which requests are considered valid matches for what exists in the cache.</p>
 <p>You would commonly set this to something like “Accept-Encoding” to make sure your gzip’ed assets get served where appropriate, saving you all that bandwidth you might otherwise waste. Additionally, setting:</p>
 <p>vary: User-Agent<br>will put you in the SEO good-books if you happen to be serving different versions of your HTML/CSS depending on the User-Agent of the request. Google will note the header and have the Googlebot crawl your mobile content as well.</p>
-<ol>
+<ol start="5">
 <li>pragma</li>
 </ol>
 <p>Another beast from the days of yore, the “pragma” header does many things, and most of them are honoured by newer implementations. The directive we’re most concerned with is:</p>
@@ -225,10 +225,10 @@
 </ol>
 <p>Remember that “Accept-Encoding” example for the “vary” header we talked about? That’s your new best friend if you intend to serve compressed content, which I hope you do to increase performance and save on bandwidth. CDN providers that get a request with “gzip” as an accepted encoding are expected to request the compressed asset from the origin server, or to serve a cached version of that compressed asset. Historically, this has been a sticking point for some CDNs, and for people wishing to use something like S3 to serve their files, although modern CDNs are able to perform the compression operation themselves if need be.</p>
 <p>Things to watch out for when the CDN serves compressed assets is that they’ll often ensure that both uncompressed (AKA identity) and gzip’ed version are in their cache, regardless of which was requested. There is a time delay as they perform that operation, so any testing you do will have to take that delay into account.</p>
-<ol>
+<ol start="2">
 <li>SSL</li>
 </ol>
-<p>A CDN is basically a Man-In-The-Middle, meaning you need to think about your HTTPS traffic and how it gets back to your server. Many CDNs will pipe a request for <a href="https://somesite.com/asset" target="_blank" rel="external">https://somesite.com/asset</a> to your servers as <a href="http://somesite.com/asset" target="_blank" rel="external">http://somesite.com/asset</a>, so if your server logic depended on that being SSL, either reconsider your logic or ask your CDN to redirect to an HTTPS origin URL. Most CDNs are capable of doing so, with varying degrees of flexibility.</p>
+<p>A CDN is basically a Man-In-The-Middle, meaning you need to think about your HTTPS traffic and how it gets back to your server. Many CDNs will pipe a request for <a href="https://somesite.com/asset" target="_blank" rel="noopener">https://somesite.com/asset</a> to your servers as <a href="http://somesite.com/asset" target="_blank" rel="noopener">http://somesite.com/asset</a>, so if your server logic depended on that being SSL, either reconsider your logic or ask your CDN to redirect to an HTTPS origin URL. Most CDNs are capable of doing so, with varying degrees of flexibility.</p>
 <p>But What about Dynamic Content?</p>
 <p>Generally the rule of thumb for dynamic content, like the HTML files of a WordPress blog, is to set “cache-control: no-cache” and prevent the CDNs or User Agents from storing the asset. For most applications, serving your own dynamic content is probably fine, however if you need to boost performance, read on.</p>
 <p>Typical Dynamic Content<br>HTTP/1.1 200 OK<br>Server: Apache<br>X-Rack-Cache: miss<br>ETag: “e6811cdbcedf972c5e8105a89f637d39-gzip”<br>Status: 200<br>Content-Type: text/html; charset=utf-8<br>Expires: Mon, 29 Apr 2013 21:44:55 GMT<br>Cache-Control: max-age=0, no-cache, no-store<br>Pragma: no-cache<br>Date: Mon, 29 Apr 2013 21:44:55 GMT<br>An example of a section of a header for dynamic content. Note the missed cache status, and the cache-control directives all set to 0 seconds.</p>
@@ -247,19 +247,19 @@
 <li>Web Inspector</li>
 </ol>
 <p>Probably the most accessible method, simply right-click on a webpage in Chrome, click Inspect Element, navigate to the Network tab, hit refresh, and click on the HTML asset at the top. If it’s not selected by default, checkout the Headers tab to see all your request and response headers. Chrome also lets you set the user agent you request with, and gives you the option to not use your local cache, which is handy when you’re testing.</p>
-<ol>
+<ol start="2">
 <li>Charles Proxy et al.</li>
 </ol>
 <p>Tools like Charles Proxy will let you route traffic through them and manipulate DNS lookups, record headers, and see performance statistics, all in a clean, easy-to-use GUI. These tools are generally more task-specific than the Web Inspector and other browser tools, and generally worth the small licensing fee if you work with web requests in any significant way.</p>
-<ol>
+<ol start="3">
 <li>cURL</li>
 </ol>
 <p>Quick, easy, and highly flexible, cURL lets you make web requests directly from the command line and check out the responding headers. Helpful flags include -A for user agents, -b for cookies, -F for form data, -H for setting headers, and -I to request the header only. Very handy for sanity checks, and extremely powerful.</p>
-<ol>
+<ol start="4">
 <li>hurl.it</li>
 </ol>
 <p>hurl.it is essentially cURL with a prettier interface, and in a webbrowser. You’re able to set the headers you pass in to the request, as well as view the full header and body response. Although you don’t quite get the robustness of the command line, it’s still very useful for a quick header examination, and is probably the fastest way to get access to headers if you’re in a hurry.</p>
-<ol>
+<ol start="5">
 <li>Python and Requests</li>
 </ol>
 <p>Requests is a great Python package for making web requests, and is useful for quick checks from the REPL, or from slightly more complex scripted checks. Using Requests comes with the added benefit of letting you write a test-suite for your web assets to assert the status of response headers.</p>
@@ -275,14 +275,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2013/10/11/Connect-Timeout-When-Npm-Install/" data-toggle="tooltip" data-placement="top"
-                           title="npm install时连接超时的解决办法">&larr; Previous Post</a>
+                        <a href="/2013/10/11/Connect-Timeout-When-Npm-Install/" data-toggle="tooltip" data-placement="top" title="npm install时连接超时的解决办法">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2013/09/27/Tools-for-Image-Optimization/" data-toggle="tooltip" data-placement="top"
-                           title="【翻译】图片优化工具">Next Post &rarr;</a>
+                        <a href="/2013/09/27/Tools-for-Image-Optimization/" data-toggle="tooltip" data-placement="top" title="【翻译】图片优化工具">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -294,6 +292,9 @@
 
                 <!--加入新的评论系统-->
                 
+
+                
+
             </div>
 
             <div class="hidden-xs col-sm-3 toc-col">
@@ -365,7 +366,7 @@
 
                 
                     <li>
-                        <a target="_blank"  href="https://github.com/lichangwei">
+                        <a target="_blank" href="https://github.com/lichangwei">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-github fa-stack-1x fa-inverse"></i>

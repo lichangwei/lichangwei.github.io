@@ -2,7 +2,7 @@
 <html lang="en">
 
 <!-- Head tag -->
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -43,8 +43,8 @@
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="" class="animated fadeIn">
 <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
-" data-ishome = "false" >
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
+" data-ishome="false">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header page-scroll">
@@ -58,6 +58,7 @@
                 <span class="brand-logo">
                     飞鹰走码
                 </span>
+                's Blog
             </a>
         </div>
 
@@ -118,8 +119,7 @@
 <!--only post-->
 
 
-<img class="wechat-title-img"
-     src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
+<img class="wechat-title-img" src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
 
 
 <style>
@@ -166,15 +166,15 @@
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
                 <ol>
 <li><p>####解释什么是Deferred，以及优点是什么。<br>Deferred，意为延迟执行，是jQuery的回调函数解决方案，对所有的异步操作提供统一和更加方便的编程接口。使用Deferred实现的$.ajax有以下几种有点。（1）链式调用（2）指定多个回调（3）为多个操作指定回调  </p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line">$.ajax(<span class="string">'test.html'</span>)</div><div class="line">  .done(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="string">'Done.'</span>)&#125;)</div><div class="line">  .fail(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="string">'Fail.'</span>)&#125;)</div><div class="line">  .done(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="string">'OK.'</span>));</div><div class="line">$.when($.ajax(<span class="string">'test1.html'</span>), $.ajax(<span class="string">'test2.html'</span>))</div><div class="line">  .done(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="string">'Done.'</span>)&#125;)</div><div class="line">  .fail(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="string">'Fail.'</span>)&#125;);</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$.ajax(<span class="string">'test.html'</span>)</span><br><span class="line">  .done(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="string">'Done.'</span>)&#125;)</span><br><span class="line">  .fail(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="string">'Fail.'</span>)&#125;)</span><br><span class="line">  .done(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="string">'OK.'</span>));</span><br><span class="line">$.when($.ajax(<span class="string">'test1.html'</span>), $.ajax(<span class="string">'test2.html'</span>))</span><br><span class="line">  .done(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="string">'Done.'</span>)&#125;)</span><br><span class="line">  .fail(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="string">'Fail.'</span>)&#125;);</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>####你如何给一个事件处理函数命名空间，为什么要这样做？</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="comment">// 主要用于jQuery插件，当需要取消某插件的效果时，可以通过unbind('.namespace')一次性删除该插件绑定的所有事件，而不会影响到其他插件或者用户手动绑定的事件。</span></div><div class="line"><span class="keyword">var</span> $btn = $(<span class="string">'XXX'</span>);</div><div class="line"><span class="comment">// 比如我们写了一个实现拖拽的插件，该插件监听了mousedown，mousemove和mouseup事件。</span></div><div class="line">$btn.bind(<span class="string">'mousedown.dragdrop'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;);</div><div class="line">$btn.bind(<span class="string">'mousemove.dragdrop'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;);</div><div class="line">$btn.bind(<span class="string">'mouseup.dragdrop'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;);</div><div class="line"><span class="comment">// 当某个节点不支持拖拽时，取消拖拽相关的事件监听，就可以使用如下方法，一次性删除。</span></div><div class="line">$btn.unbind(<span class="string">'.dragdrop'</span>);</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 主要用于jQuery插件，当需要取消某插件的效果时，可以通过unbind('.namespace')一次性删除该插件绑定的所有事件，而不会影响到其他插件或者用户手动绑定的事件。</span></span><br><span class="line"><span class="keyword">var</span> $btn = $(<span class="string">'XXX'</span>);</span><br><span class="line"><span class="comment">// 比如我们写了一个实现拖拽的插件，该插件监听了mousedown，mousemove和mouseup事件。</span></span><br><span class="line">$btn.bind(<span class="string">'mousedown.dragdrop'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;);</span><br><span class="line">$btn.bind(<span class="string">'mousemove.dragdrop'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;);</span><br><span class="line">$btn.bind(<span class="string">'mouseup.dragdrop'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;);</span><br><span class="line"><span class="comment">// 当某个节点不支持拖拽时，取消拖拽相关的事件监听，就可以使用如下方法，一次性删除。</span></span><br><span class="line">$btn.unbind(<span class="string">'.dragdrop'</span>);</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>####请指出’$’和’$.fn’的区别？或者说出’$.fn’的用途。</p>
 </li>
 <li><p>####解释chaining。</p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="comment">// 链式调用，如果对象的方法不需要一个明确意义的返回值，那么可以返回自身。</span></div><div class="line">$(<span class="string">'XXX'</span>).css(<span class="string">'width'</span>, <span class="string">'100px'</span>).show().click(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;);</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 链式调用，如果对象的方法不需要一个明确意义的返回值，那么可以返回自身。</span></span><br><span class="line">$(<span class="string">'XXX'</span>).css(<span class="string">'width'</span>, <span class="string">'100px'</span>).show().click(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;&#125;);</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>####你知道那些针对jQuery的优化方法。<br>（1）将一个jQuery对象保存起来，如果多次使用的话。</p>
 </li>
@@ -188,14 +188,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2013/05/18/Using SVG/" data-toggle="tooltip" data-placement="top"
-                           title="【翻译】使用SVG">&larr; Previous Post</a>
+                        <a href="/2013/05/18/Using SVG/" data-toggle="tooltip" data-placement="top" title="【翻译】使用SVG">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2013/05/13/HTML-CSS-Interview-Questions/" data-toggle="tooltip" data-placement="top"
-                           title="">Next Post &rarr;</a>
+                        <a href="/2013/05/13/Unskilled-Interview-Questions/" data-toggle="tooltip" data-placement="top" title="">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -207,6 +205,9 @@
 
                 <!--加入新的评论系统-->
                 
+
+                
+
             </div>
 
             <div class="hidden-xs col-sm-3 toc-col">
@@ -278,7 +279,7 @@
 
                 
                     <li>
-                        <a target="_blank"  href="https://github.com/lichangwei">
+                        <a target="_blank" href="https://github.com/lichangwei">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-github fa-stack-1x fa-inverse"></i>

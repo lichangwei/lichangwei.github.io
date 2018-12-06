@@ -2,7 +2,7 @@
 <html lang="en">
 
 <!-- Head tag -->
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -43,8 +43,8 @@
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="" class="animated fadeIn">
 <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
-" data-ishome = "false" >
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
+" data-ishome="false">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header page-scroll">
@@ -58,6 +58,7 @@
                 <span class="brand-logo">
                     飞鹰走码
                 </span>
+                's Blog
             </a>
         </div>
 
@@ -118,8 +119,7 @@
 <!--only post-->
 
 
-<img class="wechat-title-img"
-     src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
+<img class="wechat-title-img" src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
 
 
 <style>
@@ -164,10 +164,10 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <h2 id="API"><a href="#API" class="headerlink" title="API"></a>API</h2><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">void</span> drawImage(<span class="built_in">Object</span> image, float dx, float dy[float dw, float, dh]);</div><div class="line"><span class="keyword">void</span> drawImage(<span class="built_in">Object</span> image, float sx, float sy, float sw, float sh, float dx, float dy, float dw, float dh);</div><div class="line"></div><div class="line">ImageData getImageData(float sx, float sy, float sw, float sh);</div><div class="line"><span class="keyword">void</span> putImageData(ImageData imageData, float dx, float dy[, float dirtyX, float dirtyY, float dirtyWidth, float dirtyHeight]);</div></pre></td></tr></table></figure>
+                <h2 id="API"><a href="#API" class="headerlink" title="API"></a>API</h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">void</span> drawImage(<span class="built_in">Object</span> image, float dx, float dy[float dw, float, dh]);</span><br><span class="line"><span class="keyword">void</span> drawImage(<span class="built_in">Object</span> image, float sx, float sy, float sw, float sh, float dx, float dy, float dw, float dh);</span><br><span class="line"></span><br><span class="line">ImageData getImageData(float sx, float sy, float sw, float sh);</span><br><span class="line"><span class="keyword">void</span> putImageData(ImageData imageData, float dx, float dy[, float dirtyX, float dirtyY, float dirtyWidth, float dirtyHeight]);</span><br></pre></td></tr></table></figure>
 <p>drawImage的第一个参数可以是HTMLImageElement（绘图），HTMLCanvasElement（复制）或者HTMLVideoElement（截屏）。  </p>
-<h2 id="缓存Canvas中间数据"><a href="#缓存Canvas中间数据" class="headerlink" title="缓存Canvas中间数据"></a>缓存Canvas中间数据</h2><p>如果我们需要在一个Canvas上画很多图片，其中一部分是固定（或短期内固定）存在的，那么最好的办法是将他们绘制完毕之后，将他们保存起来，等下一次需要绘制这些图片的时候，一次性绘制缓存结果。这样可以减少渲染次数，以提高渲染效率。<br>首先想到的是getImageData和putImageData。所以做了如下测试：<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">var</span> repeat_times = <span class="number">10000</span>;</div><div class="line"></div><div class="line"><span class="built_in">console</span>.time(<span class="string">'drawImage'</span>);</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; repeat_times; i++)&#123;</div><div class="line">  context.drawImage(image, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.timeEnd(<span class="string">'drawImage'</span>);</div><div class="line"></div><div class="line"><span class="built_in">console</span>.time(<span class="string">'putImageData'</span>);</div><div class="line">context.drawImage(image, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">var</span> data = context.getImageData(<span class="number">0</span>, <span class="number">0</span>, image.width, image.height);</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; repeat_times; i++)&#123;</div><div class="line">  context.putImageData(data, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.timeEnd(<span class="string">'putImageData'</span>);</div></pre></td></tr></table></figure></p>
-<p>简单起见，这里我们仅仅绘制一张图片。打印出来的结果完全出乎意料，putImageData非但没有更快，反而比drawImage慢600倍左右。至于为什么会这么慢，我还不知道答案。总之putImageData远远不是我想象中的那么高效。<br>后来才考虑到可以将Canvas中的数据缓存到某个隐藏Canvas中去，然后再调用DrawImage方法。<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="built_in">console</span>.time(<span class="string">'drawCanvas'</span>);</div><div class="line"><span class="keyword">var</span> buffer = <span class="built_in">document</span>.createElement(<span class="string">'canvas'</span>);</div><div class="line">buffer.width = canvas.width;</div><div class="line">buffer.height = canvas.height;</div><div class="line">context.drawImage(image, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; repeat_times; i++)&#123;</div><div class="line">  context.drawImage(buffer, <span class="number">0</span>, <span class="number">0</span>);</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.timeEnd(<span class="string">'drawCanvas'</span>);</div></pre></td></tr></table></figure></p>
+<h2 id="缓存Canvas中间数据"><a href="#缓存Canvas中间数据" class="headerlink" title="缓存Canvas中间数据"></a>缓存Canvas中间数据</h2><p>如果我们需要在一个Canvas上画很多图片，其中一部分是固定（或短期内固定）存在的，那么最好的办法是将他们绘制完毕之后，将他们保存起来，等下一次需要绘制这些图片的时候，一次性绘制缓存结果。这样可以减少渲染次数，以提高渲染效率。<br>首先想到的是getImageData和putImageData。所以做了如下测试：<br><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> repeat_times = <span class="number">10000</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.time(<span class="string">'drawImage'</span>);</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; repeat_times; i++)&#123;</span><br><span class="line">  context.drawImage(image, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.timeEnd(<span class="string">'drawImage'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.time(<span class="string">'putImageData'</span>);</span><br><span class="line">context.drawImage(image, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"><span class="keyword">var</span> data = context.getImageData(<span class="number">0</span>, <span class="number">0</span>, image.width, image.height);</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; repeat_times; i++)&#123;</span><br><span class="line">  context.putImageData(data, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.timeEnd(<span class="string">'putImageData'</span>);</span><br></pre></td></tr></table></figure></p>
+<p>简单起见，这里我们仅仅绘制一张图片。打印出来的结果完全出乎意料，putImageData非但没有更快，反而比drawImage慢600倍左右。至于为什么会这么慢，我还不知道答案。总之putImageData远远不是我想象中的那么高效。<br>后来才考虑到可以将Canvas中的数据缓存到某个隐藏Canvas中去，然后再调用DrawImage方法。<br><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">console</span>.time(<span class="string">'drawCanvas'</span>);</span><br><span class="line"><span class="keyword">var</span> buffer = <span class="built_in">document</span>.createElement(<span class="string">'canvas'</span>);</span><br><span class="line">buffer.width = canvas.width;</span><br><span class="line">buffer.height = canvas.height;</span><br><span class="line">context.drawImage(image, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; repeat_times; i++)&#123;</span><br><span class="line">  context.drawImage(buffer, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.timeEnd(<span class="string">'drawCanvas'</span>);</span><br></pre></td></tr></table></figure></p>
 <p>经过测试以后发现比drawImage方法慢了一倍，相对于10000次循环，这点性能损失可以忽略不计，因为我们仅仅绘制一张图片。图片的数目每增加1，drawImage绘图次数增加10000，而drawCanvas绘图次数仅仅增加1。  </p>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p><code>putImageData</code>的优点在于能够像素级别操作图像，但是因其效率很低，并不适合做Canvas的数据缓存，而<code>drawImage(canvas, 0, 0)</code>较为适合。</p>
 
@@ -177,14 +177,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2013/04/24/Highlight-Keywords-in-Client/" data-toggle="tooltip" data-placement="top"
-                           title="在客户端高亮关键字">&larr; Previous Post</a>
+                        <a href="/2013/04/24/Highlight-Keywords-in-Client/" data-toggle="tooltip" data-placement="top" title="在客户端高亮关键字">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2013/04/15/Grouping-Numbers-with-Comma/" data-toggle="tooltip" data-placement="top"
-                           title="【正则表达式】使用逗号将数字三位三位地分开">Next Post &rarr;</a>
+                        <a href="/2013/04/15/Grouping-Numbers-with-Comma/" data-toggle="tooltip" data-placement="top" title="【正则表达式】使用逗号将数字三位三位地分开">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -196,6 +194,9 @@
 
                 <!--加入新的评论系统-->
                 
+
+                
+
             </div>
 
             <div class="hidden-xs col-sm-3 toc-col">
@@ -267,7 +268,7 @@
 
                 
                     <li>
-                        <a target="_blank"  href="https://github.com/lichangwei">
+                        <a target="_blank" href="https://github.com/lichangwei">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-github fa-stack-1x fa-inverse"></i>

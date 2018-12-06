@@ -2,7 +2,7 @@
 <html lang="en">
 
 <!-- Head tag -->
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -43,8 +43,8 @@
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="" class="animated fadeIn">
 <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
-" data-ishome = "false" >
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
+" data-ishome="false">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header page-scroll">
@@ -58,6 +58,7 @@
                 <span class="brand-logo">
                     飞鹰走码
                 </span>
+                's Blog
             </a>
         </div>
 
@@ -118,8 +119,7 @@
 <!--only post-->
 
 
-<img class="wechat-title-img"
-     src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
+<img class="wechat-title-img" src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
 
 
 <style>
@@ -168,11 +168,11 @@
 <p>这两种扩展都是需要用户手动安装的，也是可以自动更新的。但是有些时候，我们还是需要去检查Extension的版本。下面我们就看看如何去做？  </p>
 <p>首先，我们知道，在编写Extension时，我们都需要写一个<code>manifest.json</code>文件，它里面包含着关于这个Extension的信息。比如<code>name</code>，<code>description</code>，<code>version</code>等很多信息。那么我就可以通过获取该文件来获取本扩展的版本。  </p>
 <p>那么如何获取<code>manifest.json</code>文件呢？  </p>
-<p>首先我们知道Extension中可以通过<code>XMLHttpRequest</code>来获取资源文件，而<code>manifest.json</code>也可以看做是普通的一个资源文件，那么我们就可以通过<code>XMLHttpRequest</code>获取<code>manifest.json</code>。<br><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> url = <span class="string">'manifest.json'</span>;</div><div class="line">  <span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</div><div class="line">  xhr.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> manifest = <span class="built_in">JSON</span>.parse(xhr.response);</div><div class="line">    <span class="keyword">var</span> version = manifest.version;</div><div class="line">    <span class="comment">// do something here</span></div><div class="line">  &#125;;</div><div class="line">  xhr.open(<span class="string">'GET'</span>, url, <span class="literal">true</span>);</div><div class="line">  xhr.send();</div><div class="line">&#125;)();</div></pre></td></tr></table></figure></p>
-<p>以上方法放在Extension的content script中，报如下错误：<code>GET http://[ip]:[port]/manifest.json 404 (Not Found)</code>。这个很容易理解，因为在Extension中，该脚本是通过script标签插入到DOM中执行的。那么我们如何来获取manifest.json的实际路径呢？答案是<code>chrome.extension.getURL</code>，这个API就是根据扩展中资源文件的相对路径来获取其绝对路径。而在Packaged App中则可以直接使用相对路径。所以在Extension中的做法是：<br><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> url = chrome.extension.getURL(<span class="string">'manifest.json'</span>);</div><div class="line">  <span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</div><div class="line">  xhr.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">var</span> manifest = <span class="built_in">JSON</span>.parse(xhr.response);</div><div class="line">    <span class="keyword">var</span> version = manifest.version;</div><div class="line">    <span class="comment">// do something here</span></div><div class="line">  &#125;;</div><div class="line">  xhr.open(<span class="string">'GET'</span>, url, <span class="literal">true</span>);</div><div class="line">  xhr.send();</div><div class="line">&#125;)();</div></pre></td></tr></table></figure></p>
-<p>还要记住，我们需要在<code>manifest.json</code>中声明<code>manifest.json</code>是一种可以访问的资源。<br><figure class="highlight json"><table><tr><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"web_accessible_resources"</span>: [<span class="string">"manifest.json"</span>]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>否则我们会看到如下错误：<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Denying load of chrome-extension://ongmmjdilaoifhglgibpinckpckeclch/manifest.json. Resources must be listed in the web_accessible_resources manifest key in order to be loaded by pages outside the extension.</div></pre></td></tr></table></figure></p>
-<p>以上我们把<code>manifest.json</code>当做一个普通的资源文件来访问。那么<code>manifest.json</code>作为一种很关键很通用（所有Extension中都有该文件）的一个配置文件，那么有没有更简单的方法呢？答案是肯定的。在最新的Chrome（v22+）中提供了<code>chrome.runtime.*</code>API，他们提供了获取background页面，manifest.json文件，以及和其他Extension通信的各种API。代码如下：<br><figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="keyword">var</span> manifest = chrome.runtime.getManifest();</div><div class="line"><span class="keyword">var</span> version = manifest.version;</div><div class="line"><span class="comment">// do something here</span></div></pre></td></tr></table></figure></p>
+<p>首先我们知道Extension中可以通过<code>XMLHttpRequest</code>来获取资源文件，而<code>manifest.json</code>也可以看做是普通的一个资源文件，那么我们就可以通过<code>XMLHttpRequest</code>获取<code>manifest.json</code>。<br><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> url = <span class="string">'manifest.json'</span>;</span><br><span class="line">  <span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">  xhr.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> manifest = <span class="built_in">JSON</span>.parse(xhr.response);</span><br><span class="line">    <span class="keyword">var</span> version = manifest.version;</span><br><span class="line">    <span class="comment">// do something here</span></span><br><span class="line">  &#125;;</span><br><span class="line">  xhr.open(<span class="string">'GET'</span>, url, <span class="literal">true</span>);</span><br><span class="line">  xhr.send();</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure></p>
+<p>以上方法放在Extension的content script中，报如下错误：<code>GET http://[ip]:[port]/manifest.json 404 (Not Found)</code>。这个很容易理解，因为在Extension中，该脚本是通过script标签插入到DOM中执行的。那么我们如何来获取manifest.json的实际路径呢？答案是<code>chrome.extension.getURL</code>，这个API就是根据扩展中资源文件的相对路径来获取其绝对路径。而在Packaged App中则可以直接使用相对路径。所以在Extension中的做法是：<br><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> url = chrome.extension.getURL(<span class="string">'manifest.json'</span>);</span><br><span class="line">  <span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">  xhr.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> manifest = <span class="built_in">JSON</span>.parse(xhr.response);</span><br><span class="line">    <span class="keyword">var</span> version = manifest.version;</span><br><span class="line">    <span class="comment">// do something here</span></span><br><span class="line">  &#125;;</span><br><span class="line">  xhr.open(<span class="string">'GET'</span>, url, <span class="literal">true</span>);</span><br><span class="line">  xhr.send();</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure></p>
+<p>还要记住，我们需要在<code>manifest.json</code>中声明<code>manifest.json</code>是一种可以访问的资源。<br><figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"web_accessible_resources"</span>: [<span class="string">"manifest.json"</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>否则我们会看到如下错误：<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Denying load of chrome-extension://ongmmjdilaoifhglgibpinckpckeclch/manifest.json. Resources must be listed in the web_accessible_resources manifest key in order to be loaded by pages outside the extension.</span><br></pre></td></tr></table></figure></p>
+<p>以上我们把<code>manifest.json</code>当做一个普通的资源文件来访问。那么<code>manifest.json</code>作为一种很关键很通用（所有Extension中都有该文件）的一个配置文件，那么有没有更简单的方法呢？答案是肯定的。在最新的Chrome（v22+）中提供了<code>chrome.runtime.*</code>API，他们提供了获取background页面，manifest.json文件，以及和其他Extension通信的各种API。代码如下：<br><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> manifest = chrome.runtime.getManifest();</span><br><span class="line"><span class="keyword">var</span> version = manifest.version;</span><br><span class="line"><span class="comment">// do something here</span></span><br></pre></td></tr></table></figure></p>
 <p>很明显，直接使用<code>chrome.runtime.getManifest</code>来获取Extension的版本号，最为简单，代码少，还是同步的。</p>
 <p>总结：文章总结了获取Extension版本号（在<code>manifest.json</code>中）的两种方法，一种把<code>manifest.json</code>当做普通资源文件访问，一种直接使用<code>chrome.runtime.getManifest</code>访问，后者更为简单易用。</p>
 
@@ -182,14 +182,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2013/09/01/Ways-to-Cross-Domain/" data-toggle="tooltip" data-placement="top"
-                           title="">&larr; Previous Post</a>
+                        <a href="/2013/09/01/Ways-to-Cross-Domain/" data-toggle="tooltip" data-placement="top" title="">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2013/08/19/Programmer-Dilemma/" data-toggle="tooltip" data-placement="top"
-                           title="程序员困境">Next Post &rarr;</a>
+                        <a href="/2013/08/19/Programmer-Dilemma/" data-toggle="tooltip" data-placement="top" title="程序员困境">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -201,6 +199,9 @@
 
                 <!--加入新的评论系统-->
                 
+
+                
+
             </div>
 
             <div class="hidden-xs col-sm-3 toc-col">
@@ -272,7 +273,7 @@
 
                 
                     <li>
-                        <a target="_blank"  href="https://github.com/lichangwei">
+                        <a target="_blank" href="https://github.com/lichangwei">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-github fa-stack-1x fa-inverse"></i>

@@ -2,7 +2,7 @@
 <html lang="en">
 
 <!-- Head tag -->
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -43,8 +43,8 @@
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="" class="animated fadeIn">
 <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
-" data-ishome = "false" >
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
+" data-ishome="false">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header page-scroll">
@@ -58,6 +58,7 @@
                 <span class="brand-logo">
                     飞鹰走码
                 </span>
+                's Blog
             </a>
         </div>
 
@@ -118,8 +119,7 @@
 <!--only post-->
 
 
-<img class="wechat-title-img"
-     src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
+<img class="wechat-title-img" src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
 
 
 <style>
@@ -165,13 +165,13 @@
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
                 <p>某些时候，我们并不使用CSS中支持的鼠标形状，比如default箭头，pointer手型等等，也不使用url指定鼠标形状，而是使用html+css+js渲染。例如在黑色背景的页面中，使用一个从圆心到周边透明度径向渐变的圆形图形作为鼠标形状。<br>实现起来非常简单。首先在html元素上声明如下样式<code>html{ cursor: none; }</code>，放弃默认的箭头鼠标形状。然后创建一个绝对定位的，className为cursor的body子元素div。</p>
-<h2 id="方案一：渐变背景色实现【失败】"><a href="#方案一：渐变背景色实现【失败】" class="headerlink" title="方案一：渐变背景色实现【失败】"></a>方案一：渐变背景色实现【失败】</h2><figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">div</span><span class="selector-class">.cursor</span>&#123;</div><div class="line">  <span class="attribute">position</span>: absolute;</div><div class="line">  <span class="attribute">width</span>: <span class="number">150px</span>;</div><div class="line">  <span class="attribute">height</span>: <span class="number">150px</span>;</div><div class="line">  <span class="attribute">margin-top</span>: -<span class="number">75px</span>;</div><div class="line">  <span class="attribute">margin-left</span>: -<span class="number">75px</span>;</div><div class="line">  <span class="attribute">background</span>: <span class="built_in">-webkit-radial-gradient</span>(50% 50%, circle contain, rgba(255, 255, 255, 1.0), <span class="built_in">rgba</span>(255, 255, 255, 0));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="方案一：渐变背景色实现【失败】"><a href="#方案一：渐变背景色实现【失败】" class="headerlink" title="方案一：渐变背景色实现【失败】"></a>方案一：渐变背景色实现【失败】</h2><figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">div</span><span class="selector-class">.cursor</span>&#123;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">150px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">150px</span>;</span><br><span class="line">  <span class="attribute">margin-top</span>: -<span class="number">75px</span>;</span><br><span class="line">  <span class="attribute">margin-left</span>: -<span class="number">75px</span>;</span><br><span class="line">  <span class="attribute">background</span>: <span class="built_in">-webkit-radial-gradient</span>(50% 50%, circle contain, rgba(255, 255, 255, 1.0), <span class="built_in">rgba</span>(255, 255, 255, 0));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>但是这样就有一个问题，当按下鼠标时，mouse事件的target属性永远指向该DIV元素。如果想监听页面上其他元素的mouse事件，就变得很繁琐，只能根据。于是首先想到的是用<strong>after伪元素</strong>实现。</p>
-<h2 id="方案二：伪元素背景色实现【失败】"><a href="#方案二：伪元素背景色实现【失败】" class="headerlink" title="方案二：伪元素背景色实现【失败】"></a>方案二：伪元素背景色实现【失败】</h2><figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">div</span>&#123;</div><div class="line">  <span class="attribute">position</span>: absolute;</div><div class="line">  <span class="attribute">width</span>: <span class="number">0</span>;</div><div class="line">  <span class="attribute">height</span>: <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"><span class="selector-tag">div</span><span class="selector-pseudo">:after</span>&#123;</div><div class="line">  <span class="attribute">position</span>: absolute;</div><div class="line">  <span class="attribute">content</span>: <span class="string">''</span>;</div><div class="line">  <span class="attribute">width</span>: <span class="number">150px</span>;</div><div class="line">  <span class="attribute">height</span>: <span class="number">150px</span>;</div><div class="line">  <span class="attribute">margin-top</span>: -<span class="number">75px</span>;</div><div class="line">  <span class="attribute">margin-left</span>: -<span class="number">75px</span>;</div><div class="line">  <span class="attribute">background</span>: <span class="built_in">-webkit-radial-gradient</span>(50% 50%, circle contain, rgba(255, 255, 255, 1.0), <span class="built_in">rgba</span>(255, 255, 255, 0));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="方案二：伪元素背景色实现【失败】"><a href="#方案二：伪元素背景色实现【失败】" class="headerlink" title="方案二：伪元素背景色实现【失败】"></a>方案二：伪元素背景色实现【失败】</h2><figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">div</span>&#123;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="selector-tag">div</span><span class="selector-pseudo">:after</span>&#123;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">content</span>: <span class="string">''</span>;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">150px</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">150px</span>;</span><br><span class="line">  <span class="attribute">margin-top</span>: -<span class="number">75px</span>;</span><br><span class="line">  <span class="attribute">margin-left</span>: -<span class="number">75px</span>;</span><br><span class="line">  <span class="attribute">background</span>: <span class="built_in">-webkit-radial-gradient</span>(50% 50%, circle contain, rgba(255, 255, 255, 1.0), <span class="built_in">rgba</span>(255, 255, 255, 0));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>实现以后发现mouse事件的target属性仍然指向该div元素。思考一下，这个是符合逻辑的，因为first和after伪元素本来就相当于子元素的。</p>
-<h2 id="方案三：box-shadow效果实现【成功】"><a href="#方案三：box-shadow效果实现【成功】" class="headerlink" title="方案三：box-shadow效果实现【成功】"></a>方案三：box-shadow效果实现【成功】</h2><p>也许你还记得，很多阴影效果都有模糊渐变的效果，在box-shadow语法中，blur配合spread就可以做到。<br>语法：<code>box-shadow: h-shadow v-shadow blur spread color inset;</code><br><figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">div</span>&#123;</div><div class="line">  <span class="attribute">position</span>: absolute;</div><div class="line">  <span class="attribute">width</span>: <span class="number">0</span>;</div><div class="line">  <span class="attribute">height</span>: <span class="number">0</span>;</div><div class="line">  <span class="attribute">-webkit-box-shadow</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">75px</span> <span class="number">30px</span> <span class="number">#000</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="方案三：box-shadow效果实现【成功】"><a href="#方案三：box-shadow效果实现【成功】" class="headerlink" title="方案三：box-shadow效果实现【成功】"></a>方案三：box-shadow效果实现【成功】</h2><p>也许你还记得，很多阴影效果都有模糊渐变的效果，在box-shadow语法中，blur配合spread就可以做到。<br>语法：<code>box-shadow: h-shadow v-shadow blur spread color inset;</code><br><figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">div</span>&#123;</span><br><span class="line">  <span class="attribute">position</span>: absolute;</span><br><span class="line">  <span class="attribute">width</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">height</span>: <span class="number">0</span>;</span><br><span class="line">  <span class="attribute">-webkit-box-shadow</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">75px</span> <span class="number">30px</span> <span class="number">#000</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>效果基本可以实现，但是对于更加特别的需求，就怕无能为力了。</p>
-<h2 id="方案四：CSS属性pointer-events使得元素不响应事件【最佳】"><a href="#方案四：CSS属性pointer-events使得元素不响应事件【最佳】" class="headerlink" title="方案四：CSS属性pointer-events使得元素不响应事件【最佳】"></a>方案四：CSS属性pointer-events使得元素不响应事件【最佳】</h2><p>事件可以透过（忽视）pointer-events值为none的任何元素，而触发在它后面的那个元素之上。<br><figure class="highlight css"><table><tr><td class="code"><pre><div class="line"><span class="selector-tag">pointer-events</span>: <span class="selector-tag">none</span>;</div></pre></td></tr></table></figure></p>
+<h2 id="方案四：CSS属性pointer-events使得元素不响应事件【最佳】"><a href="#方案四：CSS属性pointer-events使得元素不响应事件【最佳】" class="headerlink" title="方案四：CSS属性pointer-events使得元素不响应事件【最佳】"></a>方案四：CSS属性pointer-events使得元素不响应事件【最佳】</h2><p>事件可以透过（忽视）pointer-events值为none的任何元素，而触发在它后面的那个元素之上。<br><figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">pointer-events</span>: <span class="selector-tag">none</span>;</span><br></pre></td></tr></table></figure></p>
 
                 <hr>
                 
@@ -179,14 +179,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2013/04/15/Grouping-Numbers-with-Comma/" data-toggle="tooltip" data-placement="top"
-                           title="【正则表达式】使用逗号将数字三位三位地分开">&larr; Previous Post</a>
+                        <a href="/2013/04/15/Grouping-Numbers-with-Comma/" data-toggle="tooltip" data-placement="top" title="【正则表达式】使用逗号将数字三位三位地分开">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2013/04/11/CSS-animations-off-the-UI-thread/" data-toggle="tooltip" data-placement="top"
-                           title="脱离UI线程的CSS3动画">Next Post &rarr;</a>
+                        <a href="/2013/04/11/CSS-animations-off-the-UI-thread/" data-toggle="tooltip" data-placement="top" title="脱离UI线程的CSS3动画">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -198,6 +196,9 @@
 
                 <!--加入新的评论系统-->
                 
+
+                
+
             </div>
 
             <div class="hidden-xs col-sm-3 toc-col">
@@ -269,7 +270,7 @@
 
                 
                     <li>
-                        <a target="_blank"  href="https://github.com/lichangwei">
+                        <a target="_blank" href="https://github.com/lichangwei">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-github fa-stack-1x fa-inverse"></i>

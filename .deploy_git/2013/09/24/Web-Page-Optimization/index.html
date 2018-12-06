@@ -2,7 +2,7 @@
 <html lang="en">
 
 <!-- Head tag -->
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -43,8 +43,8 @@
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="" class="animated fadeIn">
 <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
-" data-ishome = "false" >
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
+" data-ishome="false">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header page-scroll">
@@ -58,6 +58,7 @@
                 <span class="brand-logo">
                     飞鹰走码
                 </span>
+                's Blog
             </a>
         </div>
 
@@ -118,8 +119,7 @@
 <!--only post-->
 
 
-<img class="wechat-title-img"
-     src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
+<img class="wechat-title-img" src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
 
 
 <style>
@@ -166,8 +166,8 @@
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
                 <p>提到网页性能优化，一般分为两部分，加载性能优化和交互性能优化。  </p>
 <h2 id="1-加载性能优化"><a href="#1-加载性能优化" class="headerlink" title="1.加载性能优化"></a>1.加载性能优化</h2><p>当在浏览器中输入一个URL或者在其他页面点击一个链接时，浏览器要做以下工作：DNS查询，建立TCP链接，发送请求，接受响应，渲染页面，执行Load监听事件，至此页面加载就完成了。下面我们按照这个步骤思考如何优化页面加载性能？  </p>
-<h3 id="1-DNS查询"><a href="#1-DNS查询" class="headerlink" title="1.DNS查询"></a>1.DNS查询</h3><h4 id="1-减少DNS查询"><a href="#1-减少DNS查询" class="headerlink" title="1.减少DNS查询"></a>1.减少DNS查询</h4><h4 id="2-使用DNS-Prefetching（DNS预获取）特性缩短DNS查询时间。"><a href="#2-使用DNS-Prefetching（DNS预获取）特性缩短DNS查询时间。" class="headerlink" title="2.使用DNS Prefetching（DNS预获取）特性缩短DNS查询时间。"></a>2.使用DNS Prefetching（DNS预获取）特性缩短DNS查询时间。</h4><p>DNS查询一般占用带宽少，但是延迟可能很高，典型的一次DNS查询需要20-120ms。而DNS预获取为了获得较低的延迟，牺牲DNS查询次数。<br>参考：<a href="https://developer.mozilla.org/en-US/docs/Controlling_DNS_prefetching" target="_blank" rel="external">Mozilla Developer Network</a><br>参考：<a href="http://www.pinkbike.com/news/DNS-Prefetching-implications.html" target="_blank" rel="external">DNS Prefetching Implications</a></p>
-<p>减少请求<br>使用Data URI，<br>使用CSS Sprites<br><a href="http://www.csdn.net/article/2013-09-13/2816925-CSS-Sprites-vs.-Data-URIs:-Which-is-Faster-on-Mobile?" target="_blank" rel="external">http://www.csdn.net/article/2013-09-13/2816925-CSS-Sprites-vs.-Data-URIs:-Which-is-Faster-on-Mobile?</a></p>
+<h3 id="1-DNS查询"><a href="#1-DNS查询" class="headerlink" title="1.DNS查询"></a>1.DNS查询</h3><h4 id="1-减少DNS查询"><a href="#1-减少DNS查询" class="headerlink" title="1.减少DNS查询"></a>1.减少DNS查询</h4><h4 id="2-使用DNS-Prefetching（DNS预获取）特性缩短DNS查询时间。"><a href="#2-使用DNS-Prefetching（DNS预获取）特性缩短DNS查询时间。" class="headerlink" title="2.使用DNS Prefetching（DNS预获取）特性缩短DNS查询时间。"></a>2.使用DNS Prefetching（DNS预获取）特性缩短DNS查询时间。</h4><p>DNS查询一般占用带宽少，但是延迟可能很高，典型的一次DNS查询需要20-120ms。而DNS预获取为了获得较低的延迟，牺牲DNS查询次数。<br>参考：<a href="https://developer.mozilla.org/en-US/docs/Controlling_DNS_prefetching" target="_blank" rel="noopener">Mozilla Developer Network</a><br>参考：<a href="http://www.pinkbike.com/news/DNS-Prefetching-implications.html" target="_blank" rel="noopener">DNS Prefetching Implications</a></p>
+<p>减少请求<br>使用Data URI，<br>使用CSS Sprites<br><a href="http://www.csdn.net/article/2013-09-13/2816925-CSS-Sprites-vs.-Data-URIs:-Which-is-Faster-on-Mobile" target="_blank" rel="noopener">http://www.csdn.net/article/2013-09-13/2816925-CSS-Sprites-vs.-Data-URIs:-Which-is-Faster-on-Mobile</a>?</p>
 <h2 id="2-TCP连接"><a href="#2-TCP连接" class="headerlink" title="2.TCP连接"></a>2.TCP连接</h2><h3 id="1-使用keep-alive保持持久连接"><a href="#1-使用keep-alive保持持久连接" class="headerlink" title="1.使用keep-alive保持持久连接"></a>1.使用keep-alive保持持久连接</h3><h3 id="2-交互性能优化"><a href="#2-交互性能优化" class="headerlink" title="2.交互性能优化"></a>2.交互性能优化</h3>
                 <hr>
                 
@@ -175,14 +175,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2013/09/25/HTML5-Application-Cache-Basic/" data-toggle="tooltip" data-placement="top"
-                           title="HTML5应用缓存基础知识">&larr; Previous Post</a>
+                        <a href="/2013/09/25/HTML5-Application-Cache-Basic/" data-toggle="tooltip" data-placement="top" title="HTML5应用缓存基础知识">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2013/09/23/HTML5-Application-Cache-and-Baidu-Map-Service/" data-toggle="tooltip" data-placement="top"
-                           title="HTML5应用缓存与百度地图服务">Next Post &rarr;</a>
+                        <a href="/2013/09/23/Browser-Cache/" data-toggle="tooltip" data-placement="top" title="">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -194,6 +192,9 @@
 
                 <!--加入新的评论系统-->
                 
+
+                
+
             </div>
 
             <div class="hidden-xs col-sm-3 toc-col">
@@ -265,7 +266,7 @@
 
                 
                     <li>
-                        <a target="_blank"  href="https://github.com/lichangwei">
+                        <a target="_blank" href="https://github.com/lichangwei">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-github fa-stack-1x fa-inverse"></i>

@@ -2,7 +2,7 @@
 <html lang="en">
 
 <!-- Head tag -->
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -43,8 +43,8 @@
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="" class="animated fadeIn">
 <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
-" data-ishome = "false" >
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
+" data-ishome="false">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header page-scroll">
@@ -58,6 +58,7 @@
                 <span class="brand-logo">
                     飞鹰走码
                 </span>
+                's Blog
             </a>
         </div>
 
@@ -118,8 +119,7 @@
 <!--only post-->
 
 
-<img class="wechat-title-img"
-     src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
+<img class="wechat-title-img" src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
 
 
 <style>
@@ -164,7 +164,7 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>该项目是一个运行于蓝光机内置浏览器Opera之上的单页面WebApp，输入关键字，跨服务（视频，音频，Youtube等）查询媒体内容。由于所有操作都是通过遥控器完成，所以通常可以使用的操作基本只有按键：上下左右以及返回键，确定键。为了显示不确定数量的媒体项，采用了通过向下/向上键来控制显示更后面/更前面的记录。<br>使用的框架包括，使用<a href="http://requirejs.org/" target="_blank" rel="external">requirejs</a>动态加载脚本，使用<a href="http://jquery.com/" target="_blank" rel="external">jQuery</a>操作DOM，使用<a href="http://olado.github.io/doT/" target="_blank" rel="external">doT</a>作为模板引擎。  </p>
+                <h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>该项目是一个运行于蓝光机内置浏览器Opera之上的单页面WebApp，输入关键字，跨服务（视频，音频，Youtube等）查询媒体内容。由于所有操作都是通过遥控器完成，所以通常可以使用的操作基本只有按键：上下左右以及返回键，确定键。为了显示不确定数量的媒体项，采用了通过向下/向上键来控制显示更后面/更前面的记录。<br>使用的框架包括，使用<a href="http://requirejs.org/" target="_blank" rel="noopener">requirejs</a>动态加载脚本，使用<a href="http://jquery.com/" target="_blank" rel="noopener">jQuery</a>操作DOM，使用<a href="http://olado.github.io/doT/" target="_blank" rel="noopener">doT</a>作为模板引擎。  </p>
 <h2 id="优化历程"><a href="#优化历程" class="headerlink" title="优化历程"></a>优化历程</h2><p>分析一：根据一般的WebApp开发经验知道，不可能在一个页面中显示所有的媒体项。有必要分页显示。但是每页显示多少呢？通过对蓝光机的实机测试，每页显示30个项目，另外根据UI设计每屏最多显示12条。  </p>
 <p><strong>方案一</strong>：首先显示第一个30条（0-29），随着用户按下向下键，当要显示第30条记录的时候，使用<code>$container.html($(str))</code>显示第18-47条，当需要显示第48条的时候，使用<code>$container.html($(str))</code>显示第36-65条……依次类推下去<br>现象一：桌面浏览器没有问题，但在蓝光机中会出现闪烁，即在某个时刻页面中没有任何内容。所有的蓝光机概率为<strong>~95%</strong>  </p>
 <p>分析二：这种现象的原因很简单，<code>$container.html($(str))</code>确实做了一个清空容器的操作，如果性能较差，会出现闪烁现象。  </p>
@@ -173,10 +173,10 @@
 <p>分析三：以上仍然使用jQuery封装的find，remove以及append方法，这些方法的实现还是相当复杂，做了太多无用的工作。<br><strong>方案三</strong>：使用原生的DOM操作方法<code>document.createDocumentFragment()</code>创建一个文档片段，批量添加记录。<br>现象三：桌面浏览器没有问题，但在性能较好的蓝光机中出现闪烁的概率为 <strong>~1%</strong>，在较差的蓝光机中概率为 <strong>~15%</strong>  </p>
 <p>分析四：仍然使用了<code>$container.find(&#39;:lt(18)&#39;).remove()</code>去掉前面18条记录，这里<code>remove</code>方法可以导致$container这部分内容18次的重排重绘。 这是因为并没有找到和<code>document.createDocumentFragment</code>相似的可以批量删除DOM节点的方法。 在桌面浏览器，移动浏览器常用的方法，比如首先将$container从DOM树中删除，执行一系列的删除操作之后再添加到DOM树中，都会导致更频繁的闪烁现象。<br>在即将放弃该项优化的时候，脑子里突然冒出了一个从来没有使用过的方法。既不清楚能够解决该问题，也不知道如何使用该方法，只知道这个方法通常用在富文本编辑器中，好像可以批量操作元素。  </p>
 <p><strong>方案四</strong>：使用<code>document.createRange</code>批量删除元素。  </p>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">removeChildren</span>(<span class="params">parent, start, end</span>)</span>&#123;</div><div class="line">  <span class="keyword">var</span> range = <span class="built_in">document</span>.createRange();</div><div class="line">  <span class="keyword">var</span> children = parent.children;</div><div class="line">  range.setStartBefore(children[start]);</div><div class="line">  range.setEndAfter(children[end]);</div><div class="line">  children = <span class="literal">null</span>;</div><div class="line">  range.deleteContents();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">removeChildren</span>(<span class="params">parent, start, end</span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> range = <span class="built_in">document</span>.createRange();</span><br><span class="line">  <span class="keyword">var</span> children = parent.children;</span><br><span class="line">  range.setStartBefore(children[start]);</span><br><span class="line">  range.setEndAfter(children[end]);</span><br><span class="line">  children = <span class="literal">null</span>;</span><br><span class="line">  range.deleteContents();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>现象四：桌面浏览器以及所有的蓝光机中均没有闪烁现象。  </p>
 <p>最后又发现<code>elem.insertAdjacentHTML</code>的执行效率在蓝光机上优于<code>document.createDocumentFragment</code>，基本上前者耗时是后者的 <strong>50%</strong>，但是不解的是在Chrome26/Windows7上前者耗时略高于后者。由于目标设备是蓝光机，所以这次优化成功，可以使用<code>elem.insertAdjacentHTML</code>。<br><code>elem.insertAdjacentHTML</code>第一个参数是字符串，表示插入位置，共有四个可选值，如下表说明（来源：Javascript权威指南，P379）。第二参数也是字符串，表示要插入的HTML字符串。</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"target"</span>&gt;</span>This is the element content<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">   ↑                ↑                           ↑     ↑</div><div class="line">beforebegin     afterbegin              beforeend   afterend</div></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"target"</span>&gt;</span>This is the element content<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">   ↑                ↑                           ↑     ↑</span><br><span class="line">beforebegin     afterbegin              beforeend   afterend</span><br></pre></td></tr></table></figure>
 
                 <hr>
                 
@@ -184,8 +184,7 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2013/04/11/CSS-animations-off-the-UI-thread/" data-toggle="tooltip" data-placement="top"
-                           title="脱离UI线程的CSS3动画">&larr; Previous Post</a>
+                        <a href="/2013/04/11/CSS-animations-off-the-UI-thread/" data-toggle="tooltip" data-placement="top" title="脱离UI线程的CSS3动画">&larr; Previous Post</a>
                     </li>
                     
                     
@@ -198,6 +197,9 @@
 
                 <!--加入新的评论系统-->
                 
+
+                
+
             </div>
 
             <div class="hidden-xs col-sm-3 toc-col">
@@ -269,7 +271,7 @@
 
                 
                     <li>
-                        <a target="_blank"  href="https://github.com/lichangwei">
+                        <a target="_blank" href="https://github.com/lichangwei">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-github fa-stack-1x fa-inverse"></i>

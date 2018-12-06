@@ -2,7 +2,7 @@
 <html lang="en">
 
 <!-- Head tag -->
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -43,8 +43,8 @@
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="" class="animated fadeIn">
 <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
-" data-ishome = "false" >
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
+" data-ishome="false">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header page-scroll">
@@ -58,6 +58,7 @@
                 <span class="brand-logo">
                     飞鹰走码
                 </span>
+                's Blog
             </a>
         </div>
 
@@ -118,8 +119,7 @@
 <!--only post-->
 
 
-<img class="wechat-title-img"
-     src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
+<img class="wechat-title-img" src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
 
 
 <style>
@@ -176,7 +176,7 @@
 <li><p>当用户再次登录时，首先判断用户名和密码是否正确，如果正确，然后用户是否已经在别处登录，即Session表是否有该用户的未过期Session，如果是，则给用户一个错误提示，否则才判定位登录成功。  </p>
 </li>
 </ol>
-<p>在我们当前的应用中，服务器端语言使用的Node，框架是Express。Session管理我们可以使用的是Express自带的Session中间件。代码如下：<br><figure class="highlight js"><table><tr><td class="code"><pre><div class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</div><div class="line"><span class="keyword">var</span> app = <span class="keyword">new</span> express();</div><div class="line">app.use(express.session());</div></pre></td></tr></table></figure></p>
+<p>在我们当前的应用中，服务器端语言使用的Node，框架是Express。Session管理我们可以使用的是Express自带的Session中间件。代码如下：<br><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> app = <span class="keyword">new</span> express();</span><br><span class="line">app.use(express.session());</span><br></pre></td></tr></table></figure></p>
 <p>Express的Session中间件没有API可以得到用户是否已经在别处登录。另外一个问题就是即便我们自己实现Session控制，那么也是不可取的，因为项目特殊性，用户在登录以后就加在几乎所有的资源，也只有在登录，申请设备和获取已申请设备清单时才会发送一个服务器端的请求。之后用户只需要按下启动按钮，之后虚拟设备就运行在Web App中了，第三方应用就可以通过SSDP协议发现设备并与该设备进行HTTP通信了。以后只有部分静态资源文件会从Node Server上获取之后，就没有其他的请求了。所以自从获取已申请设备清单以后，就没有会修改最后操作时间的请求了。  </p>
 <p>W给出的一个方案：使用socketio，保持与服务器端通信。可行倒是可行，但是我们要为了一个需求大动干戈吗？这个要划一个问号。然后我跟W说，我去跟Tony商量一下，看看他的目的是什么，再决定怎么做。  </p>
 <p>在跟Tony的交流中，发现他有过这样的经历：开发阶段两个人使用了同一个账号同时登录，这两个浏览器中自然有着同样的设备列表，然后都启动了某个设备，这时候在局域网中就有了两个有着同样UUID的虚拟设备，他们IP不同，设别描述文件地址也不同，设备状态也不同。有些SSDP客户端会因此而崩溃掉。所以他想让一个账号不能同时在两处登录就能解决该问题了。  </p>
@@ -189,14 +189,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2013/09/17/innertext-vs-textcontent/" data-toggle="tooltip" data-placement="top"
-                           title="innerText vs textContent">&larr; Previous Post</a>
+                        <a href="/2013/09/17/innertext-vs-textcontent/" data-toggle="tooltip" data-placement="top" title="innerText vs textContent">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2013/09/12/Five-Helpful-Tips-When-Using-RequireJS/" data-toggle="tooltip" data-placement="top"
-                           title="【翻译】RequireJS的五个有用的小技巧">Next Post &rarr;</a>
+                        <a href="/2013/09/12/Five-Helpful-Tips-When-Using-RequireJS/" data-toggle="tooltip" data-placement="top" title="【翻译】RequireJS的五个有用的小技巧">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -208,6 +206,9 @@
 
                 <!--加入新的评论系统-->
                 
+
+                
+
             </div>
 
             <div class="hidden-xs col-sm-3 toc-col">
@@ -279,7 +280,7 @@
 
                 
                     <li>
-                        <a target="_blank"  href="https://github.com/lichangwei">
+                        <a target="_blank" href="https://github.com/lichangwei">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-github fa-stack-1x fa-inverse"></i>

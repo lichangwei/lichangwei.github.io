@@ -2,7 +2,7 @@
 <html lang="en">
 
 <!-- Head tag -->
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -43,8 +43,8 @@
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="" class="animated fadeIn">
 <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
-" data-ishome = "false" >
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
+" data-ishome="false">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header page-scroll">
@@ -58,6 +58,7 @@
                 <span class="brand-logo">
                     飞鹰走码
                 </span>
+                's Blog
             </a>
         </div>
 
@@ -118,8 +119,7 @@
 <!--only post-->
 
 
-<img class="wechat-title-img"
-     src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
+<img class="wechat-title-img" src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
 
 
 <style>
@@ -164,9 +164,9 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <p>为什么innerText会导致重排？我在我的上篇<a href="http://kellegous.com/j/2013/01/26/layout-performance" target="_blank" rel="external">关于重排的文章</a>末尾提出了这个问题。这里简单地总结一下，有些DOM API可能会因为不必要的重排，从而导致严重的性能问题。我将在这些文章中，着重提出这些年我发现的关于Web性能的古怪问题。  </p>
+                <p>为什么innerText会导致重排？我在我的上篇<a href="http://kellegous.com/j/2013/01/26/layout-performance" target="_blank" rel="noopener">关于重排的文章</a>末尾提出了这个问题。这里简单地总结一下，有些DOM API可能会因为不必要的重排，从而导致严重的性能问题。我将在这些文章中，着重提出这些年我发现的关于Web性能的古怪问题。  </p>
 <p>As with many other things in browsers, innerText’s behavior seemed to have happened due to overlapping (and, perhaps, under-defined) use cases. 当你要获取DOM节点中的文本时，你会遇到两个问题，节点中原始文本是什么？用户看到的文本是什么？虽然类似，但是显然有所不同。在浏览器中，可以通过textContent获得前者，通过innerHTML获得后者。  </p>
-<p>我们用以下例子来解释他们的最重要的不同点，看看以下HTML节点的innerText和textContent。<br><figure class="highlight html"><table><tr><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"t"</span>&gt;</span><span class="tag">&lt;<span class="name">div</span>&gt;</span>lions,</div><div class="line">tigers<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"visibility:hidden"</span>&gt;</span>and bears<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>我们用以下例子来解释他们的最重要的不同点，看看以下HTML节点的innerText和textContent。<br><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"t"</span>&gt;</span><span class="tag">&lt;<span class="name">div</span>&gt;</span>lions,</span><br><span class="line">tigers<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"visibility:hidden"</span>&gt;</span>and bears<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p>innerText: <code>lions, tigers</code><br>textContent: <code>lions,\ntigersand bears</code>  </p>
 <p>注意以下不同点：（1）.那些没有显示出来元素也不会出现在innerText中（2）innerText中的换行符遵循布局中换行符的规则。理解innerText最好的方式就是，它大概就是你选择该节点的内容然后拷贝获得的文本。而textContent是各个子节点的文本内容组成的文本。  </p>
 <h2 id="innerText可能不是你想要的"><a href="#innerText可能不是你想要的" class="headerlink" title="innerText可能不是你想要的"></a>innerText可能不是你想要的</h2><p>innerText最大的特点是需要从布局系统中获得一些信息然后决定文本是怎样显示给用户的，这就是为什么innerText成为一个让性能变糟的一个属性。很多库喜欢用<code>innerText</code>而不用<code>textContent</code>仅仅是因为IE中先有<code>innerText</code>。下面让我们演示选择<code>innerText</code>和<code>textContent</code>时对性能的影响。  </p>
@@ -181,14 +181,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2013/09/20/Canvas-Inspection-using-Chrome-DevTools/" data-toggle="tooltip" data-placement="top"
-                           title="【翻译】使用Chrome开发者工具调试Canvas">&larr; Previous Post</a>
+                        <a href="/2013/09/20/Canvas-Inspection-using-Chrome-DevTools/" data-toggle="tooltip" data-placement="top" title="【翻译】使用Chrome开发者工具调试Canvas">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2013/09/16/Why-the-User-Need-this-Feature/" data-toggle="tooltip" data-placement="top"
-                           title="透过用户的要求理解用户的关切">Next Post &rarr;</a>
+                        <a href="/2013/09/16/Why-the-User-Need-this-Feature/" data-toggle="tooltip" data-placement="top" title="透过用户的要求理解用户的关切">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -200,6 +198,9 @@
 
                 <!--加入新的评论系统-->
                 
+
+                
+
             </div>
 
             <div class="hidden-xs col-sm-3 toc-col">
@@ -271,7 +272,7 @@
 
                 
                     <li>
-                        <a target="_blank"  href="https://github.com/lichangwei">
+                        <a target="_blank" href="https://github.com/lichangwei">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-github fa-stack-1x fa-inverse"></i>

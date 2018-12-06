@@ -2,7 +2,7 @@
 <html lang="en">
 
 <!-- Head tag -->
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -43,8 +43,8 @@
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="" class="animated fadeIn">
 <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
-" data-ishome = "false" >
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
+" data-ishome="false">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header page-scroll">
@@ -58,6 +58,7 @@
                 <span class="brand-logo">
                     飞鹰走码
                 </span>
+                's Blog
             </a>
         </div>
 
@@ -118,8 +119,7 @@
 <!--only post-->
 
 
-<img class="wechat-title-img"
-     src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
+<img class="wechat-title-img" src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
 
 
 <style>
@@ -169,8 +169,8 @@
 <h2 id="项目简介"><a href="#项目简介" class="headerlink" title="项目简介"></a>项目简介</h2><p>项目采用前后端分离方式开发，两个代码仓库，并部署为两个应用。后端接口地址全部以<code>/api</code>打头，方便简化转发规则。现在就需要在前端应用中将<code>/api</code>打头的请求转至后端应用。</p>
 <h2 id="IIS默认不支持反向代理，需要额外安装插件"><a href="#IIS默认不支持反向代理，需要额外安装插件" class="headerlink" title="IIS默认不支持反向代理，需要额外安装插件"></a>IIS默认不支持反向代理，需要额外安装插件</h2><p>很难想象<code>IIS</code>(Internet Infomation Service)竟然不默认支持反向代理，需要安装官方提供的两个插件。<br>安装插件：</p>
 <ol>
-<li><a href="https://www.iis.net/downloads/microsoft/application-request-routing" target="_blank" rel="external">Application Request Routing</a></li>
-<li><a href="https://www.iis.net/downloads/microsoft/url-rewrite" target="_blank" rel="external">URL Rewrite</a><br>安装完成之后重新启动一下<code>IIS</code>.</li>
+<li><a href="https://www.iis.net/downloads/microsoft/application-request-routing" target="_blank" rel="noopener">Application Request Routing</a></li>
+<li><a href="https://www.iis.net/downloads/microsoft/url-rewrite" target="_blank" rel="noopener">URL Rewrite</a><br>安装完成之后重新启动一下<code>IIS</code>.</li>
 </ol>
 <h2 id="启用反向代理功能"><a href="#启用反向代理功能" class="headerlink" title="启用反向代理功能"></a>启用反向代理功能</h2><ol>
 <li>双击<code>IIS</code>根目录，双击<code>Application Request Routing Cache</code>，双击右侧的<code>Server Proxy Settings</code>。<br><img src="../../../../images/iis-url-rewrite/1.click-iis-root-select-arr.png" alt=""><br><img src="../../../../images/iis-url-rewrite/2.server-proxy-setting.png" alt=""></li>
@@ -194,10 +194,13 @@
 
                 <ul class="pager">
                     
+                    <li class="previous">
+                        <a href="/2018/02/08/webpack-public-path/" data-toggle="tooltip" data-placement="top" title="运行时指定 Webpack 的 publicPath">&larr; Previous Post</a>
+                    </li>
+                    
                     
                     <li class="next">
-                        <a href="/2017/10/24/shared-cookie/" data-toggle="tooltip" data-placement="top"
-                           title="Cookie 的共享规则">Next Post &rarr;</a>
+                        <a href="/2017/10/24/shared-cookie/" data-toggle="tooltip" data-placement="top" title="Cookie 的共享规则">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -209,6 +212,9 @@
 
                 <!--加入新的评论系统-->
                 
+
+                
+
             </div>
 
             <div class="hidden-xs col-sm-3 toc-col">
@@ -280,7 +286,7 @@
 
                 
                     <li>
-                        <a target="_blank"  href="https://github.com/lichangwei">
+                        <a target="_blank" href="https://github.com/lichangwei">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-github fa-stack-1x fa-inverse"></i>

@@ -2,7 +2,7 @@
 <html lang="en">
 
 <!-- Head tag -->
-<head>
+<head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -43,8 +43,8 @@
 <!-- hack iOS CSS :active style -->
 <body ontouchstart="" class="animated fadeIn">
 <!-- Navigation -->
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost = "true" data-istags="false
-" data-ishome = "false" >
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top " id="nav-top" data-ispost="true" data-istags="false
+" data-ishome="false">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header page-scroll">
@@ -58,6 +58,7 @@
                 <span class="brand-logo">
                     飞鹰走码
                 </span>
+                's Blog
             </a>
         </div>
 
@@ -118,8 +119,7 @@
 <!--only post-->
 
 
-<img class="wechat-title-img"
-     src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
+<img class="wechat-title-img" src="http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg">
 
 
 <style>
@@ -166,16 +166,16 @@
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
                 <p>在上篇文章我们提到如何使用WWW-Authenticate实现登录和认证。这一次我们讲一下另一种实现方式。服务器端提供一个登录认证页面，浏览器端需要跳转到该页面，用户输入PIN码之后，发送请求，浏览器验证之后跳转当前页面来。以下是更详细的步骤。  </p>
 <ol>
-<li>浏览器端点击认证按钮，然后请求电视机（服务器端，下同）提供的一个认证页面。<figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">GET http://192.168.1.199:7999/webauth/auth_default?app_name=Sample%20Web%20App&amp;app_url=http%3A%2F%2F192.168.1.199%3A3000%2Ftest%2Fbravia.html&amp;return_url=http%3A%2F%2F192.168.1.199%3A3000%2Ftest%2Fbravia.html%3Fserver%3D192.168.1.199%26port%3D7999%26device_id%3D3%26x%3D1%26y%3D2%23zzz&amp;auth_level=generic HTTP/1.1</div></pre></td></tr></table></figure>
+<li>浏览器端点击认证按钮，然后请求电视机（服务器端，下同）提供的一个认证页面。<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GET http://192.168.1.199:7999/webauth/auth_default?app_name=Sample%20Web%20App&amp;app_url=http%3A%2F%2F192.168.1.199%3A3000%2Ftest%2Fbravia.html&amp;return_url=http%3A%2F%2F192.168.1.199%3A3000%2Ftest%2Fbravia.html%3Fserver%3D192.168.1.199%26port%3D7999%26device_id%3D3%26x%3D1%26y%3D2%23zzz&amp;auth_level=generic HTTP/1.1</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 <p>该请求中包含一些重要的参数信息：<br>app_name 该应用的名称，显示给用户确认。<br>app_url 该应用的网址，显示给用户确认。<br>return_url 认证完成之后，通过该网址跳回本应用。<br>auth_level 认证等级，将会体现到该应用对电视机操控权限上。  </p>
-<ol>
-<li>电视机接收到认证页面请求，创建PIN码并显示在电视机上（如下图），返回该页面源码。<br><img src="../../../../images/Redirect-1.png" alt="电视机上显示PIN码">  <figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">HTTP/1.1 200 OK</div><div class="line">&lt;!DOCTYPE HTML&gt;</div><div class="line">```  </div><div class="line">  </div><div class="line">3. 浏览器端显示该页面（如下图），用户输入PIN码并发送认证请求。  </div><div class="line">![浏览器上显示认证页面](../../../../images/Redirect-2.png)</div></pre></td></tr></table></figure>
+<ol start="2">
+<li>电视机接收到认证页面请求，创建PIN码并显示在电视机上（如下图），返回该页面源码。<br><img src="../../../../images/Redirect-1.png" alt="电视机上显示PIN码">  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">&lt;!DOCTYPE HTML&gt;</span><br><span class="line">```  </span><br><span class="line">  </span><br><span class="line">3. 浏览器端显示该页面（如下图），用户输入PIN码并发送认证请求。  </span><br><span class="line">![浏览器上显示认证页面](../../../../images/Redirect-2.png)</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>POST <a href="http://192.168.1.199:7999/webauth/auth_default_submit" target="_blank" rel="external">http://192.168.1.199:7999/webauth/auth_default_submit</a> HTTP/1.1<br>Content-Type: application/x-www-form-urlencoded<br>pin_code=5184&amp;response=allow&amp;token=1378462608431&amp;app_name=Sample+Web+App&amp;app_url=http%3A%2F%2F192.168.1.199%3A3000%2Ftest%2Fbravia.html&amp;return_url=http%3A%2F%2F192.168.1.199%3A3000%2Ftest%2Fbravia.html%3Fserver%3D192.168.1.199%26port%3D7999%26device_id%3D3%26x%3D1%26y%3D2%23zzz&amp;auth_level=generic<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">  </div><div class="line">4. 电视机收到认证请求，判断PIN码是否正确，如果不正确，则再次回到第二步中的认证页面，并提示错误，如下图。  </div><div class="line">![PIN码输入错误](../../../../images/Redirect-error-case.png)  </div><div class="line">如果正确，则跳转到return_url页面。</div></pre></td></tr></table></figure></p>
-<p>HTTP/1.1 302 Found<br>Location: <a href="http://192.168.1.199:3000/test/bravia.html?server=192.168.1.199&amp;port=7999&amp;device_id=3&amp;x=1&amp;y=2&amp;result=authorized#zzz" target="_blank" rel="external">http://192.168.1.199:3000/test/bravia.html?server=192.168.1.199&amp;port=7999&amp;device_id=3&amp;x=1&amp;y=2&amp;result=authorized#zzz</a><br>Set-Cookie: auth=9336226396260589431055355817107579663142096251022247731126844883; path=/; max-age=1209600; expires=Fri, 20 Sep 2013 10:49:56 GMT<br>```</p>
+<p>POST <a href="http://192.168.1.199:7999/webauth/auth_default_submit" target="_blank" rel="noopener">http://192.168.1.199:7999/webauth/auth_default_submit</a> HTTP/1.1<br>Content-Type: application/x-www-form-urlencoded<br>pin_code=5184&amp;response=allow&amp;token=1378462608431&amp;app_name=Sample+Web+App&amp;app_url=http%3A%2F%2F192.168.1.199%3A3000%2Ftest%2Fbravia.html&amp;return_url=http%3A%2F%2F192.168.1.199%3A3000%2Ftest%2Fbravia.html%3Fserver%3D192.168.1.199%26port%3D7999%26device_id%3D3%26x%3D1%26y%3D2%23zzz&amp;auth_level=generic<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">  </span><br><span class="line">4. 电视机收到认证请求，判断PIN码是否正确，如果不正确，则再次回到第二步中的认证页面，并提示错误，如下图。  </span><br><span class="line">![PIN码输入错误](../../../../images/Redirect-error-case.png)  </span><br><span class="line">如果正确，则跳转到return_url页面。</span><br></pre></td></tr></table></figure></p>
+<p>HTTP/1.1 302 Found<br>Location: <a href="http://192.168.1.199:3000/test/bravia.html?server=192.168.1.199&amp;port=7999&amp;device_id=3&amp;x=1&amp;y=2&amp;result=authorized#zzz" target="_blank" rel="noopener">http://192.168.1.199:3000/test/bravia.html?server=192.168.1.199&amp;port=7999&amp;device_id=3&amp;x=1&amp;y=2&amp;result=authorized#zzz</a><br>Set-Cookie: auth=9336226396260589431055355817107579663142096251022247731126844883; path=/; max-age=1209600; expires=Fri, 20 Sep 2013 10:49:56 GMT<br><code>`</code></p>
 
                 <hr>
                 
@@ -183,14 +183,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2013/09/11/Software-Product-Quality-Cannot-be-rely-on-Test/" data-toggle="tooltip" data-placement="top"
-                           title="">&larr; Previous Post</a>
+                        <a href="/2013/09/11/Software-Product-Quality-Cannot-be-rely-on-Test/" data-toggle="tooltip" data-placement="top" title="">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2013/09/06/Using-WWW-Authenticate-to-Login-Authentication/" data-toggle="tooltip" data-placement="top"
-                           title="使用WWW-Authenticate实现登录认证">Next Post &rarr;</a>
+                        <a href="/2013/09/06/Using-WWW-Authenticate-to-Login-Authentication/" data-toggle="tooltip" data-placement="top" title="使用WWW-Authenticate实现登录认证">Next Post &rarr;</a>
                     </li>
                     
                 </ul>
@@ -202,6 +200,9 @@
 
                 <!--加入新的评论系统-->
                 
+
+                
+
             </div>
 
             <div class="hidden-xs col-sm-3 toc-col">
@@ -273,7 +274,7 @@
 
                 
                     <li>
-                        <a target="_blank"  href="https://github.com/lichangwei">
+                        <a target="_blank" href="https://github.com/lichangwei">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-github fa-stack-1x fa-inverse"></i>
