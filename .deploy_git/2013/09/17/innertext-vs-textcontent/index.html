@@ -164,14 +164,15 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <p>为什么innerText会导致重排？我在我的上篇<a href="http://kellegous.com/j/2013/01/26/layout-performance" target="_blank" rel="noopener">关于重排的文章</a>末尾提出了这个问题。这里简单地总结一下，有些DOM API可能会因为不必要的重排，从而导致严重的性能问题。我将在这些文章中，着重提出这些年我发现的关于Web性能的古怪问题。  </p>
-<p>As with many other things in browsers, innerText’s behavior seemed to have happened due to overlapping (and, perhaps, under-defined) use cases. 当你要获取DOM节点中的文本时，你会遇到两个问题，节点中原始文本是什么？用户看到的文本是什么？虽然类似，但是显然有所不同。在浏览器中，可以通过textContent获得前者，通过innerHTML获得后者。  </p>
-<p>我们用以下例子来解释他们的最重要的不同点，看看以下HTML节点的innerText和textContent。<br><figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"t"</span>&gt;</span><span class="tag">&lt;<span class="name">div</span>&gt;</span>lions,</span><br><span class="line">tigers<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"visibility:hidden"</span>&gt;</span>and bears<span class="tag">&lt;/<span class="name">div</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>innerText: <code>lions, tigers</code><br>textContent: <code>lions,\ntigersand bears</code>  </p>
-<p>注意以下不同点：（1）.那些没有显示出来元素也不会出现在innerText中（2）innerText中的换行符遵循布局中换行符的规则。理解innerText最好的方式就是，它大概就是你选择该节点的内容然后拷贝获得的文本。而textContent是各个子节点的文本内容组成的文本。  </p>
-<h2 id="innerText可能不是你想要的"><a href="#innerText可能不是你想要的" class="headerlink" title="innerText可能不是你想要的"></a>innerText可能不是你想要的</h2><p>innerText最大的特点是需要从布局系统中获得一些信息然后决定文本是怎样显示给用户的，这就是为什么innerText成为一个让性能变糟的一个属性。很多库喜欢用<code>innerText</code>而不用<code>textContent</code>仅仅是因为IE中先有<code>innerText</code>。下面让我们演示选择<code>innerText</code>和<code>textContent</code>时对性能的影响。  </p>
-<p>在基于Webkit的浏览器中，你可以看到很大的性能差异，大概<code>300ms</code>对<code>1ms</code>。在IE9中，你可以看到较好的性能以及较小的差异，这是因为</p>
-<h2 id="innerText可能不是你想要的另一个原因"><a href="#innerText可能不是你想要的另一个原因" class="headerlink" title="innerText可能不是你想要的另一个原因"></a>innerText可能不是你想要的另一个原因</h2><p>虽然innerText被广泛使用，但它不是规范的属性。它能够存活下来是因为IE时代的广泛使用。<br>On a WebKit browser, you should see a significant performance difference (~300ms vs ~1ms). On IE9, you’ll see better performance and a much smaller difference. It is clear that IE avoids computing a full layout and probably uses a special code path that computes only what is needed for innerText (which really isn’t much). If you are using Firefox or Opera, you may be scatching your head. Keep reading.</p>
+                <p>为什么 innerText 会导致重排？我在我的上篇<a href="http://kellegous.com/j/2013/01/26/layout-performance" target="_blank" rel="noopener">关于重排的文章</a>末尾提出了这个问题。这里简单地总结一下，有些 DOM API 可能会因为不必要的重排，从而导致严重的性能问题。我将在这些文章中，着重提出这些年我发现的关于 Web 性能的古怪问题。</p>
+<p>As with many other things in browsers, innerText’s behavior seemed to have happened due to overlapping (and, perhaps, under-defined) use cases. 当你要获取 DOM 节点中的文本时，你会遇到两个问题，节点中原始文本是什么？用户看到的文本是什么？虽然类似，但是显然有所不同。在浏览器中，可以通过 textContent 获得前者，通过 innerHTML 获得后者。</p>
+<p>我们用以下例子来解释他们的最重要的不同点，看看以下 HTML 节点的 innerText 和 textContent。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"t"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>lions, tigers<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"visibility:hidden"</span>&gt;</span>and bears<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>innerText: <code>lions, tigers</code><br>textContent: <code>lions,\n tigersand bears</code></p>
+<p>注意以下不同点：（1）.那些没有显示出来元素也不会出现在 innerText 中（2）innerText 中的换行符遵循布局中换行符的规则。理解 innerText 最好的方式就是，它大概就是你选择该节点的内容然后拷贝获得的文本。而 textContent 是各个子节点的文本内容组成的文本。</p>
+<h2 id="innerText-可能不是你想要的"><a href="#innerText-可能不是你想要的" class="headerlink" title="innerText 可能不是你想要的"></a>innerText 可能不是你想要的</h2><p>innerText 最大的特点是需要从布局系统中获得一些信息然后决定文本是怎样显示给用户的，这就是为什么 innerText 成为一个让性能变糟的一个属性。很多库喜欢用<code>innerText</code>而不用<code>textContent</code>仅仅是因为 IE 中先有<code>innerText</code>。下面让我们演示选择<code>innerText</code>和<code>textContent</code>时对性能的影响。</p>
+<p>在基于 Webkit 的浏览器中，你可以看到很大的性能差异，大概<code>300ms</code>对<code>1ms</code>。在 IE9 中，你可以看到较好的性能以及较小的差异，这是因为</p>
+<h2 id="innerText-可能不是你想要的另一个原因"><a href="#innerText-可能不是你想要的另一个原因" class="headerlink" title="innerText 可能不是你想要的另一个原因"></a>innerText 可能不是你想要的另一个原因</h2><p>虽然 innerText 被广泛使用，但它不是规范的属性。它能够存活下来是因为 IE 时代的广泛使用。<br>On a WebKit browser, you should see a significant performance difference (~300ms vs ~1ms). On IE9, you’ll see better performance and a much smaller difference. It is clear that IE avoids computing a full layout and probably uses a special code path that computes only what is needed for innerText (which really isn’t much). If you are using Firefox or Opera, you may be scatching your head. Keep reading.</p>
 <p>While one could certainly conceive of use cases for innerText, most callers just assume that innerText and textContent are identical. You will see the expression node.innerText || node.textContent still being used in a number of libraries. Unfortunately, that leaves the door open for some unexpected performance problems. It is much wiser to prefer textContent these days.</p>
 <p>Another reason innerText is probably not what you want<br>While it is still widely used, innerText is not standard. It is a bit of behavior that has lived on due to wide use during the Internet Explorer era. It’s heavy use back then is probably the reason IE seems to have a specialized code path. To this day, it is not present in Firefox (wise decision on their part) and its behavior still varies widely in the browsers that do support it. Opera, for instance, merely computes textContent when you try to access innerText. This is why it outperforms WebKit in the example I show. When I use the expression “browser landmine”, innerText is what I have in mind. To quote my good friend, Joel Webber, “it’s slower, but at least it doesn’t work as you would expect.”</p>
 
@@ -181,7 +182,7 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2013/09/20/Canvas-Inspection-using-Chrome-DevTools/" data-toggle="tooltip" data-placement="top" title="【翻译】使用Chrome开发者工具调试Canvas">&larr; Previous Post</a>
+                        <a href="/2013/09/20/Canvas-Inspection-using-Chrome-DevTools/" data-toggle="tooltip" data-placement="top" title="【翻译】使用 Chrome 开发者工具调试 Canvas">&larr; Previous Post</a>
                     </li>
                     
                     
@@ -205,7 +206,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#innerText可能不是你想要的"><span class="toc-text">innerText可能不是你想要的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#innerText可能不是你想要的另一个原因"><span class="toc-text">innerText可能不是你想要的另一个原因</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#innerText-可能不是你想要的"><span class="toc-text">innerText 可能不是你想要的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#innerText-可能不是你想要的另一个原因"><span class="toc-text">innerText 可能不是你想要的另一个原因</span></a></li></ol>
                 </div>
             </div>
         </div>

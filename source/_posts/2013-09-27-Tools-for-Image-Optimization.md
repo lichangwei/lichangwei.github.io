@@ -10,12 +10,9 @@ BigQuery calculated medians for a HTTP Archive run
 BigQuery calculated medians for a HTTP Archive run thanks to Ilya Grigorik
 There have been plenty of well documented cases of page weight being heavy, with the Oakley site Brad Frost mentioned in April clocking in at ~ 25MB worth of images alone. Insanity. Just think of this on mobile: slower data, CPU, GPU..and it’s just ONE page.
 
-
-
 Images are a non-trivial problem to solve because they occasionally need to be high-res, but at the same time small enough to not kill your users mobile data cap. My hope is that srcset will help us improve this long-term. Thankfully Blink, WebKit and soon FF will have it.
 
 The page cost of using images on the web is however not a new problem but we’re at least moving beyond blaming scripts as the main culprit. As a reminder, here’s a quote from Adam Sontag who suggested “One less JPG” as a solution to our bickering about framework sizes back in 2012:
-
 
 Tools
 
@@ -100,7 +97,6 @@ Desktop tools
 
 If you’re primarily a designer or don’t have a build process setup, please consider at least running your images through tools like ImageOptim or ImageAlpha as they will shave bytes off your images and keep your pages a little more lean.
 
-
 You might also find this write-up on image compression for web developers by Colt McAnlis of interest.
 
 mod_pagespeed
@@ -114,7 +110,5 @@ If there are other tools or Grunt tasks you’ve found helpful for image optimiz
 Wrapping up
 
 Mobile users are the biggest victims of image bloat on web pages. They take ages to load on slow connections and when used without any optimization can make for a costly user experience.
-
-
 
 Respect your user’s time, try to keep your pages lean and with some luck we’ll make the web just a little bit faster.

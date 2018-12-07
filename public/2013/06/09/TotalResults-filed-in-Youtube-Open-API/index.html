@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        Youtube开放API中返回数据不一致｜李长伟的博客
+        YouTube 开放 API 中返回数据不一致｜李长伟的博客
         
     </title>
 
@@ -136,7 +136,7 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>Youtube开放API中返回数据不一致</h1>
+                    <h1>YouTube 开放 API 中返回数据不一致</h1>
                     
                     <span class="meta">
                          作者 李长伟
@@ -153,7 +153,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            Youtube开放API中返回数据不一致
+            YouTube 开放 API 中返回数据不一致
         </span>
     </div>
 </header>
@@ -164,13 +164,13 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <p>在<a href="https://developers.google.com/youtube/2.0/reference?hl=en" target="_blank" rel="noopener">Youtube的开放API</a>中，totalResults字段只是近似值，而不是准确值。比如返回的totalResults为48，但是只返回46条记录。所以应用中不能依赖该字段来确定总共有多少页，然后允许用户直接跳到最后一页。因为最后一页很有可能就不存在。  </p>
-<p>为什么会出现这种情况呢？我们从以下几个概念开始说起。  </p>
-<h2 id="CAP理论"><a href="#CAP理论" class="headerlink" title="CAP理论"></a>CAP理论</h2><p>CAP理论由Eric Brewer教授提出：在设计和部署分布式应用时，存在以下三个核心的系统需求：一致性（<strong>C</strong>onsistency），可用性（<strong>A</strong>vailability）和分区容错性（<strong>P</strong>artition Tolerance）， <strong>针对特定数据，最多只能同时满足两个</strong>。<br><strong>一致性</strong>：又称为原子性或者事务性。表示一组操作是不可分割的，要么全部完成，不会出现部分完成的情况。<br><strong>可用性</strong>：是指系统能够很好的为用户服务，不会出现操作失败或者访问超时等用户体验不好的情况。可以通过数据冗余，负载均衡等手段实现。<br><strong>分区容错性</strong>：一个良好的分布式系统，在其中一个或者几个节点宕掉的情况下仍然能够工作。  </p>
-<p>从这里可以大胆的猜测，Youtube系统应该舍弃了一致性，保证了可用性和分区容错性。  </p>
-<p>身为前端开发人员，还是更加看重这样的决策对前端的影响。  </p>
-<p>1）就是不能使用传统的分页方式，可以采用无限滚动列表，或者只有“上一页”和“下一页”两个按钮的分页方式。在BDP项目中，我们使用无限列表的方式，当然是用这种方式的更大原因，电视机上没有鼠标操作，只有遥控器的上下左右键，而左右键被用切换页面，所以只能使用上下键来选择记录了。  </p>
-<p>2）前端需要良好的容错机制。首先会假设totalResults字段是准确的，并显示给用户看。随着用户的操作，持续地发送请求获取更多记录，直到①当前已经获取的记录数大于等于totalResults，或者②请求出错，就将totalResults修正为当前已经获取的记录的个数，并且比较圆润地处理错误，使得用户操作正常，就像没有出错一样。用户希望提前看到totalResults，并不一定要看到一个准确的结果，多数时候他们需要的是个预期，大概多少条记录，我要滚动页面多长时间才能浏览一遍。  </p>
+                <p>在<a href="https://developers.google.com/youtube/2.0/reference?hl=en" target="_blank" rel="noopener">YouTube 的开放 API</a>中，totalResults 字段只是近似值，而不是准确值。比如返回的 totalResults 为 48，但是只返回 46 条记录。所以应用中不能依赖该字段来确定总共有多少页，然后允许用户直接跳到最后一页。因为最后一页很有可能就不存在。</p>
+<p>为什么会出现这种情况呢？我们从以下几个概念开始说起。</p>
+<h2 id="CAP-理论"><a href="#CAP-理论" class="headerlink" title="CAP 理论"></a>CAP 理论</h2><p>CAP 理论由 Eric Brewer 教授提出：在设计和部署分布式应用时，存在以下三个核心的系统需求：一致性（Consistency），可用性（Availability）和分区容错性（Partition Tolerance）， <strong>针对特定数据，最多只能同时满足两个</strong>。<br><strong>一致性</strong>：又称为原子性或者事务性。表示一组操作是不可分割的，要么全部完成，不会出现部分完成的情况。<br><strong>可用性</strong>：是指系统能够很好的为用户服务，不会出现操作失败或者访问超时等用户体验不好的情况。可以通过数据冗余，负载均衡等手段实现。<br><strong>分区容错性</strong>：一个良好的分布式系统，在其中一个或者几个节点宕掉的情况下仍然能够工作。</p>
+<p>从这里可以大胆的猜测，YouTube 系统应该舍弃了一致性，保证了可用性和分区容错性。</p>
+<p>身为前端开发人员，还是更加看重这样的决策对前端的影响。</p>
+<p>1）就是不能使用传统的分页方式，可以采用无限滚动列表，或者只有“上一页”和“下一页”两个按钮的分页方式。在 BDP 项目中，我们使用无限列表的方式，当然是用这种方式的更大原因，电视机上没有鼠标操作，只有遥控器的上下左右键，而左右键被用切换页面，所以只能使用上下键来选择记录了。</p>
+<p>2）前端需要良好的容错机制。首先会假设 totalResults 字段是准确的，并显示给用户看。随着用户的操作，持续地发送请求获取更多记录，直到 ① 当前已经获取的记录数大于等于 totalResults，或者 ② 请求出错，就将 totalResults 修正为当前已经获取的记录的个数，并且比较圆润地处理错误，使得用户操作正常，就像没有出错一样。用户希望提前看到 totalResults，并不一定要看到一个准确的结果，多数时候他们需要的是个预期，大概多少条记录，我要滚动页面多长时间才能浏览一遍。</p>
 
                 <hr>
                 
@@ -202,7 +202,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CAP理论"><span class="toc-text">CAP理论</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CAP-理论"><span class="toc-text">CAP 理论</span></a></li></ol>
                 </div>
             </div>
         </div>

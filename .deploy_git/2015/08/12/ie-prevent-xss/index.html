@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        IE浏览器的阻止XSS攻击功能｜李长伟的博客
+        IE 浏览器的阻止 XSS 攻击功能｜李长伟的博客
         
     </title>
 
@@ -136,7 +136,7 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>IE浏览器的阻止XSS攻击功能</h1>
+                    <h1>IE 浏览器的阻止 XSS 攻击功能</h1>
                     
                     <span class="meta">
                          作者 李长伟
@@ -153,7 +153,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            IE浏览器的阻止XSS攻击功能
+            IE 浏览器的阻止 XSS 攻击功能
         </span>
     </div>
 </header>
@@ -164,20 +164,21 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <p>昨天接到一个专利搜索结果页面的bug：在某个搜索条件下，IE10浏览器不能正常显示。</p>
-<h3 id="1-重现问题"><a href="#1-重现问题" class="headerlink" title="1. 重现问题"></a>1. 重现问题</h3><p>我们这里没有IE10浏览器，一般都是通过Windows8.1上的IE11浏览器模拟实现，所以我立即在IE11上验证，没有想到IE11竟然也重现了这个问题，所以我也没有必要去模拟IE10了。</p>
+                <p>昨天接到一个专利搜索结果页面的 bug：在某个搜索条件下，IE10 浏览器不能正常显示。</p>
+<h3 id="1-重现问题"><a href="#1-重现问题" class="headerlink" title="1. 重现问题"></a>1. 重现问题</h3><p>我们这里没有 IE10 浏览器，一般都是通过 Windows8.1 上的 IE11 浏览器模拟实现，所以我立即在 IE11 上验证，没有想到 IE11 竟然也重现了这个问题，所以我也没有必要去模拟 IE10 了。</p>
 <blockquote>
-<p>开发环境：我们组有三台服务器，一台装Unbuntu用来做普通服务器用，剩下两台都用来测试网站在IE上兼容性，一台是Windows Server 2012安装了IE8，一台是Windows 8.1安装了IE11。IE9，IE10都是通过IE11模拟测试的。</p>
+<p>开发环境：我们组有三台服务器，一台装 Ubuntu 用来做普通服务器用，剩下两台都用来测试网站在 IE 上兼容性，一台是 Windows Server 2012 安装了 IE8，一台是 Windows 8.1 安装了 IE11。IE9，IE10 都是通过 IE11 模拟测试的。</p>
 </blockquote>
-<p>重现的时候发现两个问题，一个是页面顶部给出提示“Invalid input”(非法输入)，这是我们系统给出的错误提示。另一个就是IE给的提示信息“Internet Explorer has modified this page to help prevent cross-site scripting.”</p>
+<p>重现的时候发现两个问题，一个是页面顶部给出提示“Invalid input”(非法输入)，这是我们系统给出的错误提示。另一个就是 IE 给的提示信息“Internet Explorer has modified this page to help prevent cross-site scripting.”</p>
 <h3 id="2-从错误提示着手进行调试"><a href="#2-从错误提示着手进行调试" class="headerlink" title="2. 从错误提示着手进行调试"></a>2. 从错误提示着手进行调试</h3><p>因为有我们系统“非法输入”的错误提示，所以我决定通过调试来确定是哪里出错了。</p>
-<p>根据经验猜测这个错误很可能是由某个AJAX请求出错造成的，在锁定了AJAX之后，又对比该请求在Chrome和IE11浏览器中的不同，发现某个字段中括号（英文的左右括号）被替换成了#，由于该字段是由后台写在<code>&lt;script&gt;&lt;/script&gt;</code>，所以首先去查看网页源代码，令人吃惊的是网页源代码中竟然括号也变成#，这不得不让我怀疑是后台针对IE浏览器做了特殊处理。虽然我们知道后台不应该这么做，并且得到后台确切的答案（他们不会这么做）以后，我们决定通过Fiddler代理来查看请求和响应数据，而通过Fidder查看到的响应是正确的，难道是IE浏览器在搞鬼？</p>
-<h3 id="3-从IE浏览器的关于XSS的提示着手"><a href="#3-从IE浏览器的关于XSS的提示着手" class="headerlink" title="3. 从IE浏览器的关于XSS的提示着手"></a>3. 从IE浏览器的关于XSS的提示着手</h3><p>在网上搜索了“Internet Explorer has modified this page to help prevent cross-site scripting.”，找到了一些<a href="http://answers.microsoft.com/en-us/ie/forum/ie9-windows_7/internet-explorer-9-has-modified-the-page-to-help/84157078-964f-e011-8dfc-68b599b31bf5?tab=MoreHelp&amp;auth=1" target="_blank" rel="noopener">文章</a>，大致说这是由于IE检测到页面中可能带有跨站脚本攻击代码，而对页面代码做了一些修改，以保护用户免受跨站脚本攻击。<br>并且提供了一些解决方案：点击<code>Tools-&gt;Internet Options-&gt;Security-&gt;Custom level</code>，在弹出的对话框中禁用XSS Filter。这样设置以后页面确实正常显示了。可见该问题确实是有IE误判造成的。</p>
-<p>但是我们做为在线网络服务的提供商，不能依靠用户修改浏览器设置来解决问题，并且该设置并不是针对某个具体网站，而是整个互联网，意味着用户彻底放弃了IE针对XSS攻击的保护，得不偿失。还要继续寻找其他方案。终于在<a href="https://msdn.microsoft.com/zh-cn/library/dd565647%28v=vs.85%29.aspx?f=255&amp;MSPPError=-2147217396" target="_blank" rel="noopener">另一篇文章</a>中找到答案。给页面添加一个响应头<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">X-XSS-Protection: 0</span><br></pre></td></tr></table></figure></p>
+<p>根据经验猜测这个错误很可能是由某个 AJAX 请求出错造成的，在锁定了 AJAX 之后，又对比该请求在 Chrome 和 IE11 浏览器中的不同，发现某个字段中括号（英文的左右括号）被替换成了#，由于该字段是由后台写在<code>&lt;script&gt;&lt;/script&gt;</code>，所以首先去查看网页源代码，令人吃惊的是网页源代码中竟然括号也变成#，这不得不让我怀疑是后台针对 IE 浏览器做了特殊处理。虽然我们知道后台不应该这么做，并且得到后台确切的答案（他们不会这么做）以后，我们决定通过 Fiddler 代理来查看请求和响应数据，而通过 Fiddler 查看到的响应是正确的，难道是 IE 浏览器在搞鬼？</p>
+<h3 id="3-从-IE-浏览器的关于-XSS-的提示着手"><a href="#3-从-IE-浏览器的关于-XSS-的提示着手" class="headerlink" title="3. 从 IE 浏览器的关于 XSS 的提示着手"></a>3. 从 IE 浏览器的关于 XSS 的提示着手</h3><p>在网上搜索了“Internet Explorer has modified this page to help prevent cross-site scripting.”，找到了一些<a href="http://answers.microsoft.com/en-us/ie/forum/ie9-windows_7/internet-explorer-9-has-modified-the-page-to-help/84157078-964f-e011-8dfc-68b599b31bf5?tab=MoreHelp&amp;auth=1" target="_blank" rel="noopener">文章</a>，大致说这是由于 IE 检测到页面中可能带有跨站脚本攻击代码，而对页面代码做了一些修改，以保护用户免受跨站脚本攻击。<br>并且提供了一些解决方案：点击<code>Tools-&gt;Internet Options-&gt;Security-&gt;Custom level</code>，在弹出的对话框中禁用 XSS Filter。这样设置以后页面确实正常显示了。可见该问题确实是有 IE 误判造成的。</p>
+<p>但是我们做为在线网络服务的提供商，不能依靠用户修改浏览器设置来解决问题，并且该设置并不是针对某个具体网站，而是整个互联网，意味着用户彻底放弃了 IE 针对 XSS 攻击的保护，得不偿失。还要继续寻找其他方案。终于在<a href="https://msdn.microsoft.com/zh-cn/library/dd565647%28v=vs.85%29.aspx?f=255&amp;MSPPError=-2147217396" target="_blank" rel="noopener">另一篇文章</a>中找到答案。给页面添加一个响应头</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">X-XSS-Protection: 0</span><br></pre></td></tr></table></figure>
 <p>这样就通过禁用响应头彻底解决了该问题。</p>
-<p>###4. 解决问题以后的一些思考<br>问题解决了，但是还是有写疑问，我们很容易找到IE误判为XSS攻击的代码，却不知道为什么会被判断为XSS攻击代码。只在<a href="http://p42.us/ie8xss/Abusing_IE8s_XSS_Filters.pdf" target="_blank" rel="noopener">这篇文章</a>中找了一些示例，但是我们的页面源代码中都不符合这些规则。估计IE官方也不会给出这些规则，否则很容易被黑客利用，设计能够避开这些规则的XSS攻击代码。</p>
-<p>另外还想谈谈IE的阻止XSS攻击的功能，我们有时也会在Chrome看到相似的提示，但是Chrome给出另外一种选择，大概意思是我已经了解可能的风险，并且要继续访问，通过次选项用户可以比较方便地继续浏览其非常信任的网站。在这件事件上，IE显得非常保守，没有给出第二种选择，用户遇到这种情况，只会怀疑网站除了问题，也不会知道怎样才能查看网页内容。经过IE修改后的代码一般很难正确运行，而IE却尝试继续运行。远不如Chrome实在，检测到危险代码，干脆放弃执行代码，并给用户醒目提示。</p>
-<p>IE对（疑似）XSS代码处理也真够不遗余力的，连查看源代码都不放弃，个人认为这是IE设计上的缺陷，查看源代码，我看的是<strong>“源”</strong>代码，将响应当做普通的不可执行的文档处理，不可能出现XSS攻击，还有就此时IE修改了源代码，却没有给出任何提示。</p>
+<p>###4. 解决问题以后的一些思考<br>问题解决了，但是还是有写疑问，我们很容易找到 IE 误判为 XSS 攻击的代码，却不知道为什么会被判断为 XSS 攻击代码。只在<a href="http://p42.us/ie8xss/Abusing_IE8s_XSS_Filters.pdf" target="_blank" rel="noopener">这篇文章</a>中找了一些示例，但是我们的页面源代码中都不符合这些规则。估计 IE 官方也不会给出这些规则，否则很容易被黑客利用，设计能够避开这些规则的 XSS 攻击代码。</p>
+<p>另外还想谈谈 IE 的阻止 XSS 攻击的功能，我们有时也会在 Chrome 看到相似的提示，但是 Chrome 给出另外一种选择，大概意思是我已经了解可能的风险，并且要继续访问，通过次选项用户可以比较方便地继续浏览其非常信任的网站。在这件事件上，IE 显得非常保守，没有给出第二种选择，用户遇到这种情况，只会怀疑网站除了问题，也不会知道怎样才能查看网页内容。经过 IE 修改后的代码一般很难正确运行，而 IE 却尝试继续运行。远不如 Chrome 实在，检测到危险代码，干脆放弃执行代码，并给用户醒目提示。</p>
+<p>IE 对（疑似）XSS 代码处理也真够不遗余力的，连查看源代码都不放弃，个人认为这是 IE 设计上的缺陷，查看源代码，我看的是<strong>“源”</strong>代码，将响应当做普通的不可执行的文档处理，不可能出现 XSS 攻击，还有就此时 IE 修改了源代码，却没有给出任何提示。</p>
 <p>打完收工，睡觉。</p>
 
                 <hr>
@@ -210,7 +211,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-重现问题"><span class="toc-text">1. 重现问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-从错误提示着手进行调试"><span class="toc-text">2. 从错误提示着手进行调试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-从IE浏览器的关于XSS的提示着手"><span class="toc-text">3. 从IE浏览器的关于XSS的提示着手</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-重现问题"><span class="toc-text">1. 重现问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-从错误提示着手进行调试"><span class="toc-text">2. 从错误提示着手进行调试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-从-IE-浏览器的关于-XSS-的提示着手"><span class="toc-text">3. 从 IE 浏览器的关于 XSS 的提示着手</span></a></li></ol>
                 </div>
             </div>
         </div>

@@ -165,29 +165,29 @@
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
                 <ol>
-<li><p>####请解释一下什么是语义化的HTML。<br>使用拥有语义的标签，比如h1-h6, article, section, aside, header, footer, nav, address, strong, em等标签，而不是不分清空皂白地统一使用div或者p标签。<br>好处：（1）方便开发人员交流。统一的标签语义，不需要使用class表明用意。也阻止了不同的人使用不同的单词表达同样的含义。<br>（2）对搜索引擎友好。<br>（3）样式加载失败时，浏览器默认样式也使得页面比较清晰。<br>（4）对CSS支持不好甚至不支持的浏览器友好。  </p>
+<li><p>####请解释一下什么是语义化的 HTML。<br>使用拥有语义的标签，比如 h1-h6, article, section, aside, header, footer, nav, address, strong, em 等标签，而不是不分清空皂白地统一使用 div 或者 p 标签。<br>好处：（1）方便开发人员交流。统一的标签语义，不需要使用 class 表明用意。也阻止了不同的人使用不同的单词表达同样的含义。<br>（2）对搜索引擎友好。<br>（3）样式加载失败时，浏览器默认样式也使得页面比较清晰。<br>（4）对 CSS 支持不好甚至不支持的浏览器友好。</p>
 </li>
 <li><p>####你能描述一下渐进增强和优雅降级之间的不同吗?<br>构建站点的两个方法，都用到了特性检测。<br>渐进增强：Progressive enhancement。先构建站点的最少特性，然后根据浏览器特性追加功能。<br>优雅降级：graceful degradation。先构建站点的完整版本，然后根据浏览器特性进行修复。</p>
 </li>
-<li><p>####为什么利用多个域名来存储网站资源会更有效？<br>浏览器对同一个域的并行连接数是有限制的，当前一般浏览器4到8个，而IE6，7只有2个，如果同时下载同一个域下的很多资源，就会因为此限制而导致资源下载串行。但是使用多个域虽然可以并行下载资源，但是会使得浏览器需要解析更多的域名。所以在这对优缺点之间取一个平衡点。另外，解决此问题的办法并非只有启用多个域这一种方法，还可以合并和压缩JS和CSS，使用雪碧图等等。    </p>
+<li><p>####为什么利用多个域名来存储网站资源会更有效？<br>浏览器对同一个域的并行连接数是有限制的，当前一般浏览器 4 到 8 个，而 IE6，7 只有 2 个，如果同时下载同一个域下的很多资源，就会因为此限制而导致资源下载串行。但是使用多个域虽然可以并行下载资源，但是会使得浏览器需要解析更多的域名。所以在这对优缺点之间取一个平衡点。另外，解决此问题的办法并非只有启用多个域这一种方法，还可以合并和压缩 JS 和 CSS，使用雪碧图等等。</p>
 </li>
-<li><p>####请说出三种减低页面加载时间的方法。（加载时间指感知的时间或者实际加载时间）<br>文件的合并以及压缩（减少了HTTP请求的数量）<br>使用CSS Sprites（减少HTTP请求的数量）<br>使用CDN托管（减少了数据传输时间）<br>使用CSS3，SVG，甚至Canvas替代图片。<br>有效地适度地使用缓存脚本和其他资源</p>
+<li><p>####请说出三种减低页面加载时间的方法。（加载时间指感知的时间或者实际加载时间）<br>文件的合并以及压缩（减少了 HTTP 请求的数量）<br>使用 CSS Sprites（减少 HTTP 请求的数量）<br>使用 CDN 托管（减少了数据传输时间）<br>使用 CSS3，SVG，甚至 Canvas 替代图片。<br>有效地适度地使用缓存脚本和其他资源</p>
 </li>
-<li><p>####什么是FOUC？你如何来避免FOUC？<br>FOUC全称是Flash Of Unstyled Content，翻译为文档样式闪烁。一般指IE在加载网页的时候，出现短暂的CSS样式失效。<br>问题一：什么时候出现呢？（1）IE浏览器（2）IE的临时文件夹没有缓存过页面的css文件（3）页面head标签里面没有任何link和script标签（4）页面引用样式的方式是采用@import（5）外在因素（比如网速等）<br>问题二：咋解决？在head里面加入一个link或者script标签<br>吐槽：我可能一辈子也不会写出这种代码，也希望面试官不要因为这种题目来拒绝候选人。</p>
+<li><p>####什么是 FOUC？你如何来避免 FOUC？<br>FOUC 全称是 Flash Of Unstyled Content，翻译为文档样式闪烁。一般指 IE 在加载网页的时候，出现短暂的 CSS 样式失效。<br>问题一：什么时候出现呢？（1）IE 浏览器（2）IE 的临时文件夹没有缓存过页面的 css 文件（3）页面 head 标签里面没有任何 link 和 script 标签（4）页面引用样式的方式是采用@import（5）外在因素（比如网速等）<br>问题二：咋解决？在 head 里面加入一个 link 或者 script 标签<br>吐槽：我可能一辈子也不会写出这种代码，也希望面试官不要因为这种题目来拒绝候选人。</p>
 </li>
-<li><p>####描述css reset的作用和用途。<br>浏览器都会有默认样式表，这样保证了页面中即便不写任何样式，浏览器仍然能够清晰地展示出页面内容，并突出重点。  </p>
+<li><p>####描述 css reset 的作用和用途。<br>浏览器都会有默认样式表，这样保证了页面中即便不写任何样式，浏览器仍然能够清晰地展示出页面内容，并突出重点。</p>
 </li>
-<li><p>####描述下float和它的工作原理。<br>float最初应用于图文混排，让文字环绕图片。<br>语法为float: left/right/none;<br>float box脱离当前文档流，定位到父元素或者另一个float box的边缘。父元素水平方向空间不足时，向下移动知道可以放下。文档流中inline box环绕float box，block box会和float box重叠，除非使用clear: both/left/right来清除浮动。float box会形成一个新的block formatting context（BFC块状格式化上下文）。float box不会超出所在BFC，也不会和其他BFC重叠。</p>
+<li><p>####描述下 float 和它的工作原理。<br>float 最初应用于图文混排，让文字环绕图片。<br>语法为 float: left/right/none;<br>float box 脱离当前文档流，定位到父元素或者另一个 float box 的边缘。父元素水平方向空间不足时，向下移动知道可以放下。文档流中 inline box 环绕 float box，block box 会和 float box 重叠，除非使用 clear: both/left/right 来清除浮动。float box 会形成一个新的 block formatting context（BFC 块状格式化上下文）。float box 不会超出所在 BFC，也不会和其他 BFC 重叠。</p>
 </li>
-<li><p>####清除浮动的方法有那些，分别适用于什么情形。<br>clear: both/left/right<br>用于清除相应元素之前的兄弟节点浮动的影响。left和right指浮动方向，both包含left和right两个方向。</p>
+<li><p>####清除浮动的方法有那些，分别适用于什么情形。<br>clear: both/left/right<br>用于清除相应元素之前的兄弟节点浮动的影响。left 和 right 指浮动方向，both 包含 left 和 right 两个方向。</p>
 </li>
-<li><p>####解释css sprites，如何使用。<br>将数张小的背景图片拼合成一张大的图片，然后在CSS中结合background-image，background-position，width和height等属性显示某张小的背景图片。<br>网上有不少小工具可以让你上传一些小图片，然后生成一个大图并生成相应的样式表。即可直接使用。<br>优点：减少了图片的请求数量。<br>缺点：（1）不适合需要repeat的背景图片。（2）需要额外的工作来拼合成大图。（3）CSS和图片缓存失效的概率和影响更大。  </p>
+<li><p>####解释 css sprites，如何使用。<br>将数张小的背景图片拼合成一张大的图片，然后在 CSS 中结合 background-image，background-position，width 和 height 等属性显示某张小的背景图片。<br>网上有不少小工具可以让你上传一些小图片，然后生成一个大图并生成相应的样式表。即可直接使用。<br>优点：减少了图片的请求数量。<br>缺点：（1）不适合需要 repeat 的背景图片。（2）需要额外的工作来拼合成大图。（3）CSS 和图片缓存失效的概率和影响更大。</p>
 </li>
-<li><p>####你最喜欢的图片替换方法是什么，你如何选择使用。<br>Web-Font, CSS3, SVG, Canvas<br>关于如何选择，首先查看所要兼容的浏览器是否兼容其特性。在三者均支持的很好的情况下，选择优先级从高到低分别是Web-Font, CSS3, SVG, Canvas<br>Web-Font适合单色图片，并且可以通过font属性来设置其大小，颜色等，特别适合用于响应式设计中。<br>CSS3基本可以说是从SVG发展而来的，功能应该还不如SVG，但是其足够简单，所以选择优先级是比较高的。<br>SVG适合需要响应用户行为，比如mousemove等操作的图片，作为矢量图，适合用于响应式设计中。<br>Canvas适合显示动态生成的图表，不需要响应用户行为。  </p>
+<li><p>####你最喜欢的图片替换方法是什么，你如何选择使用。<br>Web-Font, CSS3, SVG, Canvas<br>关于如何选择，首先查看所要兼容的浏览器是否兼容其特性。在三者均支持的很好的情况下，选择优先级从高到低分别是 Web-Font, CSS3, SVG, Canvas<br>Web-Font 适合单色图片，并且可以通过 font 属性来设置其大小，颜色等，特别适合用于响应式设计中。<br>CSS3 基本可以说是从 SVG 发展而来的，功能应该还不如 SVG，但是其足够简单，所以选择优先级是比较高的。<br>SVG 适合需要响应用户行为，比如 mousemove 等操作的图片，作为矢量图，适合用于响应式设计中。<br>Canvas 适合显示动态生成的图表，不需要响应用户行为。</p>
 </li>
-<li><p>####讨论CSS hacks，条件引用或者其他。 </p>
+<li><p>####讨论 CSS hacks，条件引用或者其他。</p>
 </li>
-<li><p>####解释BFC（block formatting context，块状布局上下文）<br>把一组块级box和浮动元素放在一起布局的区域。<br>特点：（1）不折叠边距（margin collapsing），在同一个BFC是折叠边距的其中一个必要条件。（2）浮动元素不会超出它的范围。（3）不会跟其他浮动元素重叠。<br>形成新的BFC的条件：（1）float属性不为none（2）overflow属性不为visible（3）display属性是table-cell、table-caption或inline-block（4）position属性不为static或relative。<br>IE6/7没有BFC概念，但是它们有hasLayout与之相似，可以通过zoom: 1触发。</p>
+<li><p>####解释 BFC（block formatting context，块状布局上下文）<br>把一组块级 box 和浮动元素放在一起布局的区域。<br>特点：（1）不折叠边距（margin collapsing），在同一个 BFC 是折叠边距的其中一个必要条件。（2）浮动元素不会超出它的范围。（3）不会跟其他浮动元素重叠。<br>形成新的 BFC 的条件：（1）float 属性不为 none（2）overflow 属性不为 visible（3）display 属性是 table-cell、table-caption 或 inline-block（4）position 属性不为 static 或 relative。<br>IE6/7 没有 BFC 概念，但是它们有 hasLayout 与之相似，可以通过 zoom: 1 触发。</p>
 </li>
 </ol>
 
@@ -197,12 +197,12 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2013/05/13/Unskilled-Interview-Questions/" data-toggle="tooltip" data-placement="top" title="">&larr; Previous Post</a>
+                        <a href="/2013/05/17/jQuery-Interview-Questions/" data-toggle="tooltip" data-placement="top" title="">&larr; Previous Post</a>
                     </li>
                     
                     
                     <li class="next">
-                        <a href="/2013/05/12/Javascript-Interview-Questions/" data-toggle="tooltip" data-placement="top" title="">Next Post &rarr;</a>
+                        <a href="/2013/05/13/Unskilled-Interview-Questions/" data-toggle="tooltip" data-placement="top" title="">Next Post &rarr;</a>
                     </li>
                     
                 </ul>

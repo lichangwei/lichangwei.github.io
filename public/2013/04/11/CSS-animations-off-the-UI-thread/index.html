@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        脱离UI线程的CSS3动画｜李长伟的博客
+        脱离 UI 线程的 CSS3 动画｜李长伟的博客
         
     </title>
 
@@ -136,7 +136,7 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>脱离UI线程的CSS3动画</h1>
+                    <h1>脱离 UI 线程的 CSS3 动画</h1>
                     
                     <span class="meta">
                          作者 李长伟
@@ -153,7 +153,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            脱离UI线程的CSS3动画
+            脱离 UI 线程的 CSS3 动画
         </span>
     </div>
 </header>
@@ -164,17 +164,20 @@
         <div class="row">
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
-                <p>【原文】<a href="http://www.phpied.com/css-animations-off-the-ui-thread/" target="_blank" rel="noopener">CSS animations off the UI thread</a><br>我们知道浏览器是单线程的，在执行js脚本期间，UI会被冻结，用户行为也得不到响应。也就是所谓的“假死”现象。<br>在最新版本的浏览器中，开启了一种新的实现，将CSS3动画移出UI线程。</p>
+                <p>【原文】<a href="http://www.phpied.com/css-animations-off-the-ui-thread/" target="_blank" rel="noopener">CSS animations off the UI thread</a><br>我们知道浏览器是单线程的，在执行 js 脚本期间，UI 会被冻结，用户行为也得不到响应。也就是所谓的“假死”现象。<br>在最新版本的浏览器中，开启了一种新的实现，将 CSS3 动画移出 UI 线程。</p>
 <h2 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h2><ul>
-<li>Win7上Chrome25支持</li>
-<li>iOS6上Chrome和Safari支持</li>
-<li>原文中提到IE10（估计是Win8上），Firefox OS支持。  </li>
+<li>Win7 上 Chrome25 支持</li>
+<li>iOS6 上 Chrome 和 Safari 支持</li>
+<li>原文中提到 IE10（估计是 Win8 上），Firefox OS 支持。</li>
 </ul>
-<h2 id="测试方法"><a href="#测试方法" class="headerlink" title="测试方法"></a>测试方法</h2><p><a href="http://www.phpied.com/files/css-thread/thread.html" target="_blank" rel="noopener">点击我打开测试页面</a>。点击按钮以后，javascript脚本持续执行2秒，在这个过程中查看红蓝绿三个方块的效果。如果三个均停止动画，说明浏览器尚不支持将CSS transform动画移出UI线程，如果红色和绿色方块继续动画，则支持。</p>
-<h2 id="解释"><a href="#解释" class="headerlink" title="解释"></a>解释</h2><p>红色方块的动画如下<br><figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.spin</span> &#123;</span><br><span class="line">  <span class="attribute">animation</span>: <span class="number">3s</span> rotate linear infinite;</span><br><span class="line">&#125;</span><br><span class="line">@<span class="keyword">keyframes</span> rotate &#123;</span><br><span class="line">  <span class="selector-tag">from</span> &#123; <span class="attribute">transform</span>: <span class="built_in">rotate</span>(0deg);  &#125;</span><br><span class="line">  <span class="selector-tag">to</span>   &#123; <span class="attribute">transform</span>: <span class="built_in">rotate</span>(360deg);&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>绿色方块的动画如下<br><figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.walkabout-new-school</span> &#123;</span><br><span class="line">  <span class="attribute">animation</span>: <span class="number">3s</span> slide-transform linear infinite;</span><br><span class="line">&#125;</span><br><span class="line">@<span class="keyword">keyframes</span> slide-transform &#123;</span><br><span class="line">  <span class="selector-tag">from</span> &#123; <span class="attribute">transform</span>: <span class="built_in">translatex</span>(0);    &#125;</span><br><span class="line">  50%  &#123; <span class="attribute">transform</span>: <span class="built_in">translatex</span>(300px);&#125;</span><br><span class="line">  <span class="selector-tag">to</span>   &#123; <span class="attribute">transform</span>: <span class="built_in">translatex</span>(0);    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>蓝色方块的动画如下<br><figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.walkabout-old-school</span> &#123;</span><br><span class="line">  <span class="attribute">animation</span>: <span class="number">3s</span> slide-margin linear infinite;</span><br><span class="line">&#125;</span><br><span class="line">@<span class="keyword">keyframes</span> slide-margin &#123;</span><br><span class="line">  <span class="selector-tag">from</span> &#123; <span class="attribute">margin-left</span>: <span class="number">0</span>;   &#125;</span><br><span class="line">  50%  &#123; <span class="attribute">margin-left</span>: <span class="number">100%</span>;&#125;</span><br><span class="line">  <span class="selector-tag">to</span>   &#123; <span class="attribute">margin-left</span>: <span class="number">0</span>;   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>如果有可能，尽量使用CSS3 transform动画。这些动画脱离了主线程，不影响主线程。</p>
+<h2 id="测试方法"><a href="#测试方法" class="headerlink" title="测试方法"></a>测试方法</h2><p><a href="http://www.phpied.com/files/css-thread/thread.html" target="_blank" rel="noopener">点击我打开测试页面</a>。点击按钮以后，javascript 脚本持续执行 2 秒，在这个过程中查看红蓝绿三个方块的效果。如果三个均停止动画，说明浏览器尚不支持将 CSS transform 动画移出 UI 线程，如果红色和绿色方块继续动画，则支持。</p>
+<h2 id="解释"><a href="#解释" class="headerlink" title="解释"></a>解释</h2><p>红色方块的动画如下</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.spin</span> &#123;</span><br><span class="line">    <span class="attribute">animation</span>: <span class="number">3s</span> rotate linear infinite;</span><br><span class="line">&#125;</span><br><span class="line">@<span class="keyword">keyframes</span> rotate &#123;</span><br><span class="line">    <span class="selector-tag">from</span> &#123;</span><br><span class="line">        <span class="attribute">transform</span>: <span class="built_in">rotate</span>(0deg);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="selector-tag">to</span> &#123;</span><br><span class="line">        <span class="attribute">transform</span>: <span class="built_in">rotate</span>(360deg);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>绿色方块的动画如下</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.walkabout-new-school</span> &#123;</span><br><span class="line">    <span class="attribute">animation</span>: <span class="number">3s</span> slide-transform linear infinite;</span><br><span class="line">&#125;</span><br><span class="line">@<span class="keyword">keyframes</span> slide-transform &#123;</span><br><span class="line">    <span class="selector-tag">from</span> &#123;</span><br><span class="line">        <span class="attribute">transform</span>: <span class="built_in">translatex</span>(0);</span><br><span class="line">    &#125;</span><br><span class="line">    50% &#123;</span><br><span class="line">        <span class="attribute">transform</span>: <span class="built_in">translatex</span>(300px);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="selector-tag">to</span> &#123;</span><br><span class="line">        <span class="attribute">transform</span>: <span class="built_in">translatex</span>(0);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>蓝色方块的动画如下</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.walkabout-old-school</span> &#123;</span><br><span class="line">    <span class="attribute">animation</span>: <span class="number">3s</span> slide-margin linear infinite;</span><br><span class="line">&#125;</span><br><span class="line">@<span class="keyword">keyframes</span> slide-margin &#123;</span><br><span class="line">    <span class="selector-tag">from</span> &#123;</span><br><span class="line">        <span class="attribute">margin-left</span>: <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    50% &#123;</span><br><span class="line">        <span class="attribute">margin-left</span>: <span class="number">100%</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="selector-tag">to</span> &#123;</span><br><span class="line">        <span class="attribute">margin-left</span>: <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>如果有可能，尽量使用 CSS3 transform 动画。这些动画脱离了主线程，不影响主线程。</p>
 
                 <hr>
                 

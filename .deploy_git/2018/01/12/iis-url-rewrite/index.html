@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.css">
     <title>
         
-        IIS的URL重写（反向代理）｜李长伟的博客
+        IIS 的 URL 重写（反向代理）｜李长伟的博客
         
     </title>
 
@@ -136,7 +136,7 @@
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 text-center">
                 <div class="post-heading">
-                    <h1>IIS的URL重写（反向代理）</h1>
+                    <h1>IIS 的 URL 重写（反向代理）</h1>
                     
                     <span class="meta">
                          作者 李长伟
@@ -153,7 +153,7 @@
     </div>
     <div class="post-title-haojen">
         <span>
-            IIS的URL重写（反向代理）
+            IIS 的 URL 重写（反向代理）
         </span>
     </div>
 </header>
@@ -167,7 +167,7 @@
                 <p>以前我使用过<code>Apache</code>或<code>Nginx</code>实现反向代理，但是目前后端使用的是<code>.Net</code>语言，服务器操作系统是<code>Windows Server</code>，并且后端应用程序就部署在<code>IIS</code>上，因此不打算再安装<code>Nginx</code>，改为使用<code>IIS</code>。</p>
 <p>在操作过程中，遇到各种问题也耽误了不少时间，现在将一些操作流程记录下来，以备再用。</p>
 <h2 id="项目简介"><a href="#项目简介" class="headerlink" title="项目简介"></a>项目简介</h2><p>项目采用前后端分离方式开发，两个代码仓库，并部署为两个应用。后端接口地址全部以<code>/api</code>打头，方便简化转发规则。现在就需要在前端应用中将<code>/api</code>打头的请求转至后端应用。</p>
-<h2 id="IIS默认不支持反向代理，需要额外安装插件"><a href="#IIS默认不支持反向代理，需要额外安装插件" class="headerlink" title="IIS默认不支持反向代理，需要额外安装插件"></a>IIS默认不支持反向代理，需要额外安装插件</h2><p>很难想象<code>IIS</code>(Internet Infomation Service)竟然不默认支持反向代理，需要安装官方提供的两个插件。<br>安装插件：</p>
+<h2 id="IIS-默认不支持反向代理，需要额外安装插件"><a href="#IIS-默认不支持反向代理，需要额外安装插件" class="headerlink" title="IIS 默认不支持反向代理，需要额外安装插件"></a>IIS 默认不支持反向代理，需要额外安装插件</h2><p>很难想象<code>IIS</code>(Internet Information Service)竟然不默认支持反向代理，需要安装官方提供的两个插件。<br>安装插件：</p>
 <ol>
 <li><a href="https://www.iis.net/downloads/microsoft/application-request-routing" target="_blank" rel="noopener">Application Request Routing</a></li>
 <li><a href="https://www.iis.net/downloads/microsoft/url-rewrite" target="_blank" rel="noopener">URL Rewrite</a><br>安装完成之后重新启动一下<code>IIS</code>.</li>
@@ -187,7 +187,7 @@
 <li><p>点击右侧应用</p>
 </li>
 </ol>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>反向代理的配置相比<code>Nginx</code>等复杂太多了，还需要额外理解IIS自己定义的一些概念，比如入站规则等。相信大部分刚毕业的同学跟我一样，一度特别喜欢有操作界面的软件，随着对系统掌握程度的增加，这个想法会慢慢的逆转。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>反向代理的配置相比<code>Nginx</code>等复杂太多了，还需要额外理解 IIS 自己定义的一些概念，比如入站规则等。相信大部分刚毕业的同学跟我一样，一度特别喜欢有操作界面的软件，随着对系统掌握程度的增加，这个想法会慢慢的逆转。</p>
 
                 <hr>
                 
@@ -219,7 +219,7 @@
 
             <div class="hidden-xs col-sm-3 toc-col">
                 <div class="toc-wrap">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#项目简介"><span class="toc-text">项目简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IIS默认不支持反向代理，需要额外安装插件"><span class="toc-text">IIS默认不支持反向代理，需要额外安装插件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#启用反向代理功能"><span class="toc-text">启用反向代理功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加入站规则"><span class="toc-text">添加入站规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最后"><span class="toc-text">最后</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#项目简介"><span class="toc-text">项目简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IIS-默认不支持反向代理，需要额外安装插件"><span class="toc-text">IIS 默认不支持反向代理，需要额外安装插件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#启用反向代理功能"><span class="toc-text">启用反向代理功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#添加入站规则"><span class="toc-text">添加入站规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#最后"><span class="toc-text">最后</span></a></li></ol>
                 </div>
             </div>
         </div>

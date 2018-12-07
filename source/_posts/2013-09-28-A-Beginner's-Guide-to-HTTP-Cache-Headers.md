@@ -2,31 +2,31 @@
 title: HTTP缓存头部入门指南
 ---
 
-本文结合CDN行为，探索HTTP缓存头部。如果你正要了解怎么书写缓存头部以适应现代WEB，或者你很好奇你周围的人都在谈论什么，那么你可以阅读本文。  
+本文结合 CDN 行为，探索 HTTP 缓存头部。如果你正要了解怎么书写缓存头部以适应现代 WEB，或者你很好奇你周围的人都在谈论什么，那么你可以阅读本文。
 
-如果你已经了解了缓存头部的好处，并且想了解更多，那么我推荐你去查看[W3文档](http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html)。  
+如果你已经了解了缓存头部的好处，并且想了解更多，那么我推荐你去查看[W3 文档](http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html)。
 
 #### 缓存头部能做什么？
-简单地说，缓存能让你将Web资源保存在通往用户浏览器的每一个远程节点。当然浏览器本身也维护着一个私有缓存，它让浏览器不用每次都从服务器获取资源。  
 
-配置缓存，对于节省站点流量是非常重要的，一个经济的站点可以减少带宽支出，或者希望保持Web专业开发者的声誉，你必须了解缓存的作用以及如何使用。  
+简单地说，缓存能让你将 Web 资源保存在通往用户浏览器的每一个远程节点。当然浏览器本身也维护着一个私有缓存，它让浏览器不用每次都从服务器获取资源。
 
-对于这些资源文件，比如你公司的logo，站点的favicon，以及那些核心的各个请求之间通用的CSS，告诉浏览器将此文件的备份保存一段时间，是非常安全的。如果你的用户是一个后座上的小孩，总是不停的问：“我们到了吗？”，你很可能会告诉他，“没有，20分钟以后才到，请不要再问了。”  
+配置缓存，对于节省站点流量是非常重要的，一个经济的站点可以减少带宽支出，或者希望保持 Web 专业开发者的声誉，你必须了解缓存的作用以及如何使用。
 
-通过减少对服务器请求的数量，你可以处理更多的请求，用户也可以享受更快的浏览体验。一般来讲，像图片，Javascript脚本，样式表等资源文件都可以大量使用缓存，但是像dashboard，论坛等动态产生的内容，就很少能使用缓存。如果你关注性能，可以将动态产生的内容和静态的资源文件分离，前者使用Ajax获取，后者则可以大量使用缓存。  
+对于这些资源文件，比如你公司的 logo，站点的 favicon，以及那些核心的各个请求之间通用的 CSS，告诉浏览器将此文件的备份保存一段时间，是非常安全的。如果你的用户是一个后座上的小孩，总是不停的问：“我们到了吗？”，你很可能会告诉他，“没有，20 分钟以后才到，请不要再问了。”
 
-#### 客户端和CDN
-最初，缓存设置都是针对客户端浏览器的，所以我们应该适当地考虑客户端以及它是如何保存资源的。但是，进来伴随着CDN的出现，在网络传输的中间节点上如何做好缓存成为一个重大关切。  
+通过减少对服务器请求的数量，你可以处理更多的请求，用户也可以享受更快的浏览体验。一般来讲，像图片，Javascript 脚本，样式表等资源文件都可以大量使用缓存，但是像 dashboard，论坛等动态产生的内容，就很少能使用缓存。如果你关注性能，可以将动态产生的内容和静态的资源文件分离，前者使用 Ajax 获取，后者则可以大量使用缓存。
 
->>**什么是CDN？**  
->>如果你不愿意查看Wiki的话，我在这里给你一个简单的说明。本质上，CDN就是一组服务器（注意是一组），它位于用户和站点之间。每一个服务器都会根据你设定的缓存头部缓存你站点的内容。  
+#### 客户端和 CDN
 
-配置适当的话，CDM会使用最快的（一般是距离用户最近的）服务器向用户传递内容。另外，CDN起到站点和用户之间的缓冲的作用。我们最关心的数字是缓存命中率，它描述了CDN不需要向服务器请求就可以直接响应的请求的百分比。取决于流量和架构，它可以高达90%。即使没有这么高，你也会受益良多。注意，低频率的请求会被更多地传给服务器，所以命中率只有和缓存次数和平均负载放在一起时才有意义。如果你配置了缓存，但是缓存头部设置不当，很可能导致  
+最初，缓存设置都是针对客户端浏览器的，所以我们应该适当地考虑客户端以及它是如何保存资源的。但是，进来伴随着 CDN 的出现，在网络传输的中间节点上如何做好缓存成为一个重大关切。
+
+> > **什么是 CDN？**  
+> > 如果你不愿意查看 Wiki 的话，我在这里给你一个简单的说明。本质上，CDN 就是一组服务器（注意是一组），它位于用户和站点之间。每一个服务器都会根据你设定的缓存头部缓存你站点的内容。
+
+配置适当的话，CDM 会使用最快的（一般是距离用户最近的）服务器向用户传递内容。另外，CDN 起到站点和用户之间的缓冲的作用。我们最关心的数字是缓存命中率，它描述了 CDN 不需要向服务器请求就可以直接响应的请求的百分比。取决于流量和架构，它可以高达 90%。即使没有这么高，你也会受益良多。注意，低频率的请求会被更多地传给服务器，所以命中率只有和缓存次数和平均负载放在一起时才有意义。如果你配置了缓存，但是缓存头部设置不当，很可能导致
 
 ![简单的CDN图](http://www.mobify.com/static/blog/2013/04/CDN_basic_diagram.png)
-这是一个CDN网络中的基本的数据流图。你的Web服务器提供内容给CDN中间服务器，而CDN中间服务器分布在全球不同地区。懒一点的话，可以在这里画一片云。  
-
-
+这是一个 CDN 网络中的基本的数据流图。你的 Web 服务器提供内容给 CDN 中间服务器，而 CDN 中间服务器分布在全球不同地区。懒一点的话，可以在这里画一片云。
 
 Beyond their intended use for caching, CDNs also have a pleasant side-effect; provided you're dealing with a website, or a particularly well-crafted web application, in the event that your servers experience a momentary outage, your CDN may be able to buffer the experience for your end users, ensuring they never even notice.
 
@@ -36,7 +36,7 @@ So, you know what a CDN is, and you know you want to configure your response hea
 
 1. cache-control
 
-If there were a default super-header for caching behaviour, this would be it. Typically you will see a string of settings for this header along the lines of:
+If there were a default super-header for caching behavior, this would be it. Typically you will see a string of settings for this header along the lines of:
 
 cache-control: private, max-age=0, no-cache
 These settings are called cache response directives, and are as follows:
@@ -69,7 +69,7 @@ As always, you should check out the spec for these settings if you need any clar
 
 2. expires
 
-Back in the day, this was the standard way to specify when an asset expired, and is just a basic date-time stamp. It is still fairly useful for older user agents, which cryptowebologists assure us still roam in the uncharted territories. On most modern systems, the "cache-control" headers "max-age" and "s-maxage" will take precedence, but it's always good practice to set a matching value here for compatibility. Just make sure you format the date correctly, or it will be evaluated as an expired date:
+Back in the day, this was the standard way to specify when an asset expired, and is just a basic date-time stamp. It is still fairly useful for older user agents, which crypto webologists assure us still roam in the uncharted territories. On most modern systems, the "cache-control" headers "max-age" and "s-maxage" will take precedence, but it's always good practice to set a matching value here for compatibility. Just make sure you format the date correctly, or it will be evaluated as an expired date:
 
 Thu, 01 Dec 1983 20:00:00 GMT
 Try to avoid setting the value to more than one year out as that breaks the specification, (see below for a discussion on cache time settings).
@@ -91,7 +91,6 @@ will put you in the SEO good-books if you happen to be serving different version
 
 5. pragma
 
-
 Another beast from the days of yore, the "pragma" header does many things, and most of them are honoured by newer implementations. The directive we're most concerned with is:
 
 pragma: no-cache
@@ -102,7 +101,7 @@ I would not generally recommend worrying about it, but for the sake of completen
 
 Some Caveats
 
-Now that we've gotten some of the standard and expected behaviours out of the way, we should probably mention that not every CDN or User Agent will behave according to the specification, which I'm sure is not news to anyone familiar with browser compatibility issues. For this reason, it is a good idea to test your services before launching a live resource to make sure the behaviour you get is what you expected; it will save you money.
+Now that we've gotten some of the standard and expected behaviors out of the way, we should probably mention that not every CDN or User Agent will behave according to the specification, which I'm sure is not news to anyone familiar with browser compatibility issues. For this reason, it is a good idea to test your services before launching a live resource to make sure the behavior you get is what you expected; it will save you money.
 
 Also, you may have noted that a lot of the headers seem to be either duplicated or overlapping. Some of this is because there are subtle differences between the different methods, and also because the web is shifting over from HTTP/1.0 to HTTP/1.1, which uses the "cache-control" much more heavily. Generally it is safe to set both and let the CDNs and User Agents figure out which one they care to listen to.
 
@@ -133,7 +132,6 @@ Pragma: no-cache
 Date: Mon, 29 Apr 2013 21:44:55 GMT
 An example of a section of a header for dynamic content. Note the missed cache status, and the cache-control directives all set to 0 seconds.
 
-
 Most dynamic content has a shelf-life and is not nearly as volatile as we assume. Things like "Active Users" are probably valid for 10 or 20 seconds, depending on your site. Dashboards that report daily figures could certainly stand to be cached for a few minutes. News feeds could certainly stand to be cached for a while, especially if you remember to set an "etag". If your site is seeing lots of load, it may be worth trying out a short cache on your dynamic assets.
 
 An Analysis of Cache Time
@@ -156,17 +154,16 @@ Vary: Accept-Encoding
 X-Cache: HIT
 A sample of cache settings for a static asset served from S3. Here we see that the cache has been asked to store the asset for 900 seconds rather than the 300 seconds set for User Agents. Also note the "x-cache: HIT" header, indicating the CDN served the request.
 
-
 There is one exception to the “thou-shalt-not-set-one-year-headers” commandment, or more accurately, there’s a bit of a hack to get around their pitfalls: if you’ve configured your site to generate resource names, you can rename your assets each time you publish a new version. Typically, this will involve an incrementing version number, a date-time stamp, or a hash of the contents, much like an “etag”, being appended to the file name, so that you end up with things like “core.E89A123FFDB...432D687B.css” and the like. It’s not pretty, but really, who cares? Also, this lets you set one-year-headers without worrying about updating your resources.
 
 A handy table best explains the cache time trade-off. Assuming a web asset get 500 requests per minute, then the following Hit Ratios are possible for each cache time:
 
-Cache time (minutes)  Hit Ratio Request to Origin / Hr
+Cache time (minutes) Hit Ratio Request to Origin / Hr
 1 99.8% 60
-5 99.96%  12
-20  99.99%  3
-60  99.997% 1
-86400 99.9998%  <1
+5 99.96% 12
+20 99.99% 3
+60 99.997% 1
+86400 99.9998% <1
 There. It's spelt out. What kind of Hit Ratio do you need? Typically 60 seconds to an hour is an ideal trade-off. For pseudo-dynamic content, you can still use CDNs, just start working in the under-60-seconds range, as appropriate for the request.
 
 Testing Your CDN
@@ -187,7 +184,7 @@ Quick, easy, and highly flexible, cURL lets you make web requests directly from 
 
 4. hurl.it
 
-hurl.it is essentially cURL with a prettier interface, and in a webbrowser. You’re able to set the headers you pass in to the request, as well as view the full header and body response. Although you don’t quite get the robustness of the command line, it’s still very useful for a quick header examination, and is probably the fastest way to get access to headers if you’re in a hurry.
+hurl.it is essentially cURL with a prettier interface, and in a web browser. You’re able to set the headers you pass in to the request, as well as view the full header and body response. Although you don’t quite get the robustness of the command line, it’s still very useful for a quick header examination, and is probably the fastest way to get access to headers if you’re in a hurry.
 
 5. Python and Requests
 
@@ -199,6 +196,6 @@ So now you’ve made it all the way through our quick guide to cache headers, an
 
 Most web servers, like Apache and Nginx, will do a lot of this work for you. Really, the “cache-control” header is the only one you’re going to have to work with. Web browsers are typically set up to cache aggressively to improve user experience, so often you’ll be fighting to prevent caching rather than ensuring it. Generally this means that you set a “/static” path and configure its caching headers to allow caching up to some reasonable interval like 300 seconds. Next, you would ensure that your root path “/” has “cache-control: no-cache” enabled, or better yet route dynamic content straight to your servers and only have “/static” use your CDN. This is a healthy starting point for most purposes. If your hosting bill is astronomical, or you get to use operations cost savings as beer money, then consider tweaking your settings.
 
-CDNs will often give you the option of breaking protocol and will cache for whatever period you like, regardless of the headers. They also take liberties with the protocols depending on their interpretation of expected behaviour, which is why it’s important to test the headers you get out of your CDN and compare them to your servers. Consider the expected behaviour outlined here to be a baseline and keep an eye out for variance.
+CDNs will often give you the option of breaking protocol and will cache for whatever period you like, regardless of the headers. They also take liberties with the protocols depending on their interpretation of expected behavior, which is why it’s important to test the headers you get out of your CDN and compare them to your servers. Consider the expected behavior outlined here to be a baseline and keep an eye out for variance.
 
 Good luck, and happy caching!

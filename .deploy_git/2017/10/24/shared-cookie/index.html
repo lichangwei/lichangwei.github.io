@@ -165,30 +165,28 @@
             <!-- Post Container -->
             <div class="col-lg-8 col-lg-offset-1 col-sm-9 post-container">
                 <blockquote>
-<p>今天是1024程序猿的节日，今天不加班，回家加俩菜。</p>
+<p>今天是 1024 程序猿的节日，今天不加班，回家加俩菜。</p>
 </blockquote>
 <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>昨天同事报出一个问题，给某家客户部署测试环境时遇到一个问题，他们访问该测试环境时完全正常，但是客户却不能访问。这是为什么呢？</p>
-<p>原来是这样的，测试环境部署在阿里云上，包括两个系统，称他们分别是系统A和系统B吧。系统A通过<code>https://customer.exmaple.com</code> 访问，系统B作为系统A的子系统以<code>iframe</code>方式嵌入到系统A，并且通过<code>https://customer.exmaple.com:8010</code>访问。部署完成之后我们同事正常访问，但是客户能访问系统A，但是不能访问被<code>iframe</code>嵌入系统B。通过浏览器控制台可以看到报错.</p>
+<p>原来是这样的，测试环境部署在阿里云上，包括两个系统，称他们分别是系统 A 和系统 B 吧。系统 A 通过<code>https://customer.exmaple.com</code> 访问，系统 B 作为系统 A 的子系统以<code>iframe</code>方式嵌入到系统 A，并且通过<code>https://customer.exmaple.com:8010</code>访问。部署完成之后我们同事正常访问，但是客户能访问系统 A，但是不能访问被<code>iframe</code>嵌入系统 B。通过浏览器控制台可以看到报错.</p>
 <blockquote>
-<p>Fialed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED.</p>
+<p>Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED.</p>
 </blockquote>
-<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>从报错的信息上看，隧道连接失败，隧道还不通，也就是请求就没有发送到服务器端去。我很快注意到系统B使用<code>https</code>协议和8010端口，并猜想会不会<code>https</code>协议必须使用443端口。我部署<code>https</code>系统较少，没有看到或留意非443端口的<code>https</code>应用。但是这个猜测很快被同事证明是错误的，因为我们的另外一个客户也是这样部署的，但是能够正常访问，突然感觉自己的网络方面的知识还是很欠缺的，其实这个也是很容易推断出来的，因为<code>https</code>协议就是在http协议的基础上加了SSL。http协议支持的端口<code>https</code>也应该支持。</p>
-<p>请求根本就没有发送到服务器端去，不可能是服务器端的问题，这也被另一个现象佐证：我们同事可以正常访问。可以确定是客户网络问题，考虑到8010端口的<code>https</code>实在少见，猜测是客户网络设置中禁止了非443端口的<code>https</code>协议，那么怎么解决这个问题呢？让用户调整网络设置当然是最简单的，但是客户公司是整个集团统一设置的网络安全策略，想修改一定要有足够理由才行，在这之前还是想想有没有其他方案吧。</p>
-<p>如果系统A和系统B使用相同的<code>https</code>协议，相同的443端口，但是不同的域名呢？很快就找到CTO申请了一个<code>customer-s.example.com</code>，部署之后发现上面的错误没有了，系统B的页面可以访问了，但是页面还是出不来，系统B的请求大多报错了。</p>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>从报错的信息上看，隧道连接失败，隧道还不通，也就是请求就没有发送到服务器端去。我很快注意到系统 B 使用<code>https</code>协议和 8010 端口，并猜想会不会<code>https</code>协议必须使用 443 端口。我部署<code>https</code>系统较少，没有看到或留意非 443 端口的<code>https</code>应用。但是这个猜测很快被同事证明是错误的，因为我们的另外一个客户也是这样部署的，但是能够正常访问，突然感觉自己的网络方面的知识还是很欠缺的，其实这个也是很容易推断出来的，因为<code>https</code>协议就是在 http 协议的基础上加了 SSL。http 协议支持的端口<code>https</code>也应该支持。</p>
+<p>请求根本就没有发送到服务器端去，不可能是服务器端的问题，这也被另一个现象佐证：我们同事可以正常访问。可以确定是客户网络问题，考虑到 8010 端口的<code>https</code>实在少见，猜测是客户网络设置中禁止了非 443 端口的<code>https</code>协议，那么怎么解决这个问题呢？让用户调整网络设置当然是最简单的，但是客户公司是整个集团统一设置的网络安全策略，想修改一定要有足够理由才行，在这之前还是想想有没有其他方案吧。</p>
+<p>如果系统 A 和系统 B 使用相同的<code>https</code>协议，相同的 443 端口，但是不同的域名呢？很快就找到 CTO 申请了一个<code>customer-s.example.com</code>，部署之后发现上面的错误没有了，系统 B 的页面可以访问了，但是页面还是出不来，系统 B 的请求大多报错了。</p>
 <blockquote>
 <p>Uncaught Type Error: Cannot read property ‘job’ of undefined</p>
 </blockquote>
-<p>从浏览器端的错误信息可以看出该页面没有给出合适的初始化数据。经过后端同事诊断之后发现是系统A的<code>Cookie</code>没有带过去，所以请求出现错误。啊？这是什么道理？访问系统B为什么要让浏览器自动带上系统A设置的<code>Cookie</code>？</p>
-<p>原来系统A和系统B并没有实现单点登录，而是系统A在即将打开系统B的<code>iframe</code>时，首先调用系统B的登录接口换取登录<code>URL</code>和<code>token</code>，并在<code>iframe</code>中打开系统B，系统B的后端没有完备的数据给客户端使用，还会通过<code>http</code>请求从系统A中获取数据，而系统A不知道系统B的服务器端程序要获取哪个用户的数据，怎么办呢？</p>
-<p>猜测故事是这样的，开发阶段两个系统使用相同的localhost域名使用不同的端口，同时部署在本地，调试系统B的服务器端代码时发现原来可以获得系统A设置的<code>Cookie</code>，那我把系统A的<code>Cookie</code>带上去访问系统A的接口，模拟了一个浏览器请求，不就可以系统A获取当前用户的数据了吗？这样也就不需要系统A单独为系统B开发接口了，就这么办了。这里不去评价糟糕的设计，乱七八糟的设计最终也算是跑通了。</p>
+<p>从浏览器端的错误信息可以看出该页面没有给出合适的初始化数据。经过后端同事诊断之后发现是系统 A 的<code>Cookie</code>没有带过去，所以请求出现错误。啊？这是什么道理？访问系统 B 为什么要让浏览器自动带上系统 A 设置的<code>Cookie</code>？</p>
+<p>原来系统 A 和系统 B 并没有实现单点登录，而是系统 A 在即将打开系统 B 的<code>iframe</code>时，首先调用系统 B 的登录接口换取登录<code>URL</code>和<code>token</code>，并在<code>iframe</code>中打开系统 B，系统 B 的后端没有完备的数据给客户端使用，还会通过<code>http</code>请求从系统 A 中获取数据，而系统 A 不知道系统 B 的服务器端程序要获取哪个用户的数据，怎么办呢？</p>
+<p>猜测故事是这样的，开发阶段两个系统使用相同的 localhost 域名使用不同的端口，同时部署在本地，调试系统 B 的服务器端代码时发现原来可以获得系统 A 设置的<code>Cookie</code>，那我把系统 A 的<code>Cookie</code>带上去访问系统 A 的接口，模拟了一个浏览器请求，不就可以系统 A 获取当前用户的数据了吗？这样也就不需要系统 A 单独为系统 B 开发接口了，就这么办了。这里不去评价糟糕的设计，乱七八糟的设计最终也算是跑通了。</p>
 <p>终于说到了这篇文章的主题了，<code>Cookie</code>的作用域是整个域名，跨协议（<code>HTTP</code>或<code>HTTPS</code>，可以指定<code>Cookie</code>仅适用于<code>HTTPS</code>），跨端口共享。了解更详细内容请参考<a href="https://tools.ietf.org/html/rfc6265#section-8.5" target="_blank" rel="noopener">RFC6265</a>。这是我以前没有注意到的，又长知识了。</p>
-<p>由于解耦两个系统的工作量较大，目前还是采取跟客户沟通，对<code>HTTPS</code>协议开放某个非433的端口。</p>
+<p>由于解耦两个系统的工作量较大，目前还是采取跟客户沟通，对<code>HTTPS</code>协议开放某个非 433 的端口。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
-<li>在解决问题过程中暴露了我两个知识点上的欠缺。<ol>
+<li>在解决问题过程中暴露了我两个知识点上的欠缺。</li>
 <li><code>HTTPS</code>协议和<code>HTTP</code>协议一样，可以绑定在不同的端口上。</li>
 <li><code>Cookie</code>的作用域是整个域名，跨协议跨端口共享。</li>
-</ol>
-</li>
 <li>在遇到复杂系统通信时，需要做一些架构评审，防止出现上面提到的很不专业的处理方法。</li>
 </ol>
 
@@ -198,7 +196,7 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2018/01/12/iis-url-rewrite/" data-toggle="tooltip" data-placement="top" title="IIS的URL重写（反向代理）">&larr; Previous Post</a>
+                        <a href="/2018/01/12/iis-url-rewrite/" data-toggle="tooltip" data-placement="top" title="IIS 的 URL 重写（反向代理）">&larr; Previous Post</a>
                     </li>
                     
                     
