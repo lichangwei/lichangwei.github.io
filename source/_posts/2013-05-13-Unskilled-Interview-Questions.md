@@ -1,3 +1,8 @@
+---
+title: 非技术类面试题
+sage: true
+---
+
 1. ####平常你通过什么途径接触和学习前端知识？
    邮件订阅：Javascript Weekly, HTML5 Weekly, CSS Weekly, Web Design Weekly, Responsive Design Weekly.  
    GitHub  

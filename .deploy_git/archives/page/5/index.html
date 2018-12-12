@@ -49,21 +49,17 @@
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header page-scroll">
             <button type="button" class="navbar-toggle">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
+                <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span>
+                <span class="icon-bar"></span> <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand animated pulse" href="/">
-                <span class="brand-logo">
-                    飞鹰走码
-                </span>
-                's Blog
+                <span class="brand-logo"> 飞鹰走码 </span>
             </a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
-        <!-- Known Issue, found by Hux:
+        <!--
+            Known Issue, found by Hux:
             <nav>'s height woule be hold on by its content.
             so, when navbar scale out, the <nav> will cover tags.
             also mask any touch event of tags, unfortunately.
@@ -72,13 +68,8 @@
         <div id="huxblog_navbar">
             <div class="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="/">Home</a>
-                    </li>
-					
-                    
-					
-					
+                    <li><a href="/">Home</a></li>
+                      
                 </ul>
             </div>
         </div>
@@ -89,27 +80,27 @@
     // Drop Bootstarp low-performance Navbar
     // Use customize navbar with high-quality material design animation
     // in high-perf jank-free CSS3 implementation
-//    var $body   = document.body;
+    //    var $body   = document.body;
     var $toggle = document.querySelector('.navbar-toggle');
     var $navbar = document.querySelector('#huxblog_navbar');
     var $collapse = document.querySelector('.navbar-collapse');
 
-    $toggle.addEventListener('click', handleMagic)
-    function handleMagic(e){
+    $toggle.addEventListener('click', handleMagic);
+    function handleMagic(e) {
         if ($navbar.className.indexOf('in') > 0) {
-        // CLOSE
-            $navbar.className = " ";
+            // CLOSE
+            $navbar.className = ' ';
             // wait until animation end.
-            setTimeout(function(){
+            setTimeout(function() {
                 // prevent frequently toggle
-                if($navbar.className.indexOf('in') < 0) {
-                    $collapse.style.height = "0px"
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = '0px';
                 }
-            },400)
-        }else{
-        // OPEN
-            $collapse.style.height = "auto"
-            $navbar.className += " in";
+            }, 400);
+        } else {
+            // OPEN
+            $collapse.style.height = 'auto';
+            $navbar.className += ' in';
         }
     }
 </script>
@@ -144,75 +135,6 @@
 
 
 <div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2013/09/12/Five-Helpful-Tips-When-Using-RequireJS/">
-        <h2 class="post-title">
-            【翻译】RequireJS的五个有用的小技巧
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-09-12
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                查看原文
-RequireJS–Javascript 的文件和模块加载器–是 Web 应用中组织，管理，构建和加载 Javascript 的一种很强大的方式。我已经使用它好几年了，and while it’s admittedly difficult to limit myself to only..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2013/09/11/Software-Product-Quality-Cannot-be-rely-on-Test/">
-        <h2 class="post-title">
-            未命名
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-09-11
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                软件产品质量不能依靠测试来保证
-
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2013/09/06/Using-WWW-Authenticate-to-Login-Authentication/">
-        <h2 class="post-title">
-            使用WWW-Authenticate实现登录认证
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-09-06
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                在当前的项目中，我们做了虚拟电视机设备，手机应用必须连接并通过认证才能控制电视机。认证步骤如下，首先由手机应用向电视机发送认证请求，电视机收到后会显示 PIN 码，用户在手机应用中输入 PIN 码，再发送请求验证即可。
-其中一种认证实现，我们采用了 WWW-Authenticate，这种在互联网..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
     <a href="/2013/09/06/Using-Redirect-to-Login-and-Authentication/">
         <h2 class="post-title">
             使用页面跳转完成登录和认证
@@ -226,28 +148,6 @@ RequireJS–Javascript 的文件和模块加载器–是 Web 应用中组织，�
                 在上篇文章我们提到如何使用 WWW-Authenticate 实现登录和认证。这一次我们讲一下另一种实现方式。服务器端提供一个登录认证页面，浏览器端需要跳转到该页面，用户输入 PIN 码之后，发送请求，浏览器验证之后跳转当前页面来。以下是更详细的步骤。
 
 浏览器端点击认证按钮，然后请求电视机（服..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2013/09/01/Ways-to-Cross-Domain/">
-        <h2 class="post-title">
-            未命名
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-09-01
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                跨域的几种方法
             </p>
         </div>
     </a>
@@ -305,19 +205,112 @@ RequireJS–Javascript 的文件和模块加载器–是 Web 应用中组织，�
 
 
 <div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2013/07/19/API-Design/">
+    <a href="/2013/06/30/No-Backend/">
         <h2 class="post-title">
-            API设计
+            没有后端的应用
         </h2>
         <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-07-19
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-06-30
         </p>
         
         <div class="post-content-preview">
             <p>
-                http://www.infoq.com/cn/news/2013/09/mamund-on-api-design
-这里谈到的 API 是指应用程序中不同模块之间的接口。它一般包含函数名，若干形参和一个返回值。
+                在 infoQ 上这篇文章不用后端：noBackend 是什么？有什么好处？，阿里的王涛对这种没有后端的架构做了介绍和探讨。以下是文章引言。
 
+
+在近期举办的前端趋势 2013大会上，Gregor Martynus 做了一场题为“各位快看，不用后端！”的报告，站在前端的视角谈应用开发，服务端组件..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+<div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
+    <a href="/2013/06/28/Good-UI/">
+        <h2 class="post-title">
+            【翻译】优秀的用户界面设计
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-06-28
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                一个好的用户界面不但容易使用，还可以带来很高的转化率。换句话说，它兼顾了商业利益的同时，也让用户更加容易使用。以下是一个不断更新的最佳实践的列表。
+
+###用一列布局代替多列布局一列布局让你对故事有着更多的控制能力，它能够以你预期的方式引导用户从顶部浏览到底部。然而多列布局却有一定风险让用户忽视..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+<div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
+    <a href="/2013/06/22/Some-Interesting-Interactive/">
+        <h2 class="post-title">
+            一些有意思的交互设计
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-06-22
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                1. 网易邮箱当用户在很短的时间内三次点击“收信”按钮之后，如果还没有收到新邮件，系统提示用户注意查看“垃圾邮件”。当用户做出这样的动作时，基本都是用户被其他系统提示给他发送了一封邮件，然后用户急于查看邮件内容。如果该邮箱启动了垃圾邮件过滤功能，那么在多次刷新无果的情况下，就有可能是被当做垃圾邮..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+<div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
+    <a href="/2013/06/20/Javascript-Trick/">
+        <h2 class="post-title">
+            Javascript的坑
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-06-20
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                以下题目摘自饮水思源。
+语言基础篇0. this 的指代function getThis() &#123;    return this;&#125;console.log(getThis.call(1) === 1);console.log(getThis.call('test') === '..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+<div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
+    <a href="/2013/06/09/TotalResults-filed-in-Youtube-Open-API/">
+        <h2 class="post-title">
+            YouTube 开放 API 中返回数据不一致
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-06-09
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                在YouTube 的开放 API中，totalResults 字段只是近似值，而不是准确值。比如返回的 totalResults 为 48，但是只返回 46 条记录。所以应用中不能依赖该字段来确定总共有多少页，然后允许用户直接跳到最后一页。因为最后一页很有可能就不存在。
+为什么会出现这种情况呢？..
             </p>
         </div>
     </a>

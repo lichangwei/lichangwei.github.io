@@ -1,5 +1,6 @@
 ---
 title: API设计
+sage: true
 ---
 
 http://www.infoq.com/cn/news/2013/09/mamund-on-api-design

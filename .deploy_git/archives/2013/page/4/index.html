@@ -49,21 +49,17 @@
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header page-scroll">
             <button type="button" class="navbar-toggle">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
+                <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span>
+                <span class="icon-bar"></span> <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand animated pulse" href="/">
-                <span class="brand-logo">
-                    飞鹰走码
-                </span>
-                's Blog
+                <span class="brand-logo"> 飞鹰走码 </span>
             </a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
-        <!-- Known Issue, found by Hux:
+        <!--
+            Known Issue, found by Hux:
             <nav>'s height woule be hold on by its content.
             so, when navbar scale out, the <nav> will cover tags.
             also mask any touch event of tags, unfortunately.
@@ -72,13 +68,8 @@
         <div id="huxblog_navbar">
             <div class="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="/">Home</a>
-                    </li>
-					
-                    
-					
-					
+                    <li><a href="/">Home</a></li>
+                      
                 </ul>
             </div>
         </div>
@@ -89,27 +80,27 @@
     // Drop Bootstarp low-performance Navbar
     // Use customize navbar with high-quality material design animation
     // in high-perf jank-free CSS3 implementation
-//    var $body   = document.body;
+    //    var $body   = document.body;
     var $toggle = document.querySelector('.navbar-toggle');
     var $navbar = document.querySelector('#huxblog_navbar');
     var $collapse = document.querySelector('.navbar-collapse');
 
-    $toggle.addEventListener('click', handleMagic)
-    function handleMagic(e){
+    $toggle.addEventListener('click', handleMagic);
+    function handleMagic(e) {
         if ($navbar.className.indexOf('in') > 0) {
-        // CLOSE
-            $navbar.className = " ";
+            // CLOSE
+            $navbar.className = ' ';
             // wait until animation end.
-            setTimeout(function(){
+            setTimeout(function() {
                 // prevent frequently toggle
-                if($navbar.className.indexOf('in') < 0) {
-                    $collapse.style.height = "0px"
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = '0px';
                 }
-            },400)
-        }else{
-        // OPEN
-            $collapse.style.height = "auto"
-            $navbar.className += " in";
+            }, 400);
+        } else {
+            // OPEN
+            $collapse.style.height = 'auto';
+            $navbar.className += ' in';
         }
     }
 </script>
@@ -144,17 +135,18 @@
 
 
 <div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2013/06/07/essay/">
+    <a href="/2013/05/10/Webkit-Image-Wipes/">
         <h2 class="post-title">
-            强迫注册和注册强迫症
+            【翻译】Webkit图片擦拭效果
         </h2>
         <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-06-07
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-05-10
         </p>
         
         <div class="post-content-preview">
             <p>
-                关于用户体验，我们经常听到这样的言论，除非到了非注册不可的时候，才让用户注册账号。过早地强迫用户注册，只会吓走用户。以今天看到的一个站点孢子社区为例，首页是一张背景图片，一张 LOGO 图标，一个登陆按钮和一个注册按钮，可谓非常简洁。“孢子”这个名字对我来说比较亲切，我挺喜欢玩《植物大战僵尸》，..
+                来源Webkit 浏览器支持遮罩，虽然它还不是标准。就像 PhotoShop 中一样，你声明一张图片作为遮罩，黑色部分是不透明的，将会遮住其后面的元素。白色部分透明，其后面的元素是可见的。灰色部分是半透明的。所以下面的图片：
+&lt;img src="orig.jpg" alt="trees" ..
             </p>
         </div>
     </a>
@@ -166,18 +158,18 @@
 
 
 <div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2013/06/06/Events-in-Capture-Phase/">
+    <a href="/2013/04/27/CSS3-Transition-Research/">
         <h2 class="post-title">
-            通过 body 的 error 事件捕获页面中所有图片的 error 事件
+            CSS3 Transition过渡属性探索
         </h2>
         <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-06-06
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-04-27
         </p>
         
         <div class="post-content-preview">
             <p>
-                在 BDP 项目中，根据用户输入的关键字搜索视频并显示出来，后端返回的每条记录中有一个数组字段image_urls表示该视频的缩略图地址，它共有三种类型，分别是 small, medium 和 large。
-&#123;    "image_urls": &#123;        "small..
+                背景介绍在前面的文章蓝光机 WebApp-无尽列表优化中提到无尽列表，通过上下键可以查看前两个或者后两个记录。这时候需要做出动画效果。
+解决问题这里首先要说明 Opera 的一个问题，Opera 从 9.8 版本以后就定格为 9.8，如果要查看其真正版本，只有通过其 UserAgent 中‘Ve..
             </p>
         </div>
     </a>
@@ -189,17 +181,17 @@
 
 
 <div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2013/05/25/Reduce-reflow-repaint/">
+    <a href="/2013/04/24/Highlight-Keywords-in-Client/">
         <h2 class="post-title">
-            在DOM操作中，如何减少 reflow 或 repaint
+            在客户端高亮关键字
         </h2>
         <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-05-25
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-04-24
         </p>
         
         <div class="post-content-preview">
             <p>
-                在这篇博客中，我们列举一些可以减少 reflow 或者 repaint 的方法。下面先讲述一下这两个概念。reflow，翻译为重排，意为重新布局。当一个元素的形状位置发生改变时，浏览器会对该元素以及子元素（也可能包括同级元素）进行布局和重绘。称之为重排。repaint，翻译为重绘。当一个元素的颜..
+                背景介绍在某个项目中遇到这样的需求，用户输入几个关键字，然后根据关键字去后端搜索相关记录。后端返回记录中但是没有高亮这些关键字，这就需要前端来做这件事。按道理，高亮应该由后端完成，因为后端如何解析这些关键字，也知道如何去匹配，前端不知道也不应该知道后端为什么返回这些结果，英语中名词有复数形式，动..
             </p>
         </div>
     </a>
@@ -211,20 +203,17 @@
 
 
 <div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2013/05/18/Using SVG/">
+    <a href="/2013/04/22/Canvas-drawImage-vs-putImageData/">
         <h2 class="post-title">
-            【翻译】使用SVG
+            使用 drawImage 和 putImageData 缓存 Canvas 中间数据
         </h2>
         <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-05-18
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-04-22
         </p>
         
         <div class="post-content-preview">
             <p>
-                原文地址：css-tricks.com
-SVG 是一种矢量图片格式。字面意为可伸缩矢量图形（Scalable Vector Graphics）。也就是你通过 Adobe Illustrator 做出来的东西。在网页中可以很简单地使用 SVG，但是有些东西是你应该了解的。
-为什么要使用 SVG？
-..
+                APIvoid drawImage(Object image, float dx, float dy[float dw, float, dh]);void drawImage(Object image, float sx, float sy, float sw, float sh, float ..
             </p>
         </div>
     </a>
@@ -236,20 +225,17 @@ SVG 是一种矢量图片格式。字面意为可伸缩矢量图形（Scalable V
 
 
 <div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2013/05/17/jQuery-Interview-Questions/">
+    <a href="/2013/04/15/Grouping-Numbers-with-Comma/">
         <h2 class="post-title">
-            未命名
+            【正则表达式】使用逗号将数字三位三位地分开
         </h2>
         <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-05-17
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-04-15
         </p>
         
         <div class="post-content-preview">
             <p>
-                
-####解释什么是 Deferred，以及优点是什么。Deferred，意为延迟执行，是 jQuery 的回调函数解决方案，对所有的异步操作提供统一和更加方便的编程接口。使用 Deferred 实现的\$.ajax 有以下几种有点。（1）链式调用（2）指定多个回调（3）为多个操作指定回调
-
-$..
+                背景介绍在一个项目中，需要显示一个 YouTube 视频被观看了多少次，这个数字一般是个很长的数字，为了更好的体验，也是国际标准，三位三位地断开，对应千（thousand），百万（million），十亿（billion），当然对中国用户来讲，不是特别友好，中国人喜欢四位四位隔开，对应万，亿，万亿..
             </p>
         </div>
     </a>
@@ -261,18 +247,17 @@ $..
 
 
 <div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2013/05/13/HTML-CSS-Interview-Questions/">
+    <a href="/2013/04/12/Using-an-Especial-Cursor/">
         <h2 class="post-title">
-            未命名
+            使用别样的鼠标形状
         </h2>
         <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-05-13
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-04-12
         </p>
         
         <div class="post-content-preview">
             <p>
-                
-####请解释一下什么是语义化的 HTML。使用拥有语义的标签，比如 h1-h6, article, section, aside, header, footer, nav, address, strong, em 等标签，而不是不分清空皂白地统一使用 div 或者 p 标签。好处：（1）方便..
+                某些时候，我们并不使用 CSS 中支持的鼠标形状，比如 default 箭头，pointer 手型等等，也不使用 url 指定鼠标形状，而是使用 html+css+js 渲染。例如在黑色背景的页面中，使用一个从圆心到周边透明度径向渐变的圆形图形作为鼠标形状。实现起来非常简单。首先在 html 元..
             </p>
         </div>
     </a>
@@ -284,20 +269,19 @@ $..
 
 
 <div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2013/05/13/Unskilled-Interview-Questions/">
+    <a href="/2013/04/11/CSS-animations-off-the-UI-thread/">
         <h2 class="post-title">
-            未命名
+            脱离 UI 线程的 CSS3 动画
         </h2>
         <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-05-13
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-04-11
         </p>
         
         <div class="post-content-preview">
             <p>
-                
-####平常你通过什么途径接触和学习前端知识？邮件订阅：Javascript Weekly, HTML5 Weekly, CSS Weekly, Web Design Weekly, Responsive Design Weekly.GitHubRSS微博
-
-####你更喜欢在哪个浏览器下进行..
+                【原文】CSS animations off the UI thread我们知道浏览器是单线程的，在执行 js 脚本期间，UI 会被冻结，用户行为也得不到响应。也就是所谓的“假死”现象。在最新版本的浏览器中，开启了一种新的实现，将 CSS3 动画移出 UI 线程。
+测试结果
+Win7 上 Chr..
             </p>
         </div>
     </a>
@@ -309,20 +293,17 @@ $..
 
 
 <div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2013/05/12/Javascript-Interview-Questions/">
+    <a href="/2013/04/07/Blue-ray-Web-App-Endless-List-Optimization/">
         <h2 class="post-title">
-            未命名
+            蓝光机WebApp-无尽列表优化
         </h2>
         <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-05-12
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-04-07
         </p>
         
         <div class="post-content-preview">
             <p>
-                
-####什么是闭包？举个例子？闭包是指一个函数可以访问其生成时各级（非顶级）作用域中局部变量的能力。
-
-var lis = document.querySelector('#list li');for (var i = 0; i &lt; li.length; i++) &#123;    l..
+                背景介绍该项目是一个运行于蓝光机内置浏览器 Opera 之上的单页面 WebApp，输入关键字，跨服务（视频，音频，Youtube 等）查询媒体内容。由于所有操作都是通过遥控器完成，所以通常可以使用的操作基本只有按键：上下左右以及返回键，确定键。为了显示不确定数量的媒体项，采用了通过向下/向上键..
             </p>
         </div>
     </a>
@@ -342,10 +323,6 @@ var lis = document.querySelector('#list li');for (var i = 0; i &lt; li.length; i
         <a href="/archives/2013/page/3/">&larr; Newer Posts</a>
     </li>
     
-    
-    <li class="next">
-        <a href="/archives/2013/page/5/">Older Posts &rarr;</a>
-    </li>
     
 </ul>
 

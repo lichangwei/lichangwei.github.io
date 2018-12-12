@@ -49,21 +49,17 @@
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header page-scroll">
             <button type="button" class="navbar-toggle">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
+                <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span>
+                <span class="icon-bar"></span> <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand animated pulse" href="/">
-                <span class="brand-logo">
-                    飞鹰走码
-                </span>
-                's Blog
+                <span class="brand-logo"> 飞鹰走码 </span>
             </a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
-        <!-- Known Issue, found by Hux:
+        <!--
+            Known Issue, found by Hux:
             <nav>'s height woule be hold on by its content.
             so, when navbar scale out, the <nav> will cover tags.
             also mask any touch event of tags, unfortunately.
@@ -72,13 +68,8 @@
         <div id="huxblog_navbar">
             <div class="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="/">Home</a>
-                    </li>
-					
-                    
-					
-					
+                    <li><a href="/">Home</a></li>
+                      
                 </ul>
             </div>
         </div>
@@ -89,27 +80,27 @@
     // Drop Bootstarp low-performance Navbar
     // Use customize navbar with high-quality material design animation
     // in high-perf jank-free CSS3 implementation
-//    var $body   = document.body;
+    //    var $body   = document.body;
     var $toggle = document.querySelector('.navbar-toggle');
     var $navbar = document.querySelector('#huxblog_navbar');
     var $collapse = document.querySelector('.navbar-collapse');
 
-    $toggle.addEventListener('click', handleMagic)
-    function handleMagic(e){
+    $toggle.addEventListener('click', handleMagic);
+    function handleMagic(e) {
         if ($navbar.className.indexOf('in') > 0) {
-        // CLOSE
-            $navbar.className = " ";
+            // CLOSE
+            $navbar.className = ' ';
             // wait until animation end.
-            setTimeout(function(){
+            setTimeout(function() {
                 // prevent frequently toggle
-                if($navbar.className.indexOf('in') < 0) {
-                    $collapse.style.height = "0px"
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = '0px';
                 }
-            },400)
-        }else{
-        // OPEN
-            $collapse.style.height = "auto"
-            $navbar.className += " in";
+            }, 400);
+        } else {
+            // OPEN
+            $collapse.style.height = 'auto';
+            $navbar.className += ' in';
         }
     }
 </script>
@@ -187,7 +178,7 @@
                 <ul class="pager">
                     
                     <li class="previous">
-                        <a href="/2013/09/01/Ways-to-Cross-Domain/" data-toggle="tooltip" data-placement="top" title="">&larr; Previous Post</a>
+                        <a href="/2013/09/01/Ways-to-Cross-Domain/" data-toggle="tooltip" data-placement="top" title="跨域的几种方式">&larr; Previous Post</a>
                     </li>
                     
                     

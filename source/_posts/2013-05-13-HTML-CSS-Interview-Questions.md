@@ -1,3 +1,8 @@
+---
+title: HTML & CSS 面试题
+sage: true
+---
+
 1. ####请解释一下什么是语义化的 HTML。
    使用拥有语义的标签，比如 h1-h6, article, section, aside, header, footer, nav, address, strong, em 等标签，而不是不分清空皂白地统一使用 div 或者 p 标签。  
    好处：（1）方便开发人员交流。统一的标签语义，不需要使用 class 表明用意。也阻止了不同的人使用不同的单词表达同样的含义。

@@ -49,21 +49,17 @@
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header page-scroll">
             <button type="button" class="navbar-toggle">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
+                <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span>
+                <span class="icon-bar"></span> <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand animated pulse" href="/">
-                <span class="brand-logo">
-                    飞鹰走码
-                </span>
-                's Blog
+                <span class="brand-logo"> 飞鹰走码 </span>
             </a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
-        <!-- Known Issue, found by Hux:
+        <!--
+            Known Issue, found by Hux:
             <nav>'s height woule be hold on by its content.
             so, when navbar scale out, the <nav> will cover tags.
             also mask any touch event of tags, unfortunately.
@@ -72,13 +68,8 @@
         <div id="huxblog_navbar">
             <div class="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="/">Home</a>
-                    </li>
-					
-                    
-					
-					
+                    <li><a href="/">Home</a></li>
+                      
                 </ul>
             </div>
         </div>
@@ -89,27 +80,27 @@
     // Drop Bootstarp low-performance Navbar
     // Use customize navbar with high-quality material design animation
     // in high-perf jank-free CSS3 implementation
-//    var $body   = document.body;
+    //    var $body   = document.body;
     var $toggle = document.querySelector('.navbar-toggle');
     var $navbar = document.querySelector('#huxblog_navbar');
     var $collapse = document.querySelector('.navbar-collapse');
 
-    $toggle.addEventListener('click', handleMagic)
-    function handleMagic(e){
+    $toggle.addEventListener('click', handleMagic);
+    function handleMagic(e) {
         if ($navbar.className.indexOf('in') > 0) {
-        // CLOSE
-            $navbar.className = " ";
+            // CLOSE
+            $navbar.className = ' ';
             // wait until animation end.
-            setTimeout(function(){
+            setTimeout(function() {
                 // prevent frequently toggle
-                if($navbar.className.indexOf('in') < 0) {
-                    $collapse.style.height = "0px"
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = '0px';
                 }
-            },400)
-        }else{
-        // OPEN
-            $collapse.style.height = "auto"
-            $navbar.className += " in";
+            }, 400);
+        } else {
+            // OPEN
+            $collapse.style.height = 'auto';
+            $navbar.className += ' in';
         }
     }
 </script>
@@ -260,30 +251,6 @@
     <div class="row">
         <div class="col-lg-8 col-lg-offset-1 col-md-8 col-md-offset-1 col-sm-12 col-xs-12 post-container">
             <!-- Main Content -->
-
-
-
-<div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2014/05/08/scrollIntoView/">
-        <h2 class="post-title">
-            focus VS scrollIntoView
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2014-05-08
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                将今天遇到的小故障记录一下吧。  
-业务相关的东西就不多说了，
-
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
 
 
 
@@ -447,6 +414,29 @@ sudo npm install -g node-inspectornpm http GET https://registry.npmjs.org/node-i
                 本文结合 CDN 行为，探索 HTTP 缓存头部。如果你正要了解怎么书写缓存头部以适应现代 WEB，或者你很好奇你周围的人都在谈论什么，那么你可以阅读本文。
 如果你已经了解了缓存头部的好处，并且想了解更多，那么我推荐你去查看W3 文档。
 缓存头部能做什么？简单地说，缓存能让你将 Web 资源保存..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+<div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
+    <a href="/2013/09/27/Tools-for-Image-Optimization/">
+        <h2 class="post-title">
+            【翻译】图片优化工具
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-09-27
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                原文地址
+As we saw a few weeks ago, the weight of an average web page is now almost 1.5MB (median ~1MB), with &gt; 50% of this being images. It’s a hars..
             </p>
         </div>
     </a>

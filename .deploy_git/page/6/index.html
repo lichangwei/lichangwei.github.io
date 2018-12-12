@@ -49,21 +49,17 @@
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header page-scroll">
             <button type="button" class="navbar-toggle">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
+                <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span>
+                <span class="icon-bar"></span> <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand animated pulse" href="/">
-                <span class="brand-logo">
-                    飞鹰走码
-                </span>
-                's Blog
+                <span class="brand-logo"> 飞鹰走码 </span>
             </a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
-        <!-- Known Issue, found by Hux:
+        <!--
+            Known Issue, found by Hux:
             <nav>'s height woule be hold on by its content.
             so, when navbar scale out, the <nav> will cover tags.
             also mask any touch event of tags, unfortunately.
@@ -72,13 +68,8 @@
         <div id="huxblog_navbar">
             <div class="navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="/">Home</a>
-                    </li>
-					
-                    
-					
-					
+                    <li><a href="/">Home</a></li>
+                      
                 </ul>
             </div>
         </div>
@@ -89,27 +80,27 @@
     // Drop Bootstarp low-performance Navbar
     // Use customize navbar with high-quality material design animation
     // in high-perf jank-free CSS3 implementation
-//    var $body   = document.body;
+    //    var $body   = document.body;
     var $toggle = document.querySelector('.navbar-toggle');
     var $navbar = document.querySelector('#huxblog_navbar');
     var $collapse = document.querySelector('.navbar-collapse');
 
-    $toggle.addEventListener('click', handleMagic)
-    function handleMagic(e){
+    $toggle.addEventListener('click', handleMagic);
+    function handleMagic(e) {
         if ($navbar.className.indexOf('in') > 0) {
-        // CLOSE
-            $navbar.className = " ";
+            // CLOSE
+            $navbar.className = ' ';
             // wait until animation end.
-            setTimeout(function(){
+            setTimeout(function() {
                 // prevent frequently toggle
-                if($navbar.className.indexOf('in') < 0) {
-                    $collapse.style.height = "0px"
+                if ($navbar.className.indexOf('in') < 0) {
+                    $collapse.style.height = '0px';
                 }
-            },400)
-        }else{
-        // OPEN
-            $collapse.style.height = "auto"
-            $navbar.className += " in";
+            }, 400);
+        } else {
+            // OPEN
+            $collapse.style.height = 'auto';
+            $navbar.className += ' in';
         }
     }
 </script>
@@ -264,123 +255,6 @@
 
 
 <div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2013/06/30/No-Backend/">
-        <h2 class="post-title">
-            没有后端的应用
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-06-30
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                在 infoQ 上这篇文章不用后端：noBackend 是什么？有什么好处？，阿里的王涛对这种没有后端的架构做了介绍和探讨。以下是文章引言。
-
-
-在近期举办的前端趋势 2013大会上，Gregor Martynus 做了一场题为“各位快看，不用后端！”的报告，站在前端的视角谈应用开发，服务端组件..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2013/06/28/Good-UI/">
-        <h2 class="post-title">
-            【翻译】优秀的用户界面设计
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-06-28
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                一个好的用户界面不但容易使用，还可以带来很高的转化率。换句话说，它兼顾了商业利益的同时，也让用户更加容易使用。以下是一个不断更新的最佳实践的列表。
-
-###用一列布局代替多列布局一列布局让你对故事有着更多的控制能力，它能够以你预期的方式引导用户从顶部浏览到底部。然而多列布局却有一定风险让用户忽视..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2013/06/22/Some-Interesting-Interactive/">
-        <h2 class="post-title">
-            一些有意思的交互设计
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-06-22
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                1. 网易邮箱当用户在很短的时间内三次点击“收信”按钮之后，如果还没有收到新邮件，系统提示用户注意查看“垃圾邮件”。当用户做出这样的动作时，基本都是用户被其他系统提示给他发送了一封邮件，然后用户急于查看邮件内容。如果该邮箱启动了垃圾邮件过滤功能，那么在多次刷新无果的情况下，就有可能是被当做垃圾邮..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2013/06/20/Javascript-Trick/">
-        <h2 class="post-title">
-            Javascript的坑
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-06-20
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                以下题目摘自饮水思源。
-语言基础篇0. this 的指代function getThis() &#123;    return this;&#125;console.log(getThis.call(1) === 1);console.log(getThis.call('test') === '..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
-    <a href="/2013/06/09/TotalResults-filed-in-Youtube-Open-API/">
-        <h2 class="post-title">
-            YouTube 开放 API 中返回数据不一致
-        </h2>
-        <p class="post-meta">
-            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-06-09
-        </p>
-        
-        <div class="post-content-preview">
-            <p>
-                在YouTube 的开放 API中，totalResults 字段只是近似值，而不是准确值。比如返回的 totalResults 为 48，但是只返回 46 条记录。所以应用中不能依赖该字段来确定总共有多少页，然后允许用户直接跳到最后一页。因为最后一页很有可能就不存在。
-为什么会出现这种情况呢？..
-            </p>
-        </div>
-    </a>
-
-</div>
-
-<hr>
-
-
-
-<div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
     <a href="/2013/06/07/essay/">
         <h2 class="post-title">
             强迫注册和注册强迫症
@@ -437,6 +311,121 @@
         <div class="post-content-preview">
             <p>
                 在这篇博客中，我们列举一些可以减少 reflow 或者 repaint 的方法。下面先讲述一下这两个概念。reflow，翻译为重排，意为重新布局。当一个元素的形状位置发生改变时，浏览器会对该元素以及子元素（也可能包括同级元素）进行布局和重绘。称之为重排。repaint，翻译为重绘。当一个元素的颜..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+<div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
+    <a href="/2013/05/18/Using SVG/">
+        <h2 class="post-title">
+            【翻译】使用SVG
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-05-18
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                原文地址：css-tricks.com
+SVG 是一种矢量图片格式。字面意为可伸缩矢量图形（Scalable Vector Graphics）。也就是你通过 Adobe Illustrator 做出来的东西。在网页中可以很简单地使用 SVG，但是有些东西是你应该了解的。
+为什么要使用 SVG？
+..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+<div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
+    <a href="/2013/05/10/Webkit-Image-Wipes/">
+        <h2 class="post-title">
+            【翻译】Webkit图片擦拭效果
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-05-10
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                来源Webkit 浏览器支持遮罩，虽然它还不是标准。就像 PhotoShop 中一样，你声明一张图片作为遮罩，黑色部分是不透明的，将会遮住其后面的元素。白色部分透明，其后面的元素是可见的。灰色部分是半透明的。所以下面的图片：
+&lt;img src="orig.jpg" alt="trees" ..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+<div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
+    <a href="/2013/04/27/CSS3-Transition-Research/">
+        <h2 class="post-title">
+            CSS3 Transition过渡属性探索
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-04-27
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                背景介绍在前面的文章蓝光机 WebApp-无尽列表优化中提到无尽列表，通过上下键可以查看前两个或者后两个记录。这时候需要做出动画效果。
+解决问题这里首先要说明 Opera 的一个问题，Opera 从 9.8 版本以后就定格为 9.8，如果要查看其真正版本，只有通过其 UserAgent 中‘Ve..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+<div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
+    <a href="/2013/04/24/Highlight-Keywords-in-Client/">
+        <h2 class="post-title">
+            在客户端高亮关键字
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-04-24
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                背景介绍在某个项目中遇到这样的需求，用户输入几个关键字，然后根据关键字去后端搜索相关记录。后端返回记录中但是没有高亮这些关键字，这就需要前端来做这件事。按道理，高亮应该由后端完成，因为后端如何解析这些关键字，也知道如何去匹配，前端不知道也不应该知道后端为什么返回这些结果，英语中名词有复数形式，动..
+            </p>
+        </div>
+    </a>
+
+</div>
+
+<hr>
+
+
+
+<div class="post-preview " style="background-image: url('http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg')">
+    <a href="/2013/04/22/Canvas-drawImage-vs-putImageData/">
+        <h2 class="post-title">
+            使用 drawImage 和 putImageData 缓存 Canvas 中间数据
+        </h2>
+        <p class="post-meta">
+            <i class="fa fa-calendar" aria-hidden="true"></i> 2013-04-22
+        </p>
+        
+        <div class="post-content-preview">
+            <p>
+                APIvoid drawImage(Object image, float dx, float dy[float dw, float, dh]);void drawImage(Object image, float sx, float sy, float sw, float sh, float ..
             </p>
         </div>
     </a>
