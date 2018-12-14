@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本文假设你基本了解 HTML5 应用缓存。 前几天，一个同事联系到我，说他们项目想使用 HTML5 的应用缓存，但是遇到了脚本执行错误问题，但是如果去掉 manifest 配置，即不使用应用缓存，则一切正常运行。我让他将项目代码简化一下，剥离业务相关部分，然后打包发给我。 在浏览器中打开该页面以后，发现如下两个错误： Uncaught ReferenceError: BMap is not def">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTML5应用缓存与百度地图服务">
+<meta property="og:url" content="http://lichangwei.github.io/2013/09/23/HTML5-Application-Cache-and-Baidu-Map-Service/index.html">
+<meta property="og:site_name" content="飞鹰走码">
+<meta property="og:description" content="本文假设你基本了解 HTML5 应用缓存。 前几天，一个同事联系到我，说他们项目想使用 HTML5 的应用缓存，但是遇到了脚本执行错误问题，但是如果去掉 manifest 配置，即不使用应用缓存，则一切正常运行。我让他将项目代码简化一下，剥离业务相关部分，然后打包发给我。 在浏览器中打开该页面以后，发现如下两个错误： Uncaught ReferenceError: BMap is not def">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-07T02:57:07.424Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HTML5应用缓存与百度地图服务">
+<meta name="twitter:description" content="本文假设你基本了解 HTML5 应用缓存。 前几天，一个同事联系到我，说他们项目想使用 HTML5 的应用缓存，但是遇到了脚本执行错误问题，但是如果去掉 manifest 配置，即不使用应用缓存，则一切正常运行。我让他将项目代码简化一下，剥离业务相关部分，然后打包发给我。 在浏览器中打开该页面以后，发现如下两个错误： Uncaught ReferenceError: BMap is not def">
+
+
+
+
+
+
+  <link rel="canonical" href="http://lichangwei.github.io/2013/09/23/HTML5-Application-Cache-and-Baidu-Map-Service/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>HTML5应用缓存与百度地图服务 | 飞鹰走码</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion .logo-line-before i { left: initial; }
+    .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">飞鹰走码</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">飞鹰走码</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
+</form>
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'jKpsnJjixMaVpfnXVc3L','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lichangwei.github.io/2013/09/23/HTML5-Application-Cache-and-Baidu-Map-Service/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李长伟">
+      <meta itemprop="description" content="李长伟的博客">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="飞鹰走码">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">HTML5应用缓存与百度地图服务
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2013-09-23 00:00:00" itemprop="dateCreated datePublished" datetime="2013-09-23T00:00:00+08:00">2013-09-23</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-07 10:57:07" itemprop="dateModified" datetime="2018-12-07T10:57:07+08:00">2018-12-07</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文假设你基本了解 HTML5 应用缓存。</p>
+<p>前几天，一个同事联系到我，说他们项目想使用 HTML5 的应用缓存，但是遇到了脚本执行错误问题，但是如果去掉 manifest 配置，即不使用应用缓存，则一切正常运行。我让他将项目代码简化一下，剥离业务相关部分，然后打包发给我。</p>
+<p>在浏览器中打开该页面以后，发现如下两个错误：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Uncaught ReferenceError: BMap is not defined index.html:18</span><br><span class="line">GET http://api.map.baidu.com/getscript?v=1.5&amp;ak=24fddd5bf8d6cbe100c40dfa9aed10d2&amp;services=&amp;t=20130916115231</span><br></pre></td></tr></table></figure>
+<p>以上两个错误很明显是脚本加载失败造成的。</p>
+<p>通过代码可以看到，项目中使用了百度地图，使用方法是引入一个<code>script</code>标签.</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"http://api.map.baidu.com/api?v=1.5&amp;ak=24fddd5bf8d6cbe100c40dfa9aed10d2"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>以上<code>script</code>标签从服务器端获取的代码是：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">window</span>.BMap_loadScriptTime = <span class="keyword">new</span> <span class="built_in">Date</span>().getTime();</span><br><span class="line">    <span class="built_in">document</span>.write(</span><br><span class="line">        <span class="string">'&lt;script type="text/javascript" src="http://api.map.baidu.com/getscript?v=1.5&amp;ak=24fddd5bf8d6cbe100c40dfa9aed10d2&amp;services=&amp;t=20130916115231"&gt;&lt;/script&gt;'</span></span><br><span class="line">    );</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+<p>我们可以看到它使用了<code>document.write</code>方法，插入另一个<code>script</code>标签。然而在<code>manifest</code>文件中，却没有说明该脚本应该如何处理。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CACHE MANIFEST</span><br><span class="line">NETWORK:</span><br><span class="line">http://api.map.baidu.com/api?v=1.5&amp;ak=24fddd5bf8d6cbe100c40dfa9aed10d2</span><br></pre></td></tr></table></figure>
+<p>这时候浏览器尝试从应用缓存中寻找<code>http://api.map.baidu.com/getscript?v=1.5&amp;ak=24fddd5bf8d6cbe100c40dfa9aed10d2&amp;services=&amp;t=20130916115231</code>却没有找到，所以脚本加载失败。因为这个脚本网址不是公开 API 的一部分，今天是这个 URL，明天也许就是另一个 URL 了，所以我们不能写在<code>manifest</code>文件里面。再者地图相关资源肯定不适合应用缓存，一是我们不能枚举需要调用的脚本，图片和其他资源，从而罗列在<code>CACHE:</code>配置中，二是应用缓存在每个域下只有 25M 的配额，甚至更少。那么对于这种不固定的网址或者不可枚举的网址该怎么处理呢？</p>
+<p>这时候我们有两种做法，第一种比较简单，在<code>manifest</code>文件中 NETWORK 一栏中使用<code>*</code>这个通配符，表示如果某个 URL 没有显式定义出来，则从互联网上获取该资源。于是<code>manifest</code>文件就变成：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">NETWORK:</span><br><span class="line">*</span><br></pre></td></tr></table></figure>
+<p>另外一种做法就是将这些不固定的网址（在这里，是百度地图服务）封装在一个固定地址的页面中，不使用应用缓存，并且通过 iframe 元素引入。<br>比如：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">NETWORK:</span><br><span class="line">map.html</span><br></pre></td></tr></table></figure>
+<p>其中 map.html 负责渲染地图，并且不使用应用缓存。</p>
+<p>现在问题看似解决了，但是我们的目的是使用应用缓存，那么当百度地图服务不可用（没有网络或者百度地图服务宕掉）时，打开页面是怎样的呢？我关闭了网络连接后，刷新页面，看到是一个块空白，以及如下错误：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Application Cache Error event: Manifest fetch failed (-1) http://192.168.0.100/github/map/map.manifest map.html:1</span><br><span class="line">Uncaught ReferenceError: BMap is not defined map.html:18</span><br><span class="line">GET http://api.map.baidu.com/api?v=1.5&amp;ak=24fddd5bf8d6cbe100c40dfa9aed10d2</span><br></pre></td></tr></table></figure>
+<p>直接给用户一个空白的地图似乎不是那么友好，更好的一种做法就是在使用一张静态的百度地图的截图代替，或者通过文字告诉用户，地图加载失败。</p>
+<p>这时候有两种做法，一种做法是判断 BMap 是否定义，如果已定义则认为百度地图服务可用，否则认为不可用，此时可以提示用户地图服务不可用。这种做法很简单，这就不多说了。另一种做法更加适合上面使用 iframe 的情形，使用用应用缓存中的 FALLBACK 配置项。在 FALLBACK 配置中，每一行包括两个 URL，用空格分隔。第一个 URL 是正常情况下的资源地址，第二个 URL 是后备资源地址，当前者不可用时，由后者顶上。</p>
+<p>使用 FALLBACK 时，我们可以定义一个 nomap.html 作为百度地图 API 的后备处理方案。代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">FALLBACK:</span><br><span class="line">map.html nomap.html</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>FALLBACK 有个坑，就是 FALLBACK 中配置中第一个 URL 不能出现在 NETWORK 中，否则 FALLBACK 配置可能失效。</strong></p>
+</blockquote>
+<h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><ol>
+<li>可以使用<code>NETWORK</code>中统配符<code>*</code>来告诉浏览器，对于那些未显式指定的资源总是从网络上获取。</li>
+<li>对于<code>iframe</code>让应用的一部分使用应用缓存，另一部分不使用。</li>
+<li>配合<code>FALLBACK</code>，可以让网络不可用时或者服务不可用时，界面更加友好。</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2013/09/23/Browser-Cache/" rel="next" title="浏览器缓存模型">
+                <i class="fa fa-chevron-left"></i> 浏览器缓存模型
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2013/09/24/Web-Page-Optimization/" rel="prev" title="网页性能优化">
+                网页性能优化 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+    
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">李长伟</p>
+              <p class="site-description motion-element" itemprop="description">李长伟的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#总结："><span class="nav-number">1.</span> <span class="nav-text">总结：</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李长伟</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v6.6.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.js"></script>
+
+  
+  
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.css">
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+   <script>
+        var gitalk = new Gitalk({
+          clientID: '621ce74dae06b19c2e65',
+          clientSecret: '7f314e6e41cd4753fbd21a92c6813e5d353f9c8b',
+          repo: 'lichangwei.github.io',
+          owner: 'lichangwei',
+          admin: ['lichangwei'],
+          id: md5(location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

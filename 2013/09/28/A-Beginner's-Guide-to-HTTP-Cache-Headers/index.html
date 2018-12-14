@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="本文结合 CDN 行为，探索 HTTP 缓存头部。如果你正要了解怎么书写缓存头部以适应现代 WEB，或者你很好奇你周围的人都在谈论什么，那么你可以阅读本文。 如果你已经了解了缓存头部的好处，并且想了解更多，那么我推荐你去查看W3 文档。 缓存头部能做什么？简单地说，缓存能让你将 Web 资源保存在通往用户浏览器的每一个远程节点。当然浏览器本身也维护着一个私有缓存，它让浏览器不用每次都从服务器获取资">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTP缓存头部入门指南">
+<meta property="og:url" content="http://lichangwei.github.io/2013/09/28/A-Beginner's-Guide-to-HTTP-Cache-Headers/index.html">
+<meta property="og:site_name" content="飞鹰走码">
+<meta property="og:description" content="本文结合 CDN 行为，探索 HTTP 缓存头部。如果你正要了解怎么书写缓存头部以适应现代 WEB，或者你很好奇你周围的人都在谈论什么，那么你可以阅读本文。 如果你已经了解了缓存头部的好处，并且想了解更多，那么我推荐你去查看W3 文档。 缓存头部能做什么？简单地说，缓存能让你将 Web 资源保存在通往用户浏览器的每一个远程节点。当然浏览器本身也维护着一个私有缓存，它让浏览器不用每次都从服务器获取资">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.mobify.com/static/blog/2013/04/CDN_basic_diagram.png">
+<meta property="og:updated_time" content="2018-12-07T02:56:34.099Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HTTP缓存头部入门指南">
+<meta name="twitter:description" content="本文结合 CDN 行为，探索 HTTP 缓存头部。如果你正要了解怎么书写缓存头部以适应现代 WEB，或者你很好奇你周围的人都在谈论什么，那么你可以阅读本文。 如果你已经了解了缓存头部的好处，并且想了解更多，那么我推荐你去查看W3 文档。 缓存头部能做什么？简单地说，缓存能让你将 Web 资源保存在通往用户浏览器的每一个远程节点。当然浏览器本身也维护着一个私有缓存，它让浏览器不用每次都从服务器获取资">
+<meta name="twitter:image" content="http://www.mobify.com/static/blog/2013/04/CDN_basic_diagram.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://lichangwei.github.io/2013/09/28/A-Beginner's-Guide-to-HTTP-Cache-Headers/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>HTTP缓存头部入门指南 | 飞鹰走码</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion .logo-line-before i { left: initial; }
+    .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">飞鹰走码</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">飞鹰走码</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
+</form>
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'jKpsnJjixMaVpfnXVc3L','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lichangwei.github.io/2013/09/28/A-Beginner's-Guide-to-HTTP-Cache-Headers/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李长伟">
+      <meta itemprop="description" content="李长伟的博客">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="飞鹰走码">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">HTTP缓存头部入门指南
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2013-09-28 00:00:00" itemprop="dateCreated datePublished" datetime="2013-09-28T00:00:00+08:00">2013-09-28</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-07 10:56:34" itemprop="dateModified" datetime="2018-12-07T10:56:34+08:00">2018-12-07</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文结合 CDN 行为，探索 HTTP 缓存头部。如果你正要了解怎么书写缓存头部以适应现代 WEB，或者你很好奇你周围的人都在谈论什么，那么你可以阅读本文。</p>
+<p>如果你已经了解了缓存头部的好处，并且想了解更多，那么我推荐你去查看<a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html" target="_blank" rel="noopener">W3 文档</a>。</p>
+<h4 id="缓存头部能做什么？"><a href="#缓存头部能做什么？" class="headerlink" title="缓存头部能做什么？"></a>缓存头部能做什么？</h4><p>简单地说，缓存能让你将 Web 资源保存在通往用户浏览器的每一个远程节点。当然浏览器本身也维护着一个私有缓存，它让浏览器不用每次都从服务器获取资源。</p>
+<p>配置缓存，对于节省站点流量是非常重要的，一个经济的站点可以减少带宽支出，或者希望保持 Web 专业开发者的声誉，你必须了解缓存的作用以及如何使用。</p>
+<p>对于这些资源文件，比如你公司的 logo，站点的 favicon，以及那些核心的各个请求之间通用的 CSS，告诉浏览器将此文件的备份保存一段时间，是非常安全的。如果你的用户是一个后座上的小孩，总是不停的问：“我们到了吗？”，你很可能会告诉他，“没有，20 分钟以后才到，请不要再问了。”</p>
+<p>通过减少对服务器请求的数量，你可以处理更多的请求，用户也可以享受更快的浏览体验。一般来讲，像图片，Javascript 脚本，样式表等资源文件都可以大量使用缓存，但是像 dashboard，论坛等动态产生的内容，就很少能使用缓存。如果你关注性能，可以将动态产生的内容和静态的资源文件分离，前者使用 Ajax 获取，后者则可以大量使用缓存。</p>
+<h4 id="客户端和-CDN"><a href="#客户端和-CDN" class="headerlink" title="客户端和 CDN"></a>客户端和 CDN</h4><p>最初，缓存设置都是针对客户端浏览器的，所以我们应该适当地考虑客户端以及它是如何保存资源的。但是，进来伴随着 CDN 的出现，在网络传输的中间节点上如何做好缓存成为一个重大关切。</p>
+<blockquote>
+<blockquote>
+<p><strong>什么是 CDN？</strong><br>如果你不愿意查看 Wiki 的话，我在这里给你一个简单的说明。本质上，CDN 就是一组服务器（注意是一组），它位于用户和站点之间。每一个服务器都会根据你设定的缓存头部缓存你站点的内容。</p>
+</blockquote>
+</blockquote>
+<p>配置适当的话，CDM 会使用最快的（一般是距离用户最近的）服务器向用户传递内容。另外，CDN 起到站点和用户之间的缓冲的作用。我们最关心的数字是缓存命中率，它描述了 CDN 不需要向服务器请求就可以直接响应的请求的百分比。取决于流量和架构，它可以高达 90%。即使没有这么高，你也会受益良多。注意，低频率的请求会被更多地传给服务器，所以命中率只有和缓存次数和平均负载放在一起时才有意义。如果你配置了缓存，但是缓存头部设置不当，很可能导致</p>
+<p><img src="http://www.mobify.com/static/blog/2013/04/CDN_basic_diagram.png" alt="简单的CDN图"><br>这是一个 CDN 网络中的基本的数据流图。你的 Web 服务器提供内容给 CDN 中间服务器，而 CDN 中间服务器分布在全球不同地区。懒一点的话，可以在这里画一片云。</p>
+<p>Beyond their intended use for caching, CDNs also have a pleasant side-effect; provided you’re dealing with a website, or a particularly well-crafted web application, in the event that your servers experience a momentary outage, your CDN may be able to buffer the experience for your end users, ensuring they never even notice.</p>
+<p>The Basic Headers</p>
+<p>So, you know what a CDN is, and you know you want to configure your response headers to make use of them. Most web servers make it trivial to set response headers, so I’ll leave it to you, Google, and the man pages to figure that part out. For now, let’s move onto what headers you should care about.</p>
+<ol>
+<li>cache-control</li>
+</ol>
+<p>If there were a default super-header for caching behavior, this would be it. Typically you will see a string of settings for this header along the lines of:</p>
+<p>cache-control: private, max-age=0, no-cache<br>These settings are called cache response directives, and are as follows:</p>
+<p>private | public<br>Essentially they let intermediary caches know that a given response is specific to the end user and should not be cached. Do not make the mistake of assuming that this in any way provides you with some kind of security or privacy: Keep using SSL for that.</p>
+<p>no-cache<br>When used alone, this guy lets you specify that caches should revalidate this resource every time, typically using the “etag” header outlined below. The fun bit comes when you specify a field name after the no-cache directive, which lets caches know that you can cache the response, provided that the named fields are stripped out; cookies would be a good example of why you might want to do this. I should note that older User Agents won’t respect this trick, so you shouldn’t depend on it too much.</p>
+<p>no-store<br>This guy lets you specify that caches should not store this response. I know that may be surprising given the name, but there it is. Actually, if the cache in question is following the rules, it will also ensure that no part of the request is stored either. “no-store” was designed with sensitive information requirements in mind, and so is kind of like the G-Man of cache headers.</p>
+<p>max-age<br>Traditionally, you would let caches know when an asset is expired by using the aptly-named “expires” header, discussed below. However, if you want to be more explicit, you may set a max-age, in seconds, which will override the expires header. Further reasons to use this directive are discussed below under the Caveats section.</p>
+<p>s-maxage<br>Using our keen deductive skills, we can see some similarities between this header and the last one. “s-“ is for shared, as in “shared cache”, as in CDN. These directives are explicitly for CDNs and other intermediary caches. When present, this directive overrides both the max-age and expires header, and most well behaved CDNs will obey it.</p>
+<p>must-revalidate<br>This one is fun, although not applicable to most of us. For the sake of completeness, and in case your dev-team has some kind of trivia night where free beer is involved, we’ll discuss it. Essentially, if your responses include this directive, you are telling the cache that it needs to revalidate a cached asset on any subsequent request, and that it may not, under any circumstance, serve stale content (which is sometimes a desired behaviour). Of course, I say “under any circumstances”, but what I really mean is that there’s a big fat asterisk next to that claim. If your users are under “severe connectivity constraints”, (perhaps they are browsing from low-earth-orbit), then their user agents may serve stale content, provided they pinky-swear to tell their users that they’ve done so. Apparently this directive exists because some protocols require it, typically involving transactions.</p>
+<p>no-transform<br>“Transform into what?”, you’re surely asking. Some proxies will convert image formats and other documents to improve performance. Presumably this was thought to be a feature that you should have to opt out of. If you don’t like the idea of your CDN making automated guesses about how your content should be encoded or formatted, I suggest including this header.</p>
+<p>proxy-revalidate<br>Essentially the same as the “must-revalidate” directive, except it’s just for the shared caches. Why didn’t they call it “s-mustrevalidate”? I’m sure there exists a mailing list somewhere where you could find that debate, but for now, just know that like “s-maxage”, this directive is designed for intermediary proxies and not user agents. The idea here is that you validate each end-user only once between the proxy and their agent, but each new user should revalidate back to the server. I suspect if your service requires this feature, you probably already know about it.</p>
+<p>As always, you should check out the spec for these settings if you need any clarification.</p>
+<ol start="2">
+<li>expires</li>
+</ol>
+<p>Back in the day, this was the standard way to specify when an asset expired, and is just a basic date-time stamp. It is still fairly useful for older user agents, which crypto webologists assure us still roam in the uncharted territories. On most modern systems, the “cache-control” headers “max-age” and “s-maxage” will take precedence, but it’s always good practice to set a matching value here for compatibility. Just make sure you format the date correctly, or it will be evaluated as an expired date:</p>
+<p>Thu, 01 Dec 1983 20:00:00 GMT<br>Try to avoid setting the value to more than one year out as that breaks the specification, (see below for a discussion on cache time settings).</p>
+<ol start="3">
+<li>etag</li>
+</ol>
+<p>Short for “entity-tag”, the etag is a unique identifier for the resource being requested, typically comprised of the hash of that resource, or a hash of the timestamp the resource was updated. Basically, this lets a client ask smarter questions of the CDNs, like “give me X if it’s different than the etag I already have.”</p>
+<p>There’s a neat trick you can do with etags, which is to make them weak validators. This basically tells the user that although they are not the same, the two resources are functionally equivalent. Support for this feature is considered optional though, so you will want to do some testing with your providers, (discussed below).</p>
+<ol start="4">
+<li>vary</li>
+</ol>
+<p>Oh wow. This one is fun. The “vary” header is extremely powerful, but can trip up what would otherwise be a simple caching scheme. IE has had issues handling the “vary” header in the past, and at one point, even Chrome was handling this in a funny way. Essentially, “vary” lets the caches know which of the headers to use to figure out if they have a valid cache for a request; if a cache were a giant key-value store, adding “vary” fields appends those values to the key, thus changing which requests are considered valid matches for what exists in the cache.</p>
+<p>You would commonly set this to something like “Accept-Encoding” to make sure your gzip’ed assets get served where appropriate, saving you all that bandwidth you might otherwise waste. Additionally, setting:</p>
+<p>vary: User-Agent<br>will put you in the SEO good-books if you happen to be serving different versions of your HTML/CSS depending on the User-Agent of the request. Google will note the header and have the Googlebot crawl your mobile content as well.</p>
+<ol start="5">
+<li>pragma</li>
+</ol>
+<p>Another beast from the days of yore, the “pragma” header does many things, and most of them are honoured by newer implementations. The directive we’re most concerned with is:</p>
+<p>pragma: no-cache<br>which gets interpreted by newer implementations as:</p>
+<p>cache-control: no-cache<br>I would not generally recommend worrying about it, but for the sake of completeness, there it is. No new HTTP directives will be defined for “pragma” going forward.</p>
+<p>Some Caveats</p>
+<p>Now that we’ve gotten some of the standard and expected behaviors out of the way, we should probably mention that not every CDN or User Agent will behave according to the specification, which I’m sure is not news to anyone familiar with browser compatibility issues. For this reason, it is a good idea to test your services before launching a live resource to make sure the behavior you get is what you expected; it will save you money.</p>
+<p>Also, you may have noted that a lot of the headers seem to be either duplicated or overlapping. Some of this is because there are subtle differences between the different methods, and also because the web is shifting over from HTTP/1.0 to HTTP/1.1, which uses the “cache-control” much more heavily. Generally it is safe to set both and let the CDNs and User Agents figure out which one they care to listen to.</p>
+<ol>
+<li>Compression</li>
+</ol>
+<p>Remember that “Accept-Encoding” example for the “vary” header we talked about? That’s your new best friend if you intend to serve compressed content, which I hope you do to increase performance and save on bandwidth. CDN providers that get a request with “gzip” as an accepted encoding are expected to request the compressed asset from the origin server, or to serve a cached version of that compressed asset. Historically, this has been a sticking point for some CDNs, and for people wishing to use something like S3 to serve their files, although modern CDNs are able to perform the compression operation themselves if need be.</p>
+<p>Things to watch out for when the CDN serves compressed assets is that they’ll often ensure that both uncompressed (AKA identity) and gzip’ed version are in their cache, regardless of which was requested. There is a time delay as they perform that operation, so any testing you do will have to take that delay into account.</p>
+<ol start="2">
+<li>SSL</li>
+</ol>
+<p>A CDN is basically a Man-In-The-Middle, meaning you need to think about your HTTPS traffic and how it gets back to your server. Many CDNs will pipe a request for <a href="https://somesite.com/asset" target="_blank" rel="noopener">https://somesite.com/asset</a> to your servers as <a href="http://somesite.com/asset" target="_blank" rel="noopener">http://somesite.com/asset</a>, so if your server logic depended on that being SSL, either reconsider your logic or ask your CDN to redirect to an HTTPS origin URL. Most CDNs are capable of doing so, with varying degrees of flexibility.</p>
+<p>But What about Dynamic Content?</p>
+<p>Generally the rule of thumb for dynamic content, like the HTML files of a WordPress blog, is to set “cache-control: no-cache” and prevent the CDNs or User Agents from storing the asset. For most applications, serving your own dynamic content is probably fine, however if you need to boost performance, read on.</p>
+<p>Typical Dynamic Content<br>HTTP/1.1 200 OK<br>Server: Apache<br>X-Rack-Cache: miss<br>ETag: “e6811cdbcedf972c5e8105a89f637d39-gzip”<br>Status: 200<br>Content-Type: text/html; charset=utf-8<br>Expires: Mon, 29 Apr 2013 21:44:55 GMT<br>Cache-Control: max-age=0, no-cache, no-store<br>Pragma: no-cache<br>Date: Mon, 29 Apr 2013 21:44:55 GMT<br>An example of a section of a header for dynamic content. Note the missed cache status, and the cache-control directives all set to 0 seconds.</p>
+<p>Most dynamic content has a shelf-life and is not nearly as volatile as we assume. Things like “Active Users” are probably valid for 10 or 20 seconds, depending on your site. Dashboards that report daily figures could certainly stand to be cached for a few minutes. News feeds could certainly stand to be cached for a while, especially if you remember to set an “etag”. If your site is seeing lots of load, it may be worth trying out a short cache on your dynamic assets.</p>
+<p>An Analysis of Cache Time</p>
+<p>So what types of cache times should you consider setting? Again, this will require you to consider things like the rate of traffic to your site, how sizeable your assets are, and how large your cache is, (yes, there are space allocations, so don’t go over them).</p>
+<p>Additionally, you should consider the main tradeoff: speed and performance vs. control. If you want to update an asset and need the new version to be live immediately, you may run into trouble if you thought a one-year cache time was a good idea, especially if you set that for Users (max-age) and not just CDNs (s-maxage).</p>
+<p>The longest you can set your headers and still be following the specification is one year, or 31536000 seconds, but this is not a very good idea. That’s like getting a face tattoo; it stays around forever, barring expensive or painful removal surgery, which accurately describes the annoyances of having to trick caches into refetching an asset through name changes or hoping you remembered to correctly set your etag and that your users and CDNs implemented them correctly. If your servers can’t stand to have your CDNs ask once a day if your profile picture has changed you should upgrade your servers.</p>
+<p>Sane Static Content Headers<br>HTTP/1.1 200 OK<br>Cache-Control: no-transform,public,max-age=300,s-maxage=900<br>Content-Type: text/html; charset=UTF-8<br>Date: Mon, 29 Apr 2013 16:38:15 GMT<br>ETag: “bbea5db7e1785119a7f94fdd504c546e”<br>Last-Modified: Sat, 27 Apr 2013 00:44:54 GMT<br>Server: AmazonS3<br>Vary: Accept-Encoding<br>X-Cache: HIT<br>A sample of cache settings for a static asset served from S3. Here we see that the cache has been asked to store the asset for 900 seconds rather than the 300 seconds set for User Agents. Also note the “x-cache: HIT” header, indicating the CDN served the request.</p>
+<p>There is one exception to the “thou-shalt-not-set-one-year-headers” commandment, or more accurately, there’s a bit of a hack to get around their pitfalls: if you’ve configured your site to generate resource names, you can rename your assets each time you publish a new version. Typically, this will involve an incrementing version number, a date-time stamp, or a hash of the contents, much like an “etag”, being appended to the file name, so that you end up with things like “core.E89A123FFDB…432D687B.css” and the like. It’s not pretty, but really, who cares? Also, this lets you set one-year-headers without worrying about updating your resources.</p>
+<p>A handy table best explains the cache time trade-off. Assuming a web asset get 500 requests per minute, then the following Hit Ratios are possible for each cache time:</p>
+<p>Cache time (minutes) Hit Ratio Request to Origin / Hr<br>1 99.8% 60<br>5 99.96% 12<br>20 99.99% 3<br>60 99.997% 1<br>86400 99.9998% &lt;1<br>There. It’s spelt out. What kind of Hit Ratio do you need? Typically 60 seconds to an hour is an ideal trade-off. For pseudo-dynamic content, you can still use CDNs, just start working in the under-60-seconds range, as appropriate for the request.</p>
+<p>Testing Your CDN</p>
+<p>So, onto the testing. Always check that the headers are coming through CDNs the way you expect when setting up new services. Typically a CDN will insert some kind of “x-“ header to indicate that it hit, missed, or served expired content. What we’re looking for is a convenient way to look at this and other headers, and to set them on our requests for testing. There are more than a few tools out there to help, though these are the ones I’ve found most handy.</p>
+<ol>
+<li>Web Inspector</li>
+</ol>
+<p>Probably the most accessible method, simply right-click on a webpage in Chrome, click Inspect Element, navigate to the Network tab, hit refresh, and click on the HTML asset at the top. If it’s not selected by default, checkout the Headers tab to see all your request and response headers. Chrome also lets you set the user agent you request with, and gives you the option to not use your local cache, which is handy when you’re testing.</p>
+<ol start="2">
+<li>Charles Proxy et al.</li>
+</ol>
+<p>Tools like Charles Proxy will let you route traffic through them and manipulate DNS lookups, record headers, and see performance statistics, all in a clean, easy-to-use GUI. These tools are generally more task-specific than the Web Inspector and other browser tools, and generally worth the small licensing fee if you work with web requests in any significant way.</p>
+<ol start="3">
+<li>cURL</li>
+</ol>
+<p>Quick, easy, and highly flexible, cURL lets you make web requests directly from the command line and check out the responding headers. Helpful flags include -A for user agents, -b for cookies, -F for form data, -H for setting headers, and -I to request the header only. Very handy for sanity checks, and extremely powerful.</p>
+<ol start="4">
+<li>hurl.it</li>
+</ol>
+<p>hurl.it is essentially cURL with a prettier interface, and in a web browser. You’re able to set the headers you pass in to the request, as well as view the full header and body response. Although you don’t quite get the robustness of the command line, it’s still very useful for a quick header examination, and is probably the fastest way to get access to headers if you’re in a hurry.</p>
+<ol start="5">
+<li>Python and Requests</li>
+</ol>
+<p>Requests is a great Python package for making web requests, and is useful for quick checks from the REPL, or from slightly more complex scripted checks. Using Requests comes with the added benefit of letting you write a test-suite for your web assets to assert the status of response headers.</p>
+<p>Notes from the Field and Parting Thoughts</p>
+<p>So now you’ve made it all the way through our quick guide to cache headers, and you’re eager to get going on setting your own. Excellent. However, now it’s time to put some of this in perspective.</p>
+<p>Most web servers, like Apache and Nginx, will do a lot of this work for you. Really, the “cache-control” header is the only one you’re going to have to work with. Web browsers are typically set up to cache aggressively to improve user experience, so often you’ll be fighting to prevent caching rather than ensuring it. Generally this means that you set a “/static” path and configure its caching headers to allow caching up to some reasonable interval like 300 seconds. Next, you would ensure that your root path “/” has “cache-control: no-cache” enabled, or better yet route dynamic content straight to your servers and only have “/static” use your CDN. This is a healthy starting point for most purposes. If your hosting bill is astronomical, or you get to use operations cost savings as beer money, then consider tweaking your settings.</p>
+<p>CDNs will often give you the option of breaking protocol and will cache for whatever period you like, regardless of the headers. They also take liberties with the protocols depending on their interpretation of expected behavior, which is why it’s important to test the headers you get out of your CDN and compare them to your servers. Consider the expected behavior outlined here to be a baseline and keep an eye out for variance.</p>
+<p>Good luck, and happy caching!</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2013/09/27/Tools-for-Image-Optimization/" rel="next" title="【翻译】图片优化工具">
+                <i class="fa fa-chevron-left"></i> 【翻译】图片优化工具
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2013/10/11/Connect-Timeout-When-Npm-Install/" rel="prev" title="npm install时连接超时的解决办法">
+                npm install时连接超时的解决办法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+    
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">李长伟</p>
+              <p class="site-description motion-element" itemprop="description">李长伟的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#缓存头部能做什么？"><span class="nav-number">1.</span> <span class="nav-text">缓存头部能做什么？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端和-CDN"><span class="nav-number">2.</span> <span class="nav-text">客户端和 CDN</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李长伟</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v6.6.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.js"></script>
+
+  
+  
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.css">
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+   <script>
+        var gitalk = new Gitalk({
+          clientID: '621ce74dae06b19c2e65',
+          clientSecret: '7f314e6e41cd4753fbd21a92c6813e5d353f9c8b',
+          repo: 'lichangwei.github.io',
+          owner: 'lichangwei',
+          admin: ['lichangwei'],
+          id: md5(location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

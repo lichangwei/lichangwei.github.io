@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="查看原文 RequireJS–Javascript 的文件和模块加载器–是 Web 应用中组织，管理，构建和加载 Javascript 的一种很强大的方式。我已经使用它好几年了，and while it’s admittedly difficult to limit myself to only five, 我要是早点知道这几条提示就好了。注意，该文章假定你了解 RequireJS，或者至少知道">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【翻译】RequireJS的五个有用的小技巧">
+<meta property="og:url" content="http://lichangwei.github.io/2013/09/12/Five-Helpful-Tips-When-Using-RequireJS/index.html">
+<meta property="og:site_name" content="飞鹰走码">
+<meta property="og:description" content="查看原文 RequireJS–Javascript 的文件和模块加载器–是 Web 应用中组织，管理，构建和加载 Javascript 的一种很强大的方式。我已经使用它好几年了，and while it’s admittedly difficult to limit myself to only five, 我要是早点知道这几条提示就好了。注意，该文章假定你了解 RequireJS，或者至少知道">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://tpstatic.com/img/usermedia/_TBvB2AB50KM-TASuLKFsw/w645.png">
+<meta property="og:updated_time" content="2018-12-07T02:59:39.819Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【翻译】RequireJS的五个有用的小技巧">
+<meta name="twitter:description" content="查看原文 RequireJS–Javascript 的文件和模块加载器–是 Web 应用中组织，管理，构建和加载 Javascript 的一种很强大的方式。我已经使用它好几年了，and while it’s admittedly difficult to limit myself to only five, 我要是早点知道这几条提示就好了。注意，该文章假定你了解 RequireJS，或者至少知道">
+<meta name="twitter:image" content="http://tpstatic.com/img/usermedia/_TBvB2AB50KM-TASuLKFsw/w645.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://lichangwei.github.io/2013/09/12/Five-Helpful-Tips-When-Using-RequireJS/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>【翻译】RequireJS的五个有用的小技巧 | 飞鹰走码</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion .logo-line-before i { left: initial; }
+    .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">飞鹰走码</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">飞鹰走码</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
+</form>
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'jKpsnJjixMaVpfnXVc3L','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lichangwei.github.io/2013/09/12/Five-Helpful-Tips-When-Using-RequireJS/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李长伟">
+      <meta itemprop="description" content="李长伟的博客">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="飞鹰走码">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">【翻译】RequireJS的五个有用的小技巧
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2013-09-12 00:00:00" itemprop="dateCreated datePublished" datetime="2013-09-12T00:00:00+08:00">2013-09-12</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-07 10:59:39" itemprop="dateModified" datetime="2018-12-07T10:59:39+08:00">2018-12-07</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="http://tech.pro/blog/1561/five-helpful-tips-when-using-requirejs" target="_blank" rel="noopener">查看原文</a></p>
+<p>RequireJS–Javascript 的文件和模块加载器–是 Web 应用中组织，管理，构建和加载 Javascript 的一种很强大的方式。我已经使用它好几年了，and while it’s admittedly difficult to limit myself to only five, 我要是早点知道这几条提示就好了。注意，该文章假定你了解 RequireJS，或者至少知道 AMD，CommonJS 和脚本加载器。RequireJS 官方网站是一个让你知其然并且知其所以然的很好的站点。</p>
+<p>在这篇文章中，我们仅仅关注在 RequireJS 本身，而不包括 r.js（RequireJS 的优化工具）。我打算以后写一篇关于 r.js 的文章。</p>
+<h2 id="1-知道定义模块的几种方式"><a href="#1-知道定义模块的几种方式" class="headerlink" title="1. 知道定义模块的几种方式"></a>1. 知道定义模块的几种方式</h2><p>大多数使用 RequireJS 的人都知道以下这种定义模块的方法。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">define([<span class="string">'dependencyA'</span>, <span class="string">'dependencyB'</span>], <span class="function"><span class="keyword">function</span>(<span class="params">depA, depB</span>) </span>&#123;</span><br><span class="line">    <span class="comment">/* module code here using depA and depB */</span></span><br><span class="line">    <span class="keyword">return</span> myModule;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>在 98%的情况下，我使用上面的方法。但是还有其他几种选择，选择哪种，取决于你的需要。一个模块不需要任何依赖，那么你可以这么做：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">define(&#123;</span><br><span class="line">    someProp: <span class="string">'Oooh, how interesting!'</span>,</span><br><span class="line">    someMethod: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// do interesting work</span></span><br><span class="line">        <span class="keyword">return</span> compellingValue;</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>如果这个模块没有任何依赖，但是你需要做一些准备工作或者保存私有状态，那么你可以这么做：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">define(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  <span class="keyword">var</span> secretValue = <span class="string">'seekret'</span>;</span><br><span class="line">  <span class="comment">// do other initialization work here...</span></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    someProp: <span class="string">'Oooh, how interesting!'</span>,</span><br><span class="line">    tellMeSecrets: <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">      <span class="comment">// do interesting work</span></span><br><span class="line">      <span class="keyword">return</span> secretValue;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h2 id="2-怎么配合非-AMD-库一起工作"><a href="#2-怎么配合非-AMD-库一起工作" class="headerlink" title="2. 怎么配合非 AMD 库一起工作"></a>2. 怎么配合非 AMD 库一起工作</h2><p>世界上有非常多的很好的 Javascript 库，大多数都没有遵循 AMD 规范，但是不用担心，你照样可以使用它们。从 RequireJS 2.1.0 版本开始，RequireJS 有了一个叫做‘shim’的特性，让你设置你要用到的哪些不满足 AMD 规范的库，并且像其他 AMD 库一样加载进来。下面我们来看个非 AMD 库的例子。<br><strong>加载没有依赖的非 AMD 库</strong><br>你获取还记得 Backbone 和 Underscore 取消 AMD 支持的情景，多亏了 shim 特性，我们依然可以容易地在 RequireJS 中使用这些库。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">require</span>.config(&#123;</span><br><span class="line">    paths: &#123;</span><br><span class="line">        underscore: <span class="string">'libs/underscore.min'</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    shim: &#123;</span><br><span class="line">        underscore: &#123;</span><br><span class="line">            exports: <span class="string">'_'</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>上面的 require.config 调用中我们提供了压缩后的 underscore.js 文件路径，后面在 shim 对象中，添加了一个和同样的属性，并且值是一个对象，它有一个 exports 属性，用来告诉 RequireJS 全局对象（如果是浏览器的话当然就 window 对象了）上某个属性就是这个模块实际值。既然 Underscore 把自己声明为 window 上的<em>属性，那么我们就让 exports 的值为</em>。从此以后，如果有一个 AMD 模块依赖 Underscore，RequireJS 会用全局对象的_值代替。<br>这个例子很简单，因为 Underscore 没有任意依赖。那么如果加载一个有其他依赖的非 AMD 库吗？<br><strong>加载有依赖的非 AMD 库</strong><br>下面我们看看怎么加载依赖于 Underscore 和 jQuery 的 Backbone 吧。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">require</span>.config(&#123;</span><br><span class="line">    paths: &#123;</span><br><span class="line">        jquery: <span class="string">'libs/jquery.min'</span>,</span><br><span class="line">        backbone: <span class="string">'libs/backbone.min'</span>,</span><br><span class="line">        underscore: <span class="string">'libs/underscore.min'</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    shim: &#123;</span><br><span class="line">        underscore: &#123;</span><br><span class="line">            exports: <span class="string">'_'</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">        backbone: &#123;</span><br><span class="line">            deps: [<span class="string">'jquery'</span>, <span class="string">'underscore'</span>],</span><br><span class="line">            exports: <span class="string">'Backbone'</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>Backbone 的 shim 配置除了 exports 属性外还有 deps 属性，deps 是一个包含了 Backbone 所有依赖的库名字数组，他们必须先于 Underscore 加载，一旦这些依赖加载完成之后，Backbone 也会被加载，然后 RequireJS 就会从全局对象上获取 Backbone 属性来作为 backbone 模块的值。<br>那么 CommonJS 又是怎样的呢？<br>假定你要 RequireJS 中使用一个 CommonJS 模块，没问题，你可以定义一个模块，并提供一个带有三个参数的工厂函数，这三个函数分别是：require，exports 和 module。多数情况下你都可以忽略其他两个参数，而只考虑如何使用 require 参数。通过 require 参数可以通过 CommonJS 的语法获取一个模块，比如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">define(<span class="function"><span class="keyword">function</span>(<span class="params">require, exports, module</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> cjs = <span class="built_in">require</span>(<span class="string">'myCommonJSModule'</span>);</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        findDroids: <span class="function"><span class="keyword">function</span>(<span class="params">droids</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> res = [],</span><br><span class="line">                i = <span class="number">0</span>,</span><br><span class="line">                len = droids.length;</span><br><span class="line">            <span class="keyword">for</span> (; i &lt; len; i++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (cjs.isDroidWareLookingFor(droids[i])) &#123;</span><br><span class="line">                    res.push(droids[i]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span> res;</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>特别注意我接下来的一片关于 r.js 的文章，当你使用 r.js 优化工具时，也可以使用更多的 CommonJS 工具库。你可以选择将 CommonJS 模块转换成用 deine()方法包裹起来的模块。你还需要知道，如果你的 CommonJS 模块有分支逻辑去有条件地调用 require，那么转换方法就会失效。比如上面的 myCommonJSModule 有以下内部逻辑（参考代码片段中去思考是什么让它不能和 RequireJS 不能一起工作）：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// inside myCommonJSModule</span></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    isDroidWeAreLookingFor: <span class="function"><span class="keyword">function</span>(<span class="params">droid</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> finder;</span><br><span class="line">        <span class="comment">// OHSNAP! The conditional logic around require</span></span><br><span class="line">        <span class="comment">// means we cannot wrap it with define in RequireJS</span></span><br><span class="line">        <span class="keyword">if</span> (isObiWanPresent) &#123;</span><br><span class="line">            finder = <span class="built_in">require</span>(<span class="string">'forceFilter'</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            finder = <span class="built_in">require</span>(<span class="string">'normalFilter'</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> finder.find(droid);</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="3-CND-Fallbacks"><a href="#3-CND-Fallbacks" class="headerlink" title="3. CND Fallbacks"></a>3. CND Fallbacks</h2><p>虽然 CDN（内容分发网络）可以提高站点的加载性能，但是不希望万一 CDN 挂掉时，你的站点也会挂掉。幸好 RequireJS 可以容易地设置后备地址。一般配置如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">require</span>.config(&#123;</span><br><span class="line">    paths: &#123;</span><br><span class="line">        kendoui: <span class="string">'http://cdn.kendostatic.com/2013.2.716/js/kendo.all.min.js'</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>当然我们希望 CDN 永远不会挂掉，但是如果它挂掉了，我们可以通过修改配置来使用后备地址：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">require</span>.config(&#123;</span><br><span class="line">    paths: &#123;</span><br><span class="line">        kendoui: [<span class="string">'http://cdn.kendostatic.com/2013.2.716/js/kendo.all.min.js'</span>, <span class="string">'libs/kendoui/kendoui.min'</span>],</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>我们给 kendoui 设置了一个地址数组，而不再是一个字符串，根据以上配置，RequireJS 将会尝试从 CDN 上加载，如果失败了，再尝试从第二个地址加载。使用后备地址的确会使得脚本加载时间变长，但是总比站点不可用要好得多。</p>
+<h2 id="4-插件"><a href="#4-插件" class="headerlink" title="4. 插件"></a>4. 插件</h2><p>RequireJS 中最好的一个增值点或许就是加载插件。加载插件可以用来加载各种非 Javascript 资源，就像其他依赖模块一样加载他们。最常见的是文本插件，它允许你加载一个普通文本文件（比如 HTML 或者 CSS 等），这对加载模板特别有用。为了让你理解它多么有用，让我们看看今天人们是怎么使用它的。</p>
+<p>下面的代码片段展示了 Backbone 视图怎样获取 unders.js 模板内容，预编译，然后渲染页面，但是代码中你却看不到 RequireJS/text 插件的痕迹。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> MyView = Backbone.View.extends(&#123;</span><br><span class="line">    initialize: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.template = _.template($(<span class="string">'generated-gif-template'</span>).text());</span><br><span class="line">    &#125;,</span><br><span class="line">    render: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.$el.html(<span class="keyword">this</span>.template(<span class="keyword">this</span>.model.toJSON()));</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>注意到这个视图应该放在页面里面。很多人会添加一个<code>script</code>标签，并给出一个假冒的<code>type</code>属性（这样就不会被当做 Javascript 执行），将模板内容放进去，如下：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/underscore-template"</span> <span class="attr">id</span>=<span class="string">"generated-gif-template"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">    &lt;span <span class="class"><span class="keyword">class</span></span>=<span class="string">"glyphicon glyphicon-remove"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"&lt;%= dataURL %&gt;"</span> <span class="attr">download</span>=<span class="string">"&lt;%= id %&gt;"</span>&gt;</span></span></span><br><span class="line"><span class="javascript">      &lt;span <span class="class"><span class="keyword">class</span></span>=<span class="string">"glyphicon glyphicon-save"</span>&gt;<span class="xml"><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span></span><br><span class="line"><span class="javascript">    &lt;img src=<span class="string">"&lt;%= dataURL %&gt;"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"img-thumbnail gif-item"</span>&gt;</span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="xml">      <span class="tag">&lt;<span class="name">input</span> <span class="attr">style</span>=<span class="string">"display:none"</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">id</span>=<span class="string">"fileName"</span> <span class="attr">value</span>=<span class="string">"&lt;%= fileName %&gt;"</span> /&gt;</span></span></span><br><span class="line"><span class="javascript">      &lt;span id=<span class="string">"lblFileName"</span>&gt;<span class="xml"><span class="tag">&lt;<span class="name">%=</span> <span class="attr">fileName</span> %&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这方法肯定是可行的，但是有一些缺点。把模板内容嵌套在 script 标签中会丧失语法高亮和其他 IDE 提供的功能。这个模板必须出现在所有要使用它的页面。在一个多页面的站点中，这意味着你可能要多次拷贝模板内容，或者额外的构建步骤将模板嵌入每个目标 HTML 页面。在 AMD 应用中，像这样将模板保存在 DOM 中意味着该模块除了显示传递给它的依赖之外，还依赖其他东西。这使得你的应用比较脆弱。理想情况下，我们希望将模板传递给我们的模块，就像其他的脚本依赖一样。这就是文本插件产生的原因。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">define([<span class="string">'backbone'</span>, <span class="string">'text!templates/generated-gif.html'</span>], <span class="function"><span class="keyword">function</span>(<span class="params">Backbone, template</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> Backbone.View.extend(&#123;</span><br><span class="line">        initialize: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.template = _.template(template);</span><br><span class="line">        &#125;,</span><br><span class="line">        render: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.$el.html(<span class="keyword">this</span>.template(<span class="keyword">this</span>.model.toJSON()));</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>我们将模板路径作为依赖加进来，用<code>text!</code>作为前缀，来告诉 RequireJS 使用一个叫做 text 的插件来处理。模板的文本内容作为<code>template</code>参数传递给模块。使用这个方法有如下好处：<br>（一）开发过程中，模板作为一个单独的文件存在，因此我们使用 IDE 带给我们的便利（语法高亮等），还避免了我们必须穿过数百行甚至更多的 HTML 代码去编辑代码。<br>（二）模板可以和其他模块同等对待，显示传递到模块中，让模块对模板的依赖更加显而易见。这和当模块执行时期望模板在 DOM 中正好相反。<br>当我们使用 r.js 构建和优化 RequireJS 应用时，模板可以和其他模板一起部署，因为文本插件可以有效地将模板包装在模块定义调用中，创建一个返回模板文件内容的模块。<br>以上就是对文本插件的惊鸿一瞥，下面是其他一些插件。<br><a href="http://requirejs.org/docs/api.html#i18n" target="_blank" rel="noopener">i18n</a> - 国际化<br><a href="https://github.com/millermedeiros/requirejs-plugins" target="_blank" rel="noopener">image</a> - 像加载其他模块一样加载图片<br><a href="https://github.com/millermedeiros/requirejs-plugins/" target="_blank" rel="noopener">mdown</a> - 加载 markdown 文件，它会给你编译成 html<br><a href="https://github.com/millermedeiros/requirejs-plugins" target="_blank" rel="noopener">font</a> - 加载 Web 字体</p>
+<h2 id="5-故障检修小技巧"><a href="#5-故障检修小技巧" class="headerlink" title="5. 故障检修小技巧"></a>5. 故障检修小技巧</h2><p>你可以在代码中使用以下 API，我还发现在 Chrome 控制台中也非常有用。<br><code>require.defined(moduleId)</code> - 返回 true 如果该模块已经被定义并且可用。<br><code>require.specified(moduleId)</code> - 返回 true 如果该模块被其他模块依赖。该函数返回 true 并不意味着该模块可用。<br><code>requirejs.s.contexts._.config</code> - 我从<a href="https://twitter.com/vernonk" target="_blank" rel="noopener">Vernon Kesner</a>那里学来的这招。这是一个技术上的后门，文档中没有说明的方法，所以它可能在没有任何警告的情况下被修改或者去除。但是它返回一个非常有用的包含配置信息的对象。<br>以下是在 Chrome 控制台中它返回结果：<br><img src="http://tpstatic.com/img/usermedia/_TBvB2AB50KM-TASuLKFsw/w645.png" alt="Chrome控制台中它返回结果"><br>以上就是我在 Devlink 用来演示<a href="https://developer.mozilla.org/en-US/docs/Web/API/Worker" target="_blank" rel="noopener">Web Worker</a>的一个<a href="https://github.com/ifandelse/gif-stitch" target="_blank" rel="noopener">生成 GIF 示例应用</a>中调用 requirejs.s.contexts._.config 返回的结果。你可以看到所有相关配置数据：根 URL，路径，shim 配置等。<br>当进行 Debug 时其他两个关键是<code>errbacks</code>和<code>requirejs.onError</code>方法。<br><code>RequireJS ‘errbacks’</code><br>当你调用<code>require</code>时，可以传入第三个参数-发生错误时的回调，允许你对错误做出反应，而不是产生一个未捕获的异常。比如：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="built_in">require</span>([<span class="string">'backbone'</span>], <span class="function"><span class="keyword">function</span>(<span class="params">Backbone</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> Backbone.View.extend(&#123;</span><br><span class="line">        <span class="comment">/* your magic here */</span></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;, <span class="function"><span class="keyword">function</span>(<span class="params">err</span>) </span>&#123;</span><br><span class="line">    <span class="comment">/* </span></span><br><span class="line"><span class="comment">      err has err.requireType (timeout, nodefine, scripterror)</span></span><br><span class="line"><span class="comment">      and err.requireModules (an array of module Ids/paths)</span></span><br><span class="line"><span class="comment">      Inside here you could requirejs.undef('backbone') to clear</span></span><br><span class="line"><span class="comment">      the module from require locally - and you could even redefine</span></span><br><span class="line"><span class="comment">      it here or fetch it from a different location (though the</span></span><br><span class="line"><span class="comment">      fallback approach earlier takes care of this use-case more succinctly)</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p><code>requirejs.onError</code><br>RequireJS 有一个全局的错误处理函数，它可以捕捉到所有未被<code>errbacks</code>处理的异常。代码如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">requirejs.onError = <span class="function"><span class="keyword">function</span>(<span class="params">err</span>) </span>&#123;</span><br><span class="line">    <span class="comment">/* </span></span><br><span class="line"><span class="comment">    err has the same info as the errback callback:</span></span><br><span class="line"><span class="comment">    err.requireType &amp; err.requireModules</span></span><br><span class="line"><span class="comment">  */</span></span><br><span class="line">    <span class="built_in">console</span>.log(err.requireType);</span><br><span class="line">    <span class="comment">// Be sure to rethrow if you don't want to</span></span><br><span class="line">    <span class="comment">// blindly swallow exceptions here!!!</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>无论你是刚接触 RequireJS 或者已有很多经验的用户，就像我前面提到的，我将会在另一篇文章中介绍<code>r.js</code>，敬请期待。你是否发现了其他有用的关于 RequireJS 使用的技巧，方法和 API，期待你的交流。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2013/09/11/Software-Product-Quality-Cannot-be-rely-on-Test/" rel="next" title="软件产品质量不能依靠测试来保证">
+                <i class="fa fa-chevron-left"></i> 软件产品质量不能依靠测试来保证
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2013/09/16/Why-the-User-Need-this-Feature/" rel="prev" title="透过用户的要求理解用户的关切">
+                透过用户的要求理解用户的关切 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+    
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">李长伟</p>
+              <p class="site-description motion-element" itemprop="description">李长伟的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-知道定义模块的几种方式"><span class="nav-number">1.</span> <span class="nav-text">1. 知道定义模块的几种方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-怎么配合非-AMD-库一起工作"><span class="nav-number">2.</span> <span class="nav-text">2. 怎么配合非 AMD 库一起工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-CND-Fallbacks"><span class="nav-number">3.</span> <span class="nav-text">3. CND Fallbacks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-插件"><span class="nav-number">4.</span> <span class="nav-text">4. 插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-故障检修小技巧"><span class="nav-number">5.</span> <span class="nav-text">5. 故障检修小技巧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李长伟</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v6.6.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.js"></script>
+
+  
+  
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.css">
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+   <script>
+        var gitalk = new Gitalk({
+          clientID: '621ce74dae06b19c2e65',
+          clientSecret: '7f314e6e41cd4753fbd21a92c6813e5d353f9c8b',
+          repo: 'lichangwei.github.io',
+          owner: 'lichangwei',
+          admin: ['lichangwei'],
+          id: md5(location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

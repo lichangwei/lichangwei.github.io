@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="简介使用过 Canvas 元素的人都知道 Canvas 很难调试。使用 Canvas 通常要调用一长串难以跟踪的 API。 function draw() &amp;#123;    context.clearRect(0, 0, 258, 258);    context.fillStyle = &apos;#EEEEEE&apos;;    context.beginPath();    context.arc(129,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【翻译】使用 Chrome 开发者工具调试 Canvas">
+<meta property="og:url" content="http://lichangwei.github.io/2013/09/20/Canvas-Inspection-using-Chrome-DevTools/index.html">
+<meta property="og:site_name" content="飞鹰走码">
+<meta property="og:description" content="简介使用过 Canvas 元素的人都知道 Canvas 很难调试。使用 Canvas 通常要调用一长串难以跟踪的 API。 function draw() &amp;#123;    context.clearRect(0, 0, 258, 258);    context.fillStyle = &apos;#EEEEEE&apos;;    context.beginPath();    context.arc(129,">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.html5rocks.com/static/demos/canvas-inspection/images/enable-canvas-inspection.png">
+<meta property="og:image" content="http://www.html5rocks.com/static/demos/canvas-inspection/images/experiments.png">
+<meta property="og:image" content="http://www.html5rocks.com/static/demos/canvas-inspection/images/canvas-profiler.png">
+<meta property="og:image" content="http://www.html5rocks.com/static/demos/canvas-inspection/images/frames.png">
+<meta property="og:image" content="http://www.html5rocks.com/static/demos/canvas-inspection/images/profile.png">
+<meta property="og:image" content="http://www.html5rocks.com/static/demos/canvas-inspection/images/expanded-menu.png">
+<meta property="og:image" content="http://www.html5rocks.com/static/demos/canvas-inspection/images/replaytime.png">
+<meta property="og:image" content="http://www.html5rocks.com/static/demos/canvas-inspection/images/sidebar.png">
+<meta property="og:image" content="http://www.html5rocks.com/static/demos/canvas-inspection/images/diff.gif">
+<meta property="og:updated_time" content="2018-12-07T02:57:47.766Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【翻译】使用 Chrome 开发者工具调试 Canvas">
+<meta name="twitter:description" content="简介使用过 Canvas 元素的人都知道 Canvas 很难调试。使用 Canvas 通常要调用一长串难以跟踪的 API。 function draw() &amp;#123;    context.clearRect(0, 0, 258, 258);    context.fillStyle = &apos;#EEEEEE&apos;;    context.beginPath();    context.arc(129,">
+<meta name="twitter:image" content="http://www.html5rocks.com/static/demos/canvas-inspection/images/enable-canvas-inspection.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://lichangwei.github.io/2013/09/20/Canvas-Inspection-using-Chrome-DevTools/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>【翻译】使用 Chrome 开发者工具调试 Canvas | 飞鹰走码</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion .logo-line-before i { left: initial; }
+    .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">飞鹰走码</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">飞鹰走码</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
+</form>
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'jKpsnJjixMaVpfnXVc3L','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lichangwei.github.io/2013/09/20/Canvas-Inspection-using-Chrome-DevTools/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李长伟">
+      <meta itemprop="description" content="李长伟的博客">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="飞鹰走码">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">【翻译】使用 Chrome 开发者工具调试 Canvas
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2013-09-20 00:00:00" itemprop="dateCreated datePublished" datetime="2013-09-20T00:00:00+08:00">2013-09-20</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-07 10:57:47" itemprop="dateModified" datetime="2018-12-07T10:57:47+08:00">2018-12-07</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>使用过 Canvas 元素的人都知道 Canvas 很难调试。使用 Canvas 通常要调用一长串难以跟踪的 API。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">draw</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    context.clearRect(<span class="number">0</span>, <span class="number">0</span>, <span class="number">258</span>, <span class="number">258</span>);</span><br><span class="line">    context.fillStyle = <span class="string">'#EEEEEE'</span>;</span><br><span class="line">    context.beginPath();</span><br><span class="line">    context.arc(<span class="number">129</span>, <span class="number">129</span>, <span class="number">127</span>, <span class="number">0</span>, <span class="number">6.28</span>, <span class="literal">true</span>);</span><br><span class="line">    context.closePath();</span><br><span class="line">    context.fill();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有时候你希望记录发送给 Canvas 上下文的指令，并且逐条执行指令。幸运的是在 Chrome 开发者工具里有一个新的 Canvas 审查特性可以帮你做到这一点。</p>
+<p>在这篇文章里，我会给你演示怎样使用这个特性来调试你的 Canvas 行为。它支持 2D 和 WebGL 上下文，所以无论你在使用哪个，都可以使用它直接获取调试信息。</p>
+<h2 id="准备开始"><a href="#准备开始" class="headerlink" title="准备开始"></a>准备开始</h2><p>在 Chrome 地址栏打开<code>about:flags</code>页面，并选中“启用开发者工具实验”（英文：Enable Developer Tools experiments，以上是 Chrome 中文版翻译）。<br><img src="http://www.html5rocks.com/static/demos/canvas-inspection/images/enable-canvas-inspection.png" alt="Figure 1 - Enabling Developer Tools Experiments in about:flags"></p>
+<p>接下来，打开开发者工具并点击右下角的齿轮图标，在新打开配置页面中可以找到<strong>实验（Experiments）</strong>一栏，然后在该栏中启用<strong>Canvas inspection（Canvas 审查）</strong>。<br><img src="http://www.html5rocks.com/static/demos/canvas-inspection/images/experiments.png" alt="Figure 2 - Enabling Canvas inspection in DevTools’ experiments"></p>
+<p>为了让这些修改生效，你必须关闭然后再打开开发者工具。当开发者工具再次打开时，找到 Profiles 一栏，你可以看到 Canvas Profile 选项，它是禁用状态，如果某个页面有你想要调试的 Canvas，你可以按下 Enable 按钮然后页面会重新载入，准备记录 Canvas 调用。<br><img src="http://www.html5rocks.com/static/demos/canvas-inspection/images/canvas-profiler.png" alt="Figure 3 - Switching on the Canvas Profiler"></p>
+<p>然后你需要决定你是记录单帧（Single Frame），还是看起来很像开发者工具中时间轴的连续多帧（Consecutive Frames）。</p>
+<p>||一帧表示页面中的一次事件循环，涉及到执行 JavaScript 代码，事件处理，更新 DOM，修改样式，布局和重绘。为了让动画更加平滑，你要让每帧耗时小于 1/60 秒，即 16.6 毫秒。</p>
+<p>单帧仅仅记录本帧结束前所有的 API 调用，多帧则记录你手动停止之前的所有 API 调用。选择哪一种取决于你如何使用 canvas 元素。对于一个持续的动画，选择单帧更好，而那些用于响应用户事件的短暂动画，就应该使用多帧。</p>
+<p><img src="http://www.html5rocks.com/static/demos/canvas-inspection/images/frames.png" alt="Figure 4 - Choosing how many frames to capture"></p>
+<p>这样我们就做完了所有的准备工作可以记录帧了。</p>
+<h2 id="记录帧"><a href="#记录帧" class="headerlink" title="记录帧"></a>记录帧</h2><p>按下 Start 按钮，像平常一样与应用交互，你可以看到它已经在记录了。如果你要记录多帧，那你还需要回到开发者工具按下 Stop 按钮来结束记录。</p>
+<p>现在你可以看到左侧有一个 profile 列表中有了一个新的 profile，里面记录了所有 canvas 元素上下文的调用。点击 profile 就可以看到如下界面：</p>
+<p><img src="http://www.html5rocks.com/static/demos/canvas-inspection/images/profile.png" alt="Figure 5 - A canvas profile in DevTools"></p>
+<p>你可以看到一组已经记录下来的帧，并且一步一步地浏览它们。一旦你点击了其中一个，你就可以看到该帧结束时 Canvas 的屏幕截图。如果有多个 Canvas 元素，你可以通过屏幕截图下面的菜单选择显示哪个 Canvas。</p>
+<p><img src="http://www.html5rocks.com/static/demos/canvas-inspection/images/expanded-menu.png" alt="Figure 6 - Choosing your canvas context"></p>
+<p>在帧里你可以看到多个绘画调用组（Draw Call Group），每个绘画调用组包含一个绘画调用，并且是该组的最后一个调用。那什么是绘画调用呢？对于一个 2D 上下文来讲，它包括 clearRect(), drawImage(), fill(), stroke(), putImageData()和其他文字渲染方法；对于一个 WebGL 上下文来讲，它包括 clear(), drawArrays()和 drawElements()。本质上讲，任何会修改当前绘画缓存内容的调用都是绘画调用（如果你不熟悉图形编程，你可以认为缓存就是一个我们正在操作的像素位图）。</p>
+<p>你可以在帧，绘画调用组和调用这三个级别依次查看该列表。无论哪一种，你都可以看到那时的上下文，这意味着你可以迅速发现和修正 Bug。</p>
+<p><img src="http://www.html5rocks.com/static/demos/canvas-inspection/images/replaytime.png" alt="Figure 7 - navigation buttons for convenient list hopping"></p>
+<h2 id="找出属性变化"><a href="#找出属性变化" class="headerlink" title="找出属性变化"></a>找出属性变化</h2><p>另一个有用特性就是可以找出两次调用之间属性和变量发生了什么变化。</p>
+<p>（译者注：在 Chrome29 上没有找到该按钮，但是 canary Chrome31 上可以找到）点击右侧按钮<img src="http://www.html5rocks.com/static/demos/canvas-inspection/images/sidebar.png" alt="">会打开一个新的面板，随着一步一步地查看 API 调用，你可以看到属性的变化，当鼠标放在任何 Buffer 和数组上时，你可以看到他们的内容。</p>
+<p><img src="http://www.html5rocks.com/static/demos/canvas-inspection/images/diff.gif" alt=""></p>
+<h2 id="注意了！"><a href="#注意了！" class="headerlink" title="注意了！"></a>注意了！</h2><p>现在你已经知道了怎样在 Chrome 开发者工具中调试 Canvas。如果你对这个工具有任何回馈，请<a href="http://crbug.com/new" target="_blank" rel="noopener">提交一个 bug</a>或者写信给<a href="https://groups.google.com/forum/#!forum/google-chrome-developer-tools" target="_blank" rel="noopener">Chrome 开发者工具工作组</a>，告诉我们，你发现了 bug 或者在调试过程中你想看到哪些信息，因为只有开发者的回馈才能让它更好。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2013/09/17/innertext-vs-textcontent/" rel="next" title="innerText vs textContent">
+                <i class="fa fa-chevron-left"></i> innerText vs textContent
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2013/09/23/Browser-Cache/" rel="prev" title="浏览器缓存模型">
+                浏览器缓存模型 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+    
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">李长伟</p>
+              <p class="site-description motion-element" itemprop="description">李长伟的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#准备开始"><span class="nav-number">2.</span> <span class="nav-text">准备开始</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#记录帧"><span class="nav-number">3.</span> <span class="nav-text">记录帧</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#找出属性变化"><span class="nav-number">4.</span> <span class="nav-text">找出属性变化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注意了！"><span class="nav-number">5.</span> <span class="nav-text">注意了！</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李长伟</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v6.6.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.js"></script>
+
+  
+  
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.css">
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+   <script>
+        var gitalk = new Gitalk({
+          clientID: '621ce74dae06b19c2e65',
+          clientSecret: '7f314e6e41cd4753fbd21a92c6813e5d353f9c8b',
+          repo: 'lichangwei.github.io',
+          owner: 'lichangwei',
+          admin: ['lichangwei'],
+          id: md5(location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

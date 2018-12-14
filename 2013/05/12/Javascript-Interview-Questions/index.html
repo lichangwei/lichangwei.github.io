@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="####什么是闭包？举个例子？闭包是指一个函数可以访问其生成时各级（非顶级）作用域中局部变量的能力。  var lis = document.querySelector(&apos;#list li&apos;);for (var i = 0; i &amp;lt; li.length; i++) &amp;#123;    li.addEventListener(        &apos;click&apos;,        (function">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JavaScript 面试题">
+<meta property="og:url" content="http://lichangwei.github.io/2013/05/12/Javascript-Interview-Questions/index.html">
+<meta property="og:site_name" content="飞鹰走码">
+<meta property="og:description" content="####什么是闭包？举个例子？闭包是指一个函数可以访问其生成时各级（非顶级）作用域中局部变量的能力。  var lis = document.querySelector(&apos;#list li&apos;);for (var i = 0; i &amp;lt; li.length; i++) &amp;#123;    li.addEventListener(        &apos;click&apos;,        (function">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-09T14:33:40.320Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JavaScript 面试题">
+<meta name="twitter:description" content="####什么是闭包？举个例子？闭包是指一个函数可以访问其生成时各级（非顶级）作用域中局部变量的能力。  var lis = document.querySelector(&apos;#list li&apos;);for (var i = 0; i &amp;lt; li.length; i++) &amp;#123;    li.addEventListener(        &apos;click&apos;,        (function">
+
+
+
+
+
+
+  <link rel="canonical" href="http://lichangwei.github.io/2013/05/12/Javascript-Interview-Questions/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>JavaScript 面试题 | 飞鹰走码</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion .logo-line-before i { left: initial; }
+    .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">飞鹰走码</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">飞鹰走码</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
+</form>
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'jKpsnJjixMaVpfnXVc3L','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lichangwei.github.io/2013/05/12/Javascript-Interview-Questions/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李长伟">
+      <meta itemprop="description" content="李长伟的博客">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="飞鹰走码">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">JavaScript 面试题
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2013-05-12 00:00:00" itemprop="dateCreated datePublished" datetime="2013-05-12T00:00:00+08:00">2013-05-12</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-09 22:33:40" itemprop="dateModified" datetime="2018-12-09T22:33:40+08:00">2018-12-09</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ol>
+<li>####什么是闭包？举个例子？<br>闭包是指一个函数可以访问其生成时各级（非顶级）作用域中局部变量的能力。</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> lis = <span class="built_in">document</span>.querySelector(<span class="string">'#list li'</span>);</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; li.length; i++) &#123;</span><br><span class="line">    li.addEventListener(</span><br><span class="line">        <span class="string">'click'</span>,</span><br><span class="line">        (<span class="function"><span class="keyword">function</span>(<span class="params">index</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">                <span class="built_in">console</span>.log(lis[index].getAttribute(<span class="string">'name'</span>));</span><br><span class="line">            &#125;;</span><br><span class="line">        &#125;)(i),</span><br><span class="line">        <span class="literal">false</span></span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在以上例子中，点击每个 li 时就会打印出该 li 的 name 属性。绑定在 click 事件上的匿名函数可以访问局部变量 index，就是利用了闭包原理。</p>
+<ol>
+<li><p>####请解释一下 JavaScript 的同源策略。<br>同源是指相同的协议、域名、端口。<br>最早用来阻止一个源下面的 js 去获取或者修改另一个源下面的文档属性，比如 iframe 加载另一个源下的页面。<br>后来也被用于 AJAX 请求，是指一个源只能同一个源的服务器发起 AJAX 请求。</p>
+</li>
+<li><p>####请解释 AJAX 的工作原理，以及其优缺点。<br>传统的 Web 应用允许用户向服务器提交 Form 表单，服务器处理之后返回一个新的页面。这种做法既浪费带宽，因为前后两个页面很多相同之处，也增加了响应时间，增加了白屏时间，降低了用户体验。后来的 iframe 技术可以局部刷新页面，当时仍然没有根本改变以上状况，此时 AJAX 技术应运而生。<br>AJAX 全称是 Asynchronous Javascript and XML，异步的 Javascript 和 XML 技术。AJAX 技术允许应用只向服务器请求必须的数据，并使用 Javascript 处理和渲染。节省带宽，提高了响应时间，基本不会白屏，提高了用户体验。<br>其缺点也很明显，（1）破坏了浏览器的后退功能，最常用的解决办法是使用 URL 片段标识符（锚点，URL 中#后面的部分）来保持跟踪，允许用户回到指定的某个应用程序状态。或者使用现代浏览器都基本支持的 HTML5 规范中的 History API。</p>
+</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/lichangwei/client-utils/blob/master/ajax.js</span></span><br><span class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">xhr.open(<span class="string">'get'</span>, <span class="string">'/url'</span>);</span><br><span class="line">xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (xhr.state === <span class="number">4</span>) &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(xhr.responseText);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">xhr.send(<span class="literal">null</span>);</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>####请解释 JSONP 的工作原理，以及它为什么不是真正的 AJAX。<br>（1）客户端生成一个全局函数，比如 jsonp_callback。<br>（2）创建一个 script 标签访问某个资源，并加上参数?jsonp=jsonp_callback.<br>（3）服务器返回资源数据，格式为 jsonp_callback(资源数据)。<br>（4）浏览器解析服务器返回数据，即调用 jsonp_callback 函数，参数为资源数据。<br>JSONP 并不使用 XMLHttpRequest 对象加载资源，而是通过 script 标签把资源当做普通的 javascript 脚本来加载，所以不存在跨域问题，也不是真正的 AJAX。</p>
+</li>
+<li><p>####你如何获取浏览器 URL 中查询字符串中的参数。</p>
+</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Using RegExp</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getQueryParam</span>(<span class="params">key</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> search = <span class="built_in">window</span>.location.search;</span><br><span class="line">    <span class="keyword">if</span> (!key || !search) <span class="keyword">return</span>;</span><br><span class="line">    key = key.replace(<span class="regexp">/\./g</span>, <span class="string">'\\.'</span>);</span><br><span class="line">    <span class="keyword">var</span> match = search.match(<span class="keyword">new</span> <span class="built_in">RegExp</span>(<span class="string">'[?&amp;]'</span> + key + <span class="string">'=([^&amp;]*)'</span>));</span><br><span class="line">    <span class="keyword">if</span> (match) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">decodeURIComponent</span>(match[<span class="number">1</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// Using String.split</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getQueryParam</span>(<span class="params">key</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> search = <span class="built_in">window</span>.location.search;</span><br><span class="line">    <span class="keyword">if</span> (!key || !search) <span class="keyword">return</span>;</span><br><span class="line">    <span class="keyword">var</span> array = search.substr(<span class="number">1</span>).split(<span class="regexp">/[\?&amp;=]/</span>);</span><br><span class="line">    <span class="keyword">var</span> index = array.indexOf(key);</span><br><span class="line">    <span class="keyword">if</span> (index !== <span class="number">-1</span> &amp;&amp; index % <span class="number">2</span> === <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">decodeURIComponent</span>(array[index + <span class="number">1</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">getQueryParam(<span class="string">'order'</span>);</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>####请解释一下事件代理。<br>将事件绑定目标元素的父元素上。在父元素的相应事件中判断 event.target 或其各级父元素是不是目标元素（一般通过 css 选择器判断），如果是，则在执行相应函数。<br>事件代理的基础是事件冒泡机制。对于部分不支持冒泡的事件时无法使用事件代理的。但是捕获阶段应该也是可以做到事件代理的，参考<a href="./2013-06-06-Events-in-Capture-Phase.md">通过 body 的 error 事件捕获页面中所有图片的 error 事件</a><br>使用场景：在绑定事件时，相应元素还没有生成，或者这类元素经常被替换掉，再或者元素个数太多，如果每个都分别绑定，太麻烦并且浪费内存。</p>
+</li>
+<li><p>####描述一种 JavaScript memoization (避免重复运算)的策略。</p>
+</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// https://github.com/lichangwei/client-utils/blob/master/memorize.js</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">  JavaScript Momorization</span></span><br><span class="line"><span class="comment">  @param &#123;string&#125; func name of function / method</span></span><br><span class="line"><span class="comment">  @param &#123;object&#125; [obj] method's object or scope correction object</span></span><br><span class="line"><span class="comment">  @param &#123;function&#125; serialize method for arguments to get the hash value.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">memorize</span>(<span class="params">func, thisObject, serialize</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> cache = &#123;&#125;;</span><br><span class="line">    thisObject = thisObject || <span class="literal">null</span>;</span><br><span class="line">    serialize =</span><br><span class="line">        serialize ||</span><br><span class="line">        <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">Array</span>.prototype.join.call(<span class="built_in">arguments</span>, <span class="string">'_'</span>);</span><br><span class="line">        &#125;;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> hash = serialize.apply(<span class="literal">null</span>, <span class="built_in">arguments</span>);</span><br><span class="line">        <span class="keyword">if</span> (!cache[hash]) &#123;</span><br><span class="line">            cache[hash] = func.apply(thisObject, <span class="built_in">arguments</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> cache[hash];</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>####什么是”use strict”？使用它的好处和坏处分别是什么？<br>在严格模式下，以下使用方法收到影响。<br>（1）去除 with 关键字。<br>（2）非顶级作用域中，不使用 var 声明变量就会报错，防止误升级为全局变量。<br>（3）对于只读属性的修改报错，而不是静默失败。<br>（4）函数形参重名或者对象定义属性重名报错。<br>（5）函数中 this 不再默认指向全局对象 window。<br>（6）更加安全的 eval. eval 中声明的变量和函数都不会影响当前作用域。<br>（7）arguments.callee 和 arguments.caller 都不在可以使用。<br>从上面列举的严格模式下的部分特性可以看出，严格模式减少出错的机会，但是也限制 JavaScrip 语言的灵活性。</p>
+</li>
+<li><p>####解释内存泄露并说明什么时候会出现内存泄露。<br>内存泄露是指一块内存不会被释放，也不会被使用，直到浏览器进程结束。浏览器中采用垃圾自动回收机制，但是由于其实现的问题，可能会造成内存泄露。造成内存泄露大多是对象循环引用：</p>
+</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">bindClickEvent</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> elem = <span class="built_in">document</span>.getElementById(<span class="string">'id'</span>);</span><br><span class="line">    elem.onclick = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// do any thing</span></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上函数的每次执行都会造成匿名函数和 elem 的循环引用。elem 显式引用匿名函数，匿名函数通过作用域链隐式引用 elem 元素。可以通过两种方法解决该问题，一是将 elem 设置为 null，二是将匿名函数置于 bindClickEvent 函数外面。两者都通过取消匿名函数对 elem 的隐式引用来解决该问题。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2013/05/10/Webkit-Image-Wipes/" rel="next" title="【翻译】Webkit图片擦拭效果">
+                <i class="fa fa-chevron-left"></i> 【翻译】Webkit图片擦拭效果
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2013/05/13/Unskilled-Interview-Questions/" rel="prev" title="非技术类面试题">
+                非技术类面试题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+    
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">李长伟</p>
+              <p class="site-description motion-element" itemprop="description">李长伟的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李长伟</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v6.6.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.js"></script>
+
+  
+  
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.css">
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+   <script>
+        var gitalk = new Gitalk({
+          clientID: '621ce74dae06b19c2e65',
+          clientSecret: '7f314e6e41cd4753fbd21a92c6813e5d353f9c8b',
+          repo: 'lichangwei.github.io',
+          owner: 'lichangwei',
+          admin: ['lichangwei'],
+          id: md5(location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

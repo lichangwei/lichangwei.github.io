@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="背景介绍该项目是一个运行于蓝光机内置浏览器 Opera 之上的单页面 WebApp，输入关键字，跨服务（视频，音频，Youtube 等）查询媒体内容。由于所有操作都是通过遥控器完成，所以通常可以使用的操作基本只有按键：上下左右以及返回键，确定键。为了显示不确定数量的媒体项，采用了通过向下/向上键来控制显示更后面/更前面的记录。使用的框架包括，使用requirejs动态加载脚本，使用jQuery操作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="蓝光机WebApp-无尽列表优化">
+<meta property="og:url" content="http://lichangwei.github.io/2013/04/07/Blue-ray-Web-App-Endless-List-Optimization/index.html">
+<meta property="og:site_name" content="飞鹰走码">
+<meta property="og:description" content="背景介绍该项目是一个运行于蓝光机内置浏览器 Opera 之上的单页面 WebApp，输入关键字，跨服务（视频，音频，Youtube 等）查询媒体内容。由于所有操作都是通过遥控器完成，所以通常可以使用的操作基本只有按键：上下左右以及返回键，确定键。为了显示不确定数量的媒体项，采用了通过向下/向上键来控制显示更后面/更前面的记录。使用的框架包括，使用requirejs动态加载脚本，使用jQuery操作">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-07T03:05:03.970Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="蓝光机WebApp-无尽列表优化">
+<meta name="twitter:description" content="背景介绍该项目是一个运行于蓝光机内置浏览器 Opera 之上的单页面 WebApp，输入关键字，跨服务（视频，音频，Youtube 等）查询媒体内容。由于所有操作都是通过遥控器完成，所以通常可以使用的操作基本只有按键：上下左右以及返回键，确定键。为了显示不确定数量的媒体项，采用了通过向下/向上键来控制显示更后面/更前面的记录。使用的框架包括，使用requirejs动态加载脚本，使用jQuery操作">
+
+
+
+
+
+
+  <link rel="canonical" href="http://lichangwei.github.io/2013/04/07/Blue-ray-Web-App-Endless-List-Optimization/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>蓝光机WebApp-无尽列表优化 | 飞鹰走码</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion .logo-line-before i { left: initial; }
+    .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">飞鹰走码</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">飞鹰走码</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
+</form>
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'jKpsnJjixMaVpfnXVc3L','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lichangwei.github.io/2013/04/07/Blue-ray-Web-App-Endless-List-Optimization/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李长伟">
+      <meta itemprop="description" content="李长伟的博客">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="飞鹰走码">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">蓝光机WebApp-无尽列表优化
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2013-04-07 00:00:00" itemprop="dateCreated datePublished" datetime="2013-04-07T00:00:00+08:00">2013-04-07</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-07 11:05:03" itemprop="dateModified" datetime="2018-12-07T11:05:03+08:00">2018-12-07</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>该项目是一个运行于蓝光机内置浏览器 Opera 之上的单页面 WebApp，输入关键字，跨服务（视频，音频，Youtube 等）查询媒体内容。由于所有操作都是通过遥控器完成，所以通常可以使用的操作基本只有按键：上下左右以及返回键，确定键。为了显示不确定数量的媒体项，采用了通过向下/向上键来控制显示更后面/更前面的记录。<br>使用的框架包括，使用<a href="http://requirejs.org/" target="_blank" rel="noopener">requirejs</a>动态加载脚本，使用<a href="http://jquery.com/" target="_blank" rel="noopener">jQuery</a>操作 DOM，使用<a href="http://olado.github.io/doT/" target="_blank" rel="noopener">doT</a>作为模板引擎。</p>
+<h2 id="优化历程"><a href="#优化历程" class="headerlink" title="优化历程"></a>优化历程</h2><p>分析一：根据一般的 WebApp 开发经验知道，不可能在一个页面中显示所有的媒体项。有必要分页显示。但是每页显示多少呢？通过对蓝光机的实机测试，每页显示 30 个项目，另外根据 UI 设计每屏最多显示 12 条。</p>
+<p><strong>方案一</strong>：首先显示第一个 30 条（0-29），随着用户按下向下键，当要显示第 30 条记录的时候，使用<code>$container.html($(str))</code>显示第 18-47 条，当需要显示第 48 条的时候，使用<code>$container.html($(str))</code>显示第 36-65 条……依次类推下去<br>现象一：桌面浏览器没有问题，但在蓝光机中会出现闪烁，即在某个时刻页面中没有任何内容。所有的蓝光机概率为<strong>~95%</strong></p>
+<p>分析二：这种现象的原因很简单，<code>$container.html($(str))</code>确实做了一个清空容器的操作，如果性能较差，会出现闪烁现象。</p>
+<p><strong>方案二</strong>：显示新纪录时，当前显示在页面中 12 条记录保持不变，使用<code>$container.find(&#39;:lt(18)&#39;).remove()</code>去掉前面 18 条记录，再使用<code>$container.append($(str))</code>添加后面的 18 条记录。</p>
+<p>现象二：桌面浏览器没有问题，但在性能较好的蓝光机中出现闪烁的概率为 <strong>~20%</strong>，在较差的蓝光机中概率为 <strong>~50%</strong></p>
+<p>分析三：以上仍然使用 jQuery 封装的 find，remove 以及 append 方法，这些方法的实现还是相当复杂，做了太多无用的工作。<br><strong>方案三</strong>：使用原生的 DOM 操作方法<code>document.createDocumentFragment()</code>创建一个文档片段，批量添加记录。<br>现象三：桌面浏览器没有问题，但在性能较好的蓝光机中出现闪烁的概率为 <strong>~1%</strong>，在较差的蓝光机中概率为 <strong>~15%</strong></p>
+<p>分析四：仍然使用了<code>$container.find(&#39;:lt(18)&#39;).remove()</code>去掉前面 18 条记录，这里<code>remove</code>方法可以导致$container这部分内容18次的重排重绘。 这是因为并没有找到和<code>document.createDocumentFragment</code>相似的可以批量删除DOM节点的方法。 在桌面浏览器，移动浏览器常用的方法，比如首先将$container 从 DOM 树中删除，执行一系列的删除操作之后再添加到 DOM 树中，都会导致更频繁的闪烁现象。<br>在即将放弃该项优化的时候，脑子里突然冒出了一个从来没有使用过的方法。既不清楚能够解决该问题，也不知道如何使用该方法，只知道这个方法通常用在富文本编辑器中，好像可以批量操作元素。</p>
+<p><strong>方案四</strong>：使用<code>document.createRange</code>批量删除元素。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">removeChildren</span>(<span class="params">parent, start, end</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> range = <span class="built_in">document</span>.createRange();</span><br><span class="line">    <span class="keyword">var</span> children = parent.children;</span><br><span class="line">    range.setStartBefore(children[start]);</span><br><span class="line">    range.setEndAfter(children[end]);</span><br><span class="line">    children = <span class="literal">null</span>;</span><br><span class="line">    range.deleteContents();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>现象四：桌面浏览器以及所有的蓝光机中均没有闪烁现象。</p>
+<p>最后又发现<code>elem.insertAdjacentHTML</code>的执行效率在蓝光机上优于<code>document.createDocumentFragment</code>，基本上前者耗时是后者的 <strong>50%</strong>，但是不解的是在 Chrome26/Windows7 上前者耗时略高于后者。由于目标设备是蓝光机，所以这次优化成功，可以使用<code>elem.insertAdjacentHTML</code>。<br><code>elem.insertAdjacentHTML</code>第一个参数是字符串，表示插入位置，共有四个可选值，如下表说明（来源：Javascript 权威指南，P379）。第二参数也是字符串，表示要插入的 HTML 字符串。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;div id=&quot;target&quot;&gt;This is the element content&lt;/div&gt;</span><br><span class="line">↑                ↑                          ↑    ↑</span><br><span class="line">beforebegin      afterbegin                 beforeend afterend</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2013/04/11/CSS-animations-off-the-UI-thread/" rel="prev" title="脱离 UI 线程的 CSS3 动画">
+                脱离 UI 线程的 CSS3 动画 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+    
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">李长伟</p>
+              <p class="site-description motion-element" itemprop="description">李长伟的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景介绍"><span class="nav-number">1.</span> <span class="nav-text">背景介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#优化历程"><span class="nav-number">2.</span> <span class="nav-text">优化历程</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李长伟</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v6.6.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.js"></script>
+
+  
+  
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.css">
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+   <script>
+        var gitalk = new Gitalk({
+          clientID: '621ce74dae06b19c2e65',
+          clientSecret: '7f314e6e41cd4753fbd21a92c6813e5d353f9c8b',
+          repo: 'lichangwei.github.io',
+          owner: 'lichangwei',
+          admin: ['lichangwei'],
+          id: md5(location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="相信很多人都看到过网上流传的各种面试题解析，其中一个便是JavaScript的连续赋值。首先要申明的是，这种题目不应该作为普通前端岗位的面试题目存在，也更不应该编写这样的代码。 网上有很多文章都在解析这到题目，题目基本一样，我在下面贴出了最常见的一个。 var a = &amp;#123; n: 1 &amp;#125;;var b = a;a.x = a = &amp;#123; n: 2 &amp;#125;;console">
+<meta property="og:type" content="article">
+<meta property="og:title" content="通过`Proxy`揭秘`JavaScript`的连续赋值">
+<meta property="og:url" content="http://lichangwei.github.io/2018/12/12/continuous-assignment/index.html">
+<meta property="og:site_name" content="飞鹰走码">
+<meta property="og:description" content="相信很多人都看到过网上流传的各种面试题解析，其中一个便是JavaScript的连续赋值。首先要申明的是，这种题目不应该作为普通前端岗位的面试题目存在，也更不应该编写这样的代码。 网上有很多文章都在解析这到题目，题目基本一样，我在下面贴出了最常见的一个。 var a = &amp;#123; n: 1 &amp;#125;;var b = a;a.x = a = &amp;#123; n: 2 &amp;#125;;console">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-14T08:48:19.182Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="通过`Proxy`揭秘`JavaScript`的连续赋值">
+<meta name="twitter:description" content="相信很多人都看到过网上流传的各种面试题解析，其中一个便是JavaScript的连续赋值。首先要申明的是，这种题目不应该作为普通前端岗位的面试题目存在，也更不应该编写这样的代码。 网上有很多文章都在解析这到题目，题目基本一样，我在下面贴出了最常见的一个。 var a = &amp;#123; n: 1 &amp;#125;;var b = a;a.x = a = &amp;#123; n: 2 &amp;#125;;console">
+
+
+
+
+
+
+  <link rel="canonical" href="http://lichangwei.github.io/2018/12/12/continuous-assignment/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>通过`Proxy`揭秘`JavaScript`的连续赋值 | 飞鹰走码</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion .logo-line-before i { left: initial; }
+    .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">飞鹰走码</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">飞鹰走码</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
+</form>
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'jKpsnJjixMaVpfnXVc3L','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lichangwei.github.io/2018/12/12/continuous-assignment/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李长伟">
+      <meta itemprop="description" content="李长伟的博客">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="飞鹰走码">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">通过`Proxy`揭秘`JavaScript`的连续赋值
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2018-12-12 00:00:00" itemprop="dateCreated datePublished" datetime="2018-12-12T00:00:00+08:00">2018-12-12</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-14 16:48:19" itemprop="dateModified" datetime="2018-12-14T16:48:19+08:00">2018-12-14</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>相信很多人都看到过网上流传的各种面试题解析，其中一个便是<code>JavaScript</code>的连续赋值。首先要申明的是，这种题目不应该作为普通前端岗位的面试题目存在，也更不应该编写这样的代码。</p>
+<p>网上有很多文章都在解析这到题目，题目基本一样，我在下面贴出了最常见的一个。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = &#123; <span class="attr">n</span>: <span class="number">1</span> &#125;;</span><br><span class="line"><span class="keyword">var</span> b = a;</span><br><span class="line">a.x = a = &#123; <span class="attr">n</span>: <span class="number">2</span> &#125;;</span><br><span class="line"><span class="built_in">console</span>.log(a.x);</span><br><span class="line"><span class="built_in">console</span>.log(b.x);</span><br></pre></td></tr></table></figure>
+<p>答案可能很难回答，但是要想知道答案却很简单，只要在控制台执行一下即可：<code>undefined</code>, <code>{n:2}</code>. 对于这个答案网上有很多推测，但是好像统统错误。我也曾对这个答案做过各种推断，尝试解释这个答案，尝试自圆其说。但是很快我意识到这样做是错误的，我们应该阅读<code>ECMAScript</code>规范，应该阅读<code>V8</code>引擎的源码。规范难读，源码难看，还能怎么做呢？好了，下面我通过<code>Proxy</code>来揭露连续赋值的过程。首先我们改造一下代码，将<code>a</code>改成一个代理对象，这样对<code>a</code>的修改将一目了然。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 初始化代码</span></span><br><span class="line"><span class="keyword">var</span> a = <span class="keyword">new</span> <span class="built_in">Proxy</span>(</span><br><span class="line">    &#123; <span class="attr">n</span>: <span class="number">1</span> &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        get: <span class="function"><span class="keyword">function</span>(<span class="params">target, prop</span>) </span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'get'</span>, prop, target[prop]);</span><br><span class="line">            <span class="keyword">return</span> target[prop];</span><br><span class="line">        &#125;,</span><br><span class="line">        set: <span class="function"><span class="keyword">function</span>(<span class="params">target, prop, value</span>) </span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'set'</span>, prop, value);</span><br><span class="line">            target[prop] = value;</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br><span class="line"><span class="keyword">var</span> b = a;</span><br></pre></td></tr></table></figure>
+<p>现在我们执行一下代码</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">a.x = a.y = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+<p>控制台打印如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">set y 1</span><br><span class="line">set x 1</span><br></pre></td></tr></table></figure>
+<p>由此可以验证，如我们以前所被告知的那样的，连续赋值操作是从右往左执行的。我们再来执行代码</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 为了消除前一步代码执行的影响，请在这里添加上面的初始化代码</span></span><br><span class="line">a.x.y = a.y.x = <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+<p>控制台打印如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">get x undefined</span><br><span class="line">get y undefined</span><br><span class="line">Uncaught TypeError: Cannot set property &apos;x&apos; of undefined</span><br></pre></td></tr></table></figure>
+<p>根据以上结果我们判断，<code>V8</code>引擎首先获取<code>a.x</code>的值，虽然是<code>undefined</code>也不直接报错，继续获取<code>a.y</code>的值，同样是<code>undefined</code>也不报错，然后执行赋值操作，给<code>a.y</code>即<code>undefined</code>添加<code>x</code>属性时报错，赋值操作中断。</p>
+<p>现在再来看本文最初的题目，就很容易理解了吧。</p>
+<ol>
+<li>首先是左侧，表达式<code>a.x</code>是对象赋值，获取<code>a</code>的值，为<code>{ n: 1 }</code>（也就是<code>b</code>），等待右侧表达式返回值进行赋值</li>
+<li>然后是中间，表达式<code>a</code>不需要提前处理，等待右侧表达式的返回值</li>
+<li>再然后是右侧新建对象<code>{ n: 2 }</code></li>
+<li>再然后回到第 2 步，将右侧返回值<code>{ n: 2 }</code>赋值为变量<code>a</code></li>
+<li>最后是将右侧是赋值表达式<code>a = { n: 2 }</code>的值<code>{ n: 2 }</code>赋值为对象<code>{ n: 1 }</code>（也就是<code>b</code>）的<code>x</code>属性</li>
+</ol>
+<p>我的讲解到此结束。各位读者，你们有不同的看法吗？</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/06/macos-printer/" rel="next" title="打造高效的macOS开发环境 - 添加打印机">
+                <i class="fa fa-chevron-left"></i> 打造高效的macOS开发环境 - 添加打印机
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+    
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">李长伟</p>
+              <p class="site-description motion-element" itemprop="description">李长伟的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李长伟</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v6.6.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.js"></script>
+
+  
+  
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.css">
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+   <script>
+        var gitalk = new Gitalk({
+          clientID: '621ce74dae06b19c2e65',
+          clientSecret: '7f314e6e41cd4753fbd21a92c6813e5d353f9c8b',
+          repo: 'lichangwei.github.io',
+          owner: 'lichangwei',
+          admin: ['lichangwei'],
+          id: md5(location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

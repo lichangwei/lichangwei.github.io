@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="CSS3 HTML5 部分特性   特性组 特性 IE8 IE9 IE10 IE11 Edge CH FF SF 参考     values    calc × √ √ √ √ √ √ √ caniuse    rem × √ √ √ √ √ √ √ caniuse    vw,vh × √ √ √ √ √ √ √ caniuse   color    currentColor × √ √ √ √">
+<meta property="og:type" content="article">
+<meta property="og:title" content="主要CSS3，HTML5特性兼容性调查">
+<meta property="og:url" content="http://lichangwei.github.io/2016/07/04/css3-html5-feature-compatibility-survey/index.html">
+<meta property="og:site_name" content="飞鹰走码">
+<meta property="og:description" content="CSS3 HTML5 部分特性   特性组 特性 IE8 IE9 IE10 IE11 Edge CH FF SF 参考     values    calc × √ √ √ √ √ √ √ caniuse    rem × √ √ √ √ √ √ √ caniuse    vw,vh × √ √ √ √ √ √ √ caniuse   color    currentColor × √ √ √ √">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-07T02:43:42.959Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="主要CSS3，HTML5特性兼容性调查">
+<meta name="twitter:description" content="CSS3 HTML5 部分特性   特性组 特性 IE8 IE9 IE10 IE11 Edge CH FF SF 参考     values    calc × √ √ √ √ √ √ √ caniuse    rem × √ √ √ √ √ √ √ caniuse    vw,vh × √ √ √ √ √ √ √ caniuse   color    currentColor × √ √ √ √">
+
+
+
+
+
+
+  <link rel="canonical" href="http://lichangwei.github.io/2016/07/04/css3-html5-feature-compatibility-survey/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>主要CSS3，HTML5特性兼容性调查 | 飞鹰走码</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion .logo-line-before i { left: initial; }
+    .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">飞鹰走码</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">飞鹰走码</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
+</form>
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'jKpsnJjixMaVpfnXVc3L','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lichangwei.github.io/2016/07/04/css3-html5-feature-compatibility-survey/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李长伟">
+      <meta itemprop="description" content="李长伟的博客">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="飞鹰走码">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">主要CSS3，HTML5特性兼容性调查
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2016-07-04 00:00:00" itemprop="dateCreated datePublished" datetime="2016-07-04T00:00:00+08:00">2016-07-04</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-07 10:43:42" itemprop="dateModified" datetime="2018-12-07T10:43:42+08:00">2018-12-07</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="CSS3-HTML5-部分特性"><a href="#CSS3-HTML5-部分特性" class="headerlink" title="CSS3 HTML5 部分特性"></a>CSS3 HTML5 部分特性</h2><table>
+<thead>
+<tr>
+<th>特性组</th>
+<th style="text-align:left">特性</th>
+<th style="text-align:center">IE8</th>
+<th style="text-align:center">IE9</th>
+<th style="text-align:center">IE10</th>
+<th style="text-align:center">IE11</th>
+<th style="text-align:center">Edge</th>
+<th style="text-align:center">CH</th>
+<th style="text-align:left">FF</th>
+<th>SF</th>
+<th>参考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>values</td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:left">calc</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left">√</td>
+<td>√</td>
+<td><a href="http://caniuse.com/#search=calc" target="_blank" rel="noopener">caniuse</a></td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:left">rem</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left">√</td>
+<td>√</td>
+<td><a href="http://caniuse.com/#search=rem" target="_blank" rel="noopener">caniuse</a></td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:left">vw,vh</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left">√</td>
+<td>√</td>
+<td><a href="http://caniuse.com/#search=vw" target="_blank" rel="noopener">caniuse</a></td>
+</tr>
+<tr>
+<td>color</td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:left">currentColor</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left">√</td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:left">hsl hsla rgba</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left">√</td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td>background</td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:left">border-radius</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left">√</td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:left">border-images</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left">√</td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td>images</td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:left">linear-gradient</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left">√</td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:left">radial-gradient</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left">√</td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:left">repeating-linear-gradient</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left">√</td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:left">repeating-radial-gradient</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left">√</td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td>animation</td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:left">keyframes</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left">√</td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:left">requestAnimationFrame</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left">√</td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td>transform</td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:left">2d</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left">√</td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:left">3d</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left">√</td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td>postion</td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:left">position:sticky</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:left">√</td>
+<td>√</td>
+<td><a href="http://caniuse.com/#search=sticky" target="_blank" rel="noopener">caniuse</a>, <a href="https://github.com/wilddeer/stickyfill" target="_blank" rel="noopener">polyfill</a></td>
+</tr>
+<tr>
+<td>selector</td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:left">querySelector querySelectorAll</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left">√</td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td>webfonts</td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:left">@font-face</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left">√</td>
+<td>√</td>
+<td><a href="http://www.mi.com/mi4/" target="_blank" rel="noopener">小米案例</a></td>
+</tr>
+<tr>
+<td>ui</td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:left">sizing-box</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left">√</td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td>dom</td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:left">mutation-observers</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left">√</td>
+<td>√</td>
+<td><a href="http://caniuse.com/#search=MutationEvents" target="_blank" rel="noopener">caniuse</a>, <a href="https://github.com/webmodules/mutation-observer" target="_blank" rel="noopener">polyfill</a></td>
+</tr>
+<tr>
+<td>HTML5</td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:left">audio</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left">√</td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:left">video</td>
+<td style="text-align:center">×</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left">√</td>
+<td>√</td>
+<td></td>
+</tr>
+<tr>
+<td>ECMA5</td>
+</tr>
+<tr>
+<td></td>
+<td style="text-align:left">Promises</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">√</td>
+<td style="text-align:center">√</td>
+<td style="text-align:left">√</td>
+<td>√</td>
+</tr>
+</tbody>
+</table>
+<h2 id="CSS-选择器"><a href="#CSS-选择器" class="headerlink" title="CSS 选择器"></a>CSS 选择器</h2><table>
+<thead>
+<tr>
+<th>-</th>
+<th>CSS 选择器</th>
+<th>IE8+</th>
+<th>IE9</th>
+<th>IE10+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CSS2.1</td>
+</tr>
+<tr>
+<td>*</td>
+<td>通配符</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>#foo</td>
+<td>ID 选择器</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>.foo</td>
+<td>类选择器</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>foo</td>
+<td>节点选择器</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>></td>
+<td>子选择器</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>+</td>
+<td>后一个兄弟节点</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>[attr]</td>
+<td>带有 attr 属性的元素</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>[attr=”val”]</td>
+<td>&lt;div attr=”val”/&gt;</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>[attr~=”val”]</td>
+<td>&lt;div attr=”val val1”/&gt;</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>[attr&#124;=”val”]</td>
+<td>&lt;div attr=”val-val1”/&gt;</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>:first-child</td>
+<td>第一个子元素</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>:link, :visited</td>
+<td>伪类，仅适用于 a 标签</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>:active, :hover</td>
+<td>伪类，适用于所有元素</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>:focus</td>
+<td>伪类，获取焦点的元素</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>:lang()</td>
+<td>伪类，&lt;div lang=”en”/&gt;</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>CSS3</td>
+</tr>
+<tr>
+<td>[attr^=”val”]</td>
+<td>带有 attr 属性并且值以 val 打头</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>[attr$=”val”]</td>
+<td>带有 attr 属性并且值以 val 结束</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>[attr*=”val”]</td>
+<td>带有 attr 属性并且值中带有 val 字眼</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>~</td>
+<td>后面兄弟选择器</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>:last-child</td>
+<td>最后一个子元素</td>
+<td>×</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>:root</td>
+<td>根元素</td>
+<td>×</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>:only-child</td>
+<td>唯一的子节点</td>
+<td>×</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>:nth-child()</td>
+<td>选择一个或多个子元素，参数 n 代表 0-+∞</td>
+<td>×</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>:nth-last-child()</td>
+<td>选择一个或多个子元素，参数 n 代表 0-+∞，从后往前选择</td>
+<td>×</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>tag:only-of-type</td>
+<td>唯一 tag 元素</td>
+<td>×</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>tag:nth-of-type</td>
+<td>选择一个或多个子 tag 元素，参数 n 代表 0-+∞</td>
+<td>×</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>tag:nth-last-of-type()</td>
+<td>选择一个或多个子 tag 元素，参数 n 代表 0-+∞，从后往前选择</td>
+<td>×</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>tag:first-of-type</td>
+<td>选择第一个 tag 元素</td>
+<td>×</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>tag:last-of-type</td>
+<td>选择最后一个 tag 元素</td>
+<td>×</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>:empty</td>
+<td>匹配空节点</td>
+<td>×</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>:target</td>
+<td>匹配 hash 相应的元素</td>
+<td>×</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>:enabled, :disabled</td>
+<td>匹配表单中启用或禁用的元素</td>
+<td>×</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>:checked</td>
+<td>匹配表单中选中的元素</td>
+<td>×</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>:not()</td>
+<td>否定选择器</td>
+<td>×</td>
+<td>√</td>
+<td>√</td>
+</tr>
+</tbody>
+</table>
+<p>备注：没有添加伪元素。</p>
+<h2 id="CSS2-1-之前的一些不为人知的特性"><a href="#CSS2-1-之前的一些不为人知的特性" class="headerlink" title="CSS2.1 之前的一些不为人知的特性"></a>CSS2.1 之前的一些不为人知的特性</h2><table>
+<thead>
+<tr>
+<th>特性</th>
+<th style="text-align:left">可选值以及含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>empty-cells</td>
+<td style="text-align:left">hide：当 td 的子元素都是隐藏的时候，自动隐藏该 td 的边框和背景<br>show：永远显示<br>不过该属性只有在 border-collapse:separate;时才有效。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="参考："><a href="#参考：" class="headerlink" title="参考："></a>参考：</h2><ol>
+<li><a href="http://www.w3.org/Style/CSS/current-work" target="_blank" rel="noopener">CSS Current Work</a> 这里记载着 CSS 规范子集的进度（稳定级别）：工作草案，最后通告，候选标准，推荐标准和标准。</li>
+<li><a href="http://www.w3.org/2005/10/Process-20051014/tr.html" target="_blank" rel="noopener">W3C Technical Report Development Process</a> W3C 技术报告开发过程</li>
+<li><a href="http://www.w3ctech.com/topic/746" target="_blank" rel="noopener">《W3C 技术报告开发过程》</a> 只翻译一部分</li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Mozilla_support_chart" target="_blank" rel="noopener">Mozilla CSS support chart</a> 火狐浏览器 CSS 特性支持</li>
+<li><a href="https://developer.apple.com/library/safari/documentation/AppleApplications/Reference/SafariCSSRef/Introduction.html" target="_blank" rel="noopener">Safari CSS Reference</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Comparison_of_layout_engines_(Cascading_Style_Sheets" target="_blank" rel="noopener">Comparison of layout engines (Cascading Style Sheets)</a>&gt;) 中文版<a href="https://zh.wikipedia.org/zh-cn/%E7%80%8F%E8%A6%BD%E5%99%A8%E5%BC%95%E6%93%8ECSS%E6%94%AF%E6%8F%B4%E6%AF%94%E8%BC%83" target="_blank" rel="noopener">浏览器引擎 CSS 支持比较</a></li>
+<li><a href="http://t337.org-w3c-region-chinese-html5.w3ctalk.info/w3c-t337.html" target="_blank" rel="noopener">http://t337.org-w3c-region-chinese-html5.w3ctalk.info/w3c-t337.html</a></li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/09/21/es5/" rel="next" title="ES5简介">
+                <i class="fa fa-chevron-left"></i> ES5简介
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/06/lodash-functions/" rel="prev" title="Lodash函数以及常见用法">
+                Lodash函数以及常见用法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+    
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">李长伟</p>
+              <p class="site-description motion-element" itemprop="description">李长伟的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS3-HTML5-部分特性"><span class="nav-number">1.</span> <span class="nav-text">CSS3 HTML5 部分特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS-选择器"><span class="nav-number">2.</span> <span class="nav-text">CSS 选择器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS2-1-之前的一些不为人知的特性"><span class="nav-number">3.</span> <span class="nav-text">CSS2.1 之前的一些不为人知的特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考："><span class="nav-number">4.</span> <span class="nav-text">参考：</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李长伟</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v6.6.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.js"></script>
+
+  
+  
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.css">
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+   <script>
+        var gitalk = new Gitalk({
+          clientID: '621ce74dae06b19c2e65',
+          clientSecret: '7f314e6e41cd4753fbd21a92c6813e5d353f9c8b',
+          repo: 'lichangwei.github.io',
+          owner: 'lichangwei',
+          admin: ['lichangwei'],
+          id: md5(location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

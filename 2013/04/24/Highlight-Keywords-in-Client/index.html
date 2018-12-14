@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="背景介绍在某个项目中遇到这样的需求，用户输入几个关键字，然后根据关键字去后端搜索相关记录。后端返回记录中但是没有高亮这些关键字，这就需要前端来做这件事。按道理，高亮应该由后端完成，因为后端如何解析这些关键字，也知道如何去匹配，前端不知道也不应该知道后端为什么返回这些结果，英语中名词有复数形式，动词有现在式，过去式，过去完成式等，其他诸如德语，葡萄牙语有没有词性变换更是不得而知。后端依赖强大的知识库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在客户端高亮关键字">
+<meta property="og:url" content="http://lichangwei.github.io/2013/04/24/Highlight-Keywords-in-Client/index.html">
+<meta property="og:site_name" content="飞鹰走码">
+<meta property="og:description" content="背景介绍在某个项目中遇到这样的需求，用户输入几个关键字，然后根据关键字去后端搜索相关记录。后端返回记录中但是没有高亮这些关键字，这就需要前端来做这件事。按道理，高亮应该由后端完成，因为后端如何解析这些关键字，也知道如何去匹配，前端不知道也不应该知道后端为什么返回这些结果，英语中名词有复数形式，动词有现在式，过去式，过去完成式等，其他诸如德语，葡萄牙语有没有词性变换更是不得而知。后端依赖强大的知识库">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-07T03:06:26.462Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在客户端高亮关键字">
+<meta name="twitter:description" content="背景介绍在某个项目中遇到这样的需求，用户输入几个关键字，然后根据关键字去后端搜索相关记录。后端返回记录中但是没有高亮这些关键字，这就需要前端来做这件事。按道理，高亮应该由后端完成，因为后端如何解析这些关键字，也知道如何去匹配，前端不知道也不应该知道后端为什么返回这些结果，英语中名词有复数形式，动词有现在式，过去式，过去完成式等，其他诸如德语，葡萄牙语有没有词性变换更是不得而知。后端依赖强大的知识库">
+
+
+
+
+
+
+  <link rel="canonical" href="http://lichangwei.github.io/2013/04/24/Highlight-Keywords-in-Client/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>在客户端高亮关键字 | 飞鹰走码</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion .logo-line-before i { left: initial; }
+    .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">飞鹰走码</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">飞鹰走码</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
+</form>
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'jKpsnJjixMaVpfnXVc3L','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lichangwei.github.io/2013/04/24/Highlight-Keywords-in-Client/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李长伟">
+      <meta itemprop="description" content="李长伟的博客">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="飞鹰走码">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">在客户端高亮关键字
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2013-04-24 00:00:00" itemprop="dateCreated datePublished" datetime="2013-04-24T00:00:00+08:00">2013-04-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-07 11:06:26" itemprop="dateModified" datetime="2018-12-07T11:06:26+08:00">2018-12-07</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>在某个项目中遇到这样的需求，用户输入几个关键字，然后根据关键字去后端搜索相关记录。后端返回记录中但是没有高亮这些关键字，这就需要前端来做这件事。按道理，高亮应该由后端完成，因为后端如何解析这些关键字，也知道如何去匹配，前端不知道也不应该知道后端为什么返回这些结果，英语中名词有复数形式，动词有现在式，过去式，过去完成式等，其他诸如德语，葡萄牙语有没有词性变换更是不得而知。后端依赖强大的知识库可以处理词性变换甚至近义词都是可能的，前端不可能完成工作，即便可能，也远比后来来处理高亮要复杂的多。但是这就是客户需求，我们还是要实现。</p>
+<p>整个流程：获取用户输入，比如 ‘search by keyword’，发送 JSONP 请求获取后端搜索到的记录。在关键的几个字段中，搜索‘search’，‘by’和‘keyword’这三个关键字，并在单词两边分别加上<code>&lt;span class=&quot;highlight&quot;&gt;</code>和<code>&lt;/span&gt;</code>，给<code>.highlight</code>定义一个合适的样式，比如粗体等，就完成了高亮的效果。</p>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><p>第一步，首先把关键字用空白符分隔开，得到一个一个的关键字。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> keywords = keyword.split(<span class="regexp">/\s+/</span>);</span><br></pre></td></tr></table></figure>
+<p>第二步，将第一步中得到的字符串数组，转变成正则数组。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">keywords.map(<span class="function"><span class="keyword">function</span>(<span class="params">it</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// g replace all</span></span><br><span class="line">    <span class="comment">// i case-insensitive</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">RegExp</span>(it, <span class="string">'gi'</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>RegExp 的第一个参数是传 it 呢，还是<code>&#39;\b&#39; + it + &#39;\b&#39;</code>呢？如果是前者，关键字<code>a</code>可以匹配<code>take</code>中的<code>a</code>。如果是后者，<code>teach</code>不可以匹配<code>teaches</code>中的<code>teach</code>。都不完美，这也是在文章开头提及的不适合前端做高亮的原因。<br>如果你够细心，你应该已经感觉到隐隐有些不妥，因为在通过 RegExp 创建正则表达式时，第一个参数不能包含正则中预定义的一些字符，除非在前面加上了一个反斜线，比如<code>[?</code>就不可以，而<code>\[\?</code>才是真正地匹配<code>[?</code>。所以在这之前，我们添加一步：</p>
+<p>第〇步：给所有的正则预定义字符之前添加一个反斜线（backslash）。找出所有的预定义字符<code>char</code>并替换为<code>&#39;\\&#39; + char</code>。通过强大的<code>String.prototype.replace</code>方法很方便的完成。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">keyword = keyword.replace(<span class="regexp">/[\\\&#123;\&#125;\[\]\(\)\*\+\?\^\$\,\-\=\!]/g</span>, <span class="function"><span class="keyword">function</span>(<span class="params">char</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'\\'</span> + char;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>需要特别说的是，还有一处可以改进。在前面的一片文章<a href="./2013-04-15-Grouping-Numbers-with-Comma.md">【正则表达式】使用逗号将数字三位三位地分开</a>中，我们使用了零宽断言。它匹配了这样一个位置（是为零宽），它后面的字符满足一定条件（是为断言）。在这里，我们可以使用正则表达式匹配预定义字符前面的位置，将该位置替换为<code>&#39;\\&#39;</code>。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">keyword = keyword.replace(<span class="regexp">/(?=[\\\&#123;\&#125;\[\]\(\)\*\+\?\^\$\-\=\!])/g</span>, <span class="string">'\\'</span>);</span><br></pre></td></tr></table></figure>
+<p>换了一种思路，顿时感觉清爽多了。</p>
+<p>第三步，遍历正则数组，然后替换所有的关键字。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">keywords.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">it</span>) </span>&#123;</span><br><span class="line">    string = string.replace(it, <span class="function"><span class="keyword">function</span>(<span class="params">val</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'&lt;span class="highlight"&gt;'</span> + val + <span class="string">'&lt;/span&gt;'</span>;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>如果你足够细心或者以前遇到过类似问题，你可能已经知道，这一步中隐藏着一些问题，就是如果用户在一次搜索中，输入了两个相同的关键字，比如<code>take take</code>，那么匹配以后可能会出现<code>&#39;&lt;span class=&quot;highlight&quot;&gt;&lt;span class=&quot;highlight&quot;&gt;take&lt;/span&gt;&lt;/span&gt;&#39;</code>这种情况，不会出错，只是浏览器需要多创建一些 DOM 元素。更甚的是，当用户输入多个关键字以后，第一次替换时会引入<code>&#39;&lt;span class=&quot;highlight&quot;&gt;&#39;</code>和<code>&#39;&lt;/span&gt;&#39;</code>片段，这两段字符是不应被匹配并替换的。比如替换字符是<code>&#39;programer&#39;</code>，关键字是<code>&#39;a span&#39;</code>，<br>匹配关键字<code>a</code>以后，变成</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">progr<span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"highlight"</span>&gt;</span>a<span class="tag">&lt;/<span class="name">span</span>&gt;</span>mer</span><br></pre></td></tr></table></figure>
+<p>匹配关键字<code>span</code>以后：</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">progr&lt;&lt;span class="highlight"&gt;span&lt;/span&gt; class="highlight"&gt;a&lt;/&lt;span class="highlight"&gt;span&lt;/span&gt;&gt;mer</span><br></pre></td></tr></table></figure>
+<p>完全乱套了。<br>为了保证以上<code>span</code>两端字符不会被匹配并替换，有一种做法是仅仅记住需要插入<code>span</code>的位置，并延迟替换。如果记住位置，考虑使用一种基本不会被用到的字符，比如 0X2611(☑)以及 0X2612（☒）。</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">keywords.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">it</span>) </span>&#123;</span><br><span class="line">    string = string.replace(it, <span class="function"><span class="keyword">function</span>(<span class="params">val</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">String</span>.fromCharCode(<span class="number">0x2611</span>) + val + <span class="built_in">String</span>.fromCharCode(<span class="number">0x2612</span>);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>匹配关键字<code>a</code>以后，变成</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">progr☑a☒mer</span><br></pre></td></tr></table></figure>
+<p>匹配不到<code>span</code>字符串，匹配结束。</p>
+<p>最后再将这两个特殊符号替换为<code>&#39;&lt;span class=&quot;highlight&quot;&gt;&#39;</code>和<code>&#39;&lt;/span&gt;&#39;</code>，在正则中使用<code>+</code>，可以匹配多个特殊字符，也就解决了用户输入输了两个以上相同的关键字并造成浏览器额外创建<code>span</code>元素的情况，当然你也可以再一开始就去重。<br>所以最终正确结果是</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">string = string.replace(<span class="regexp">/\u2611+/g</span>, <span class="string">'&lt;span class="highlight"&gt;'</span>).replace(<span class="regexp">/\u2612+/g</span>, <span class="string">'&lt;/span&gt;'</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="code"><pre><span class="line">progr<span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"highlight"</span>&gt;</span>a<span class="tag">&lt;/<span class="name">span</span>&gt;</span>mer</span><br></pre></td></tr></table></figure>
+<p>以上答案正确与否，取决于 ☑ 和 ☒ 会不会出现在被替换文字中。</p>
+<h2 id="最终代码"><a href="#最终代码" class="headerlink" title="最终代码"></a>最终代码</h2><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> keyword = input.value;</span><br><span class="line"><span class="keyword">var</span> string  = <span class="string">'The string will be highlighted'</span>；</span><br><span class="line"><span class="comment">// replace all preserved characters in regular express.</span></span><br><span class="line">keyword = keyword.replace(<span class="regexp">/(?=[\\\&#123;\&#125;\[\]\(\)\*\+\?\^\$\-\=\!])/g</span>, <span class="string">'\\'</span>);</span><br><span class="line"><span class="comment">// split keyword by space characters.</span></span><br><span class="line"><span class="keyword">var</span> keywords = keyword.split(<span class="regexp">/\s+/</span>);</span><br><span class="line">keywords.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">it</span>)</span>&#123;</span><br><span class="line">  string = string.replace(it, <span class="function"><span class="keyword">function</span>(<span class="params">val</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">String</span>.fromCharCode(<span class="number">0X2611</span>) + val + <span class="built_in">String</span>.fromCharCode(<span class="number">0X2612</span>);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br><span class="line">string = string.replace(<span class="regexp">/\u2611+/g</span>, <span class="string">'&lt;span class="highlight"&gt;'</span>)</span><br><span class="line">  .replace(<span class="regexp">/\u2612+/g</span>, <span class="string">'&lt;/span&gt;'</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.highlight</span> &#123;</span><br><span class="line">    <span class="attribute">font-weight</span>: bold;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li>高亮根据关键字搜索出来的记录不适合在客户端做，即时实现了，很可能是该高亮的没有高亮，不该高亮的高亮了。后端可以依靠巨大的知识库来高亮词性变换后的单词，甚至近义词。</li>
+<li>使用好强大的<code>String.prototype.replace</code>方法。</li>
+<li>正则中零宽断言在适当的时候，可以简化代码。</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2013/04/22/Canvas-drawImage-vs-putImageData/" rel="next" title="使用 drawImage 和 putImageData 缓存 Canvas 中间数据">
+                <i class="fa fa-chevron-left"></i> 使用 drawImage 和 putImageData 缓存 Canvas 中间数据
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2013/04/27/CSS3-Transition-Research/" rel="prev" title="CSS3 Transition过渡属性探索">
+                CSS3 Transition过渡属性探索 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+    
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">李长伟</p>
+              <p class="site-description motion-element" itemprop="description">李长伟的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#背景介绍"><span class="nav-number">1.</span> <span class="nav-text">背景介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#步骤"><span class="nav-number">2.</span> <span class="nav-text">步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最终代码"><span class="nav-number">3.</span> <span class="nav-text">最终代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李长伟</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v6.6.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.js"></script>
+
+  
+  
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.css">
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+   <script>
+        var gitalk = new Gitalk({
+          clientID: '621ce74dae06b19c2e65',
+          clientSecret: '7f314e6e41cd4753fbd21a92c6813e5d353f9c8b',
+          repo: 'lichangwei.github.io',
+          owner: 'lichangwei',
+          admin: ['lichangwei'],
+          id: md5(location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

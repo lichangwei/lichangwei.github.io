@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="####请解释一下什么是语义化的 HTML。使用拥有语义的标签，比如 h1-h6, article, section, aside, header, footer, nav, address, strong, em 等标签，而不是不分清空皂白地统一使用 div 或者 p 标签。好处：（1）方便开发人员交流。统一的标签语义，不需要使用 class 表明用意。也阻止了不同的人使用不同的单词表达同样的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTML &amp; CSS 面试题">
+<meta property="og:url" content="http://lichangwei.github.io/2013/05/13/HTML-CSS-Interview-Questions/index.html">
+<meta property="og:site_name" content="飞鹰走码">
+<meta property="og:description" content="####请解释一下什么是语义化的 HTML。使用拥有语义的标签，比如 h1-h6, article, section, aside, header, footer, nav, address, strong, em 等标签，而不是不分清空皂白地统一使用 div 或者 p 标签。好处：（1）方便开发人员交流。统一的标签语义，不需要使用 class 表明用意。也阻止了不同的人使用不同的单词表达同样的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-09T14:33:47.910Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="HTML &amp; CSS 面试题">
+<meta name="twitter:description" content="####请解释一下什么是语义化的 HTML。使用拥有语义的标签，比如 h1-h6, article, section, aside, header, footer, nav, address, strong, em 等标签，而不是不分清空皂白地统一使用 div 或者 p 标签。好处：（1）方便开发人员交流。统一的标签语义，不需要使用 class 表明用意。也阻止了不同的人使用不同的单词表达同样的">
+
+
+
+
+
+
+  <link rel="canonical" href="http://lichangwei.github.io/2013/05/13/HTML-CSS-Interview-Questions/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>HTML & CSS 面试题 | 飞鹰走码</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion .logo-line-before i { left: initial; }
+    .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">飞鹰走码</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">飞鹰走码</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
+</form>
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'jKpsnJjixMaVpfnXVc3L','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lichangwei.github.io/2013/05/13/HTML-CSS-Interview-Questions/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李长伟">
+      <meta itemprop="description" content="李长伟的博客">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="飞鹰走码">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">HTML & CSS 面试题
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2013-05-13 00:00:00" itemprop="dateCreated datePublished" datetime="2013-05-13T00:00:00+08:00">2013-05-13</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-09 22:33:47" itemprop="dateModified" datetime="2018-12-09T22:33:47+08:00">2018-12-09</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ol>
+<li><p>####请解释一下什么是语义化的 HTML。<br>使用拥有语义的标签，比如 h1-h6, article, section, aside, header, footer, nav, address, strong, em 等标签，而不是不分清空皂白地统一使用 div 或者 p 标签。<br>好处：（1）方便开发人员交流。统一的标签语义，不需要使用 class 表明用意。也阻止了不同的人使用不同的单词表达同样的含义。<br>（2）对搜索引擎友好。<br>（3）样式加载失败时，浏览器默认样式也使得页面比较清晰。<br>（4）对 CSS 支持不好甚至不支持的浏览器友好。</p>
+</li>
+<li><p>####你能描述一下渐进增强和优雅降级之间的不同吗?<br>构建站点的两个方法，都用到了特性检测。<br>渐进增强：Progressive enhancement。先构建站点的最少特性，然后根据浏览器特性追加功能。<br>优雅降级：graceful degradation。先构建站点的完整版本，然后根据浏览器特性进行修复。</p>
+</li>
+<li><p>####为什么利用多个域名来存储网站资源会更有效？<br>浏览器对同一个域的并行连接数是有限制的，当前一般浏览器 4 到 8 个，而 IE6，7 只有 2 个，如果同时下载同一个域下的很多资源，就会因为此限制而导致资源下载串行。但是使用多个域虽然可以并行下载资源，但是会使得浏览器需要解析更多的域名。所以在这对优缺点之间取一个平衡点。另外，解决此问题的办法并非只有启用多个域这一种方法，还可以合并和压缩 JS 和 CSS，使用雪碧图等等。</p>
+</li>
+<li><p>####请说出三种减低页面加载时间的方法。（加载时间指感知的时间或者实际加载时间）<br>文件的合并以及压缩（减少了 HTTP 请求的数量）<br>使用 CSS Sprites（减少 HTTP 请求的数量）<br>使用 CDN 托管（减少了数据传输时间）<br>使用 CSS3，SVG，甚至 Canvas 替代图片。<br>有效地适度地使用缓存脚本和其他资源</p>
+</li>
+<li><p>####什么是 FOUC？你如何来避免 FOUC？<br>FOUC 全称是 Flash Of Unstyled Content，翻译为文档样式闪烁。一般指 IE 在加载网页的时候，出现短暂的 CSS 样式失效。<br>问题一：什么时候出现呢？（1）IE 浏览器（2）IE 的临时文件夹没有缓存过页面的 css 文件（3）页面 head 标签里面没有任何 link 和 script 标签（4）页面引用样式的方式是采用@import（5）外在因素（比如网速等）<br>问题二：咋解决？在 head 里面加入一个 link 或者 script 标签<br>吐槽：我可能一辈子也不会写出这种代码，也希望面试官不要因为这种题目来拒绝候选人。</p>
+</li>
+<li><p>####描述 css reset 的作用和用途。<br>浏览器都会有默认样式表，这样保证了页面中即便不写任何样式，浏览器仍然能够清晰地展示出页面内容，并突出重点。</p>
+</li>
+<li><p>####描述下 float 和它的工作原理。<br>float 最初应用于图文混排，让文字环绕图片。<br>语法为 float: left/right/none;<br>float box 脱离当前文档流，定位到父元素或者另一个 float box 的边缘。父元素水平方向空间不足时，向下移动知道可以放下。文档流中 inline box 环绕 float box，block box 会和 float box 重叠，除非使用 clear: both/left/right 来清除浮动。float box 会形成一个新的 block formatting context（BFC 块状格式化上下文）。float box 不会超出所在 BFC，也不会和其他 BFC 重叠。</p>
+</li>
+<li><p>####清除浮动的方法有那些，分别适用于什么情形。<br>clear: both/left/right<br>用于清除相应元素之前的兄弟节点浮动的影响。left 和 right 指浮动方向，both 包含 left 和 right 两个方向。</p>
+</li>
+<li><p>####解释 css sprites，如何使用。<br>将数张小的背景图片拼合成一张大的图片，然后在 CSS 中结合 background-image，background-position，width 和 height 等属性显示某张小的背景图片。<br>网上有不少小工具可以让你上传一些小图片，然后生成一个大图并生成相应的样式表。即可直接使用。<br>优点：减少了图片的请求数量。<br>缺点：（1）不适合需要 repeat 的背景图片。（2）需要额外的工作来拼合成大图。（3）CSS 和图片缓存失效的概率和影响更大。</p>
+</li>
+<li><p>####你最喜欢的图片替换方法是什么，你如何选择使用。<br>Web-Font, CSS3, SVG, Canvas<br>关于如何选择，首先查看所要兼容的浏览器是否兼容其特性。在三者均支持的很好的情况下，选择优先级从高到低分别是 Web-Font, CSS3, SVG, Canvas<br>Web-Font 适合单色图片，并且可以通过 font 属性来设置其大小，颜色等，特别适合用于响应式设计中。<br>CSS3 基本可以说是从 SVG 发展而来的，功能应该还不如 SVG，但是其足够简单，所以选择优先级是比较高的。<br>SVG 适合需要响应用户行为，比如 mousemove 等操作的图片，作为矢量图，适合用于响应式设计中。<br>Canvas 适合显示动态生成的图表，不需要响应用户行为。</p>
+</li>
+<li><p>####讨论 CSS hacks，条件引用或者其他。</p>
+</li>
+<li><p>####解释 BFC（block formatting context，块状布局上下文）<br>把一组块级 box 和浮动元素放在一起布局的区域。<br>特点：（1）不折叠边距（margin collapsing），在同一个 BFC 是折叠边距的其中一个必要条件。（2）浮动元素不会超出它的范围。（3）不会跟其他浮动元素重叠。<br>形成新的 BFC 的条件：（1）float 属性不为 none（2）overflow 属性不为 visible（3）display 属性是 table-cell、table-caption 或 inline-block（4）position 属性不为 static 或 relative。<br>IE6/7 没有 BFC 概念，但是它们有 hasLayout 与之相似，可以通过 zoom: 1 触发。</p>
+</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2013/05/13/Unskilled-Interview-Questions/" rel="next" title="非技术类面试题">
+                <i class="fa fa-chevron-left"></i> 非技术类面试题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2013/05/17/jQuery-Interview-Questions/" rel="prev" title="jQuery 面试题">
+                jQuery 面试题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+    
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">李长伟</p>
+              <p class="site-description motion-element" itemprop="description">李长伟的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李长伟</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v6.6.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.js"></script>
+
+  
+  
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.css">
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+   <script>
+        var gitalk = new Gitalk({
+          clientID: '621ce74dae06b19c2e65',
+          clientSecret: '7f314e6e41cd4753fbd21a92c6813e5d353f9c8b',
+          repo: 'lichangwei.github.io',
+          owner: 'lichangwei',
+          admin: ['lichangwei'],
+          id: md5(location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

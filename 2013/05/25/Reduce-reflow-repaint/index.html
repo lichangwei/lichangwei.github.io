@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="在这篇博客中，我们列举一些可以减少 reflow 或者 repaint 的方法。下面先讲述一下这两个概念。reflow，翻译为重排，意为重新布局。当一个元素的形状位置发生改变时，浏览器会对该元素以及子元素（也可能包括同级元素）进行布局和重绘。称之为重排。repaint，翻译为重绘。当一个元素的颜色等发生改变时，浏览器会对该元素进行重绘。为了减少重排和重绘，可以从以下几个方面着手。 批量增删节点通过">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在DOM操作中，如何减少 reflow 或 repaint">
+<meta property="og:url" content="http://lichangwei.github.io/2013/05/25/Reduce-reflow-repaint/index.html">
+<meta property="og:site_name" content="飞鹰走码">
+<meta property="og:description" content="在这篇博客中，我们列举一些可以减少 reflow 或者 repaint 的方法。下面先讲述一下这两个概念。reflow，翻译为重排，意为重新布局。当一个元素的形状位置发生改变时，浏览器会对该元素以及子元素（也可能包括同级元素）进行布局和重绘。称之为重排。repaint，翻译为重绘。当一个元素的颜色等发生改变时，浏览器会对该元素进行重绘。为了减少重排和重绘，可以从以下几个方面着手。 批量增删节点通过">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-07T03:07:49.376Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在DOM操作中，如何减少 reflow 或 repaint">
+<meta name="twitter:description" content="在这篇博客中，我们列举一些可以减少 reflow 或者 repaint 的方法。下面先讲述一下这两个概念。reflow，翻译为重排，意为重新布局。当一个元素的形状位置发生改变时，浏览器会对该元素以及子元素（也可能包括同级元素）进行布局和重绘。称之为重排。repaint，翻译为重绘。当一个元素的颜色等发生改变时，浏览器会对该元素进行重绘。为了减少重排和重绘，可以从以下几个方面着手。 批量增删节点通过">
+
+
+
+
+
+
+  <link rel="canonical" href="http://lichangwei.github.io/2013/05/25/Reduce-reflow-repaint/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>在DOM操作中，如何减少 reflow 或 repaint | 飞鹰走码</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion .logo-line-before i { left: initial; }
+    .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">飞鹰走码</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">飞鹰走码</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
+</form>
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'jKpsnJjixMaVpfnXVc3L','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lichangwei.github.io/2013/05/25/Reduce-reflow-repaint/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李长伟">
+      <meta itemprop="description" content="李长伟的博客">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="飞鹰走码">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">在DOM操作中，如何减少 reflow 或 repaint
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2013-05-25 00:00:00" itemprop="dateCreated datePublished" datetime="2013-05-25T00:00:00+08:00">2013-05-25</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-07 11:07:49" itemprop="dateModified" datetime="2018-12-07T11:07:49+08:00">2018-12-07</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在这篇博客中，我们列举一些可以减少 reflow 或者 repaint 的方法。下面先讲述一下这两个概念。<br><strong>reflow</strong>，翻译为重排，意为重新布局。当一个元素的形状位置发生改变时，浏览器会对该元素以及子元素（也可能包括同级元素）进行布局和重绘。称之为重排。<br><strong>repaint</strong>，翻译为重绘。当一个元素的颜色等发生改变时，浏览器会对该元素进行重绘。<br>为了减少重排和重绘，可以从以下几个方面着手。</p>
+<h2 id="批量增删节点"><a href="#批量增删节点" class="headerlink" title="批量增删节点"></a>批量增删节点</h2><h3 id="通过elem-innerHTML批量删除和添加子节点。"><a href="#通过elem-innerHTML批量删除和添加子节点。" class="headerlink" title="通过elem.innerHTML批量删除和添加子节点。"></a>通过<code>elem.innerHTML</code>批量删除和添加子节点。</h3><h3 id="通过elem-insertAdjacentHTML批量添加子节点。"><a href="#通过elem-insertAdjacentHTML批量添加子节点。" class="headerlink" title="通过elem.insertAdjacentHTML批量添加子节点。"></a>通过<code>elem.insertAdjacentHTML</code>批量添加子节点。</h3><h3 id="通过创建一个-fragment-来批量添加子节点。"><a href="#通过创建一个-fragment-来批量添加子节点。" class="headerlink" title="通过创建一个 fragment 来批量添加子节点。"></a>通过创建一个 fragment 来批量添加子节点。</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> fragment = <span class="built_in">document</span>.createDocumentFragment();</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">    <span class="keyword">var</span> div = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>);</span><br><span class="line">    fragment.addChild(div);</span><br><span class="line">&#125;</span><br><span class="line">elem.appendChild(fragment);</span><br></pre></td></tr></table></figure>
+<h3 id="通过创建一个-range-来批量删除一组连续节点。"><a href="#通过创建一个-range-来批量删除一组连续节点。" class="headerlink" title="通过创建一个 range 来批量删除一组连续节点。"></a>通过创建一个 range 来批量删除一组连续节点。</h3><figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">removeChildren</span>(<span class="params">parent, start, end</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> range = <span class="built_in">document</span>.createRange();</span><br><span class="line">    <span class="keyword">var</span> children = parent.children;</span><br><span class="line">    range.setStartBefore(children[start]);</span><br><span class="line">    range.setEndAfter(children[end]);</span><br><span class="line">    children = <span class="literal">null</span>;</span><br><span class="line">    range.deleteContents();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="批量修改节点和样式"><a href="#批量修改节点和样式" class="headerlink" title="批量修改节点和样式"></a>批量修改节点和样式</h2><h3 id="通过修改-class-属性代替多次修改-style-属性"><a href="#通过修改-class-属性代替多次修改-style-属性" class="headerlink" title="通过修改 class 属性代替多次修改 style 属性"></a>通过修改 class 属性代替多次修改 style 属性</h3><p>不好的做法：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">elem.style.width = <span class="string">'200px'</span>;</span><br><span class="line">elem.style.height = <span class="string">'200px'</span>;</span><br></pre></td></tr></table></figure>
+<p>较好的做法：</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-class">.another-style</span> &#123;</span><br><span class="line">    <span class="attribute">width</span>: <span class="number">200px</span>;</span><br><span class="line">    <span class="attribute">height</span>: <span class="number">200px</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">elem.className = <span class="string">'another-style'</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="将节点隐藏或者删除后，批量修改，然后再显示或者添加到-DOM-树中。不管修改了多少次，只重新布局两次。"><a href="#将节点隐藏或者删除后，批量修改，然后再显示或者添加到-DOM-树中。不管修改了多少次，只重新布局两次。" class="headerlink" title="将节点隐藏或者删除后，批量修改，然后再显示或者添加到 DOM 树中。不管修改了多少次，只重新布局两次。"></a>将节点隐藏或者删除后，批量修改，然后再显示或者添加到 DOM 树中。不管修改了多少次，只重新布局两次。</h3><h3 id="先克隆节点，然后对克隆出来的节点做相应修改，然后再将原节点替换下来。"><a href="#先克隆节点，然后对克隆出来的节点做相应修改，然后再将原节点替换下来。" class="headerlink" title="先克隆节点，然后对克隆出来的节点做相应修改，然后再将原节点替换下来。"></a>先克隆节点，然后对克隆出来的节点做相应修改，然后再将原节点替换下来。</h3><h3 id="尽量缩小修改的影响"><a href="#尽量缩小修改的影响" class="headerlink" title="尽量缩小修改的影响"></a>尽量缩小修改的影响</h3><h3 id="让对经常变化的节点脱离文档流，比如使用-absolute-或者-fixed-的-position。这样，当该节点重排时不会影响其以后的兄弟节点。"><a href="#让对经常变化的节点脱离文档流，比如使用-absolute-或者-fixed-的-position。这样，当该节点重排时不会影响其以后的兄弟节点。" class="headerlink" title="让对经常变化的节点脱离文档流，比如使用 absolute 或者 fixed 的 position。这样，当该节点重排时不会影响其以后的兄弟节点。"></a>让对经常变化的节点脱离文档流，比如使用 absolute 或者 fixed 的 position。这样，当该节点重排时不会影响其以后的兄弟节点。</h3><h3 id="少使用-table-布局，很小的改动会导致整个-table-的重新布局。"><a href="#少使用-table-布局，很小的改动会导致整个-table-的重新布局。" class="headerlink" title="少使用 table 布局，很小的改动会导致整个 table 的重新布局。"></a>少使用 table 布局，很小的改动会导致整个 table 的重新布局。</h3><h2 id="访问-DOM-节点的某些属性"><a href="#访问-DOM-节点的某些属性" class="headerlink" title="访问 DOM 节点的某些属性"></a>访问 DOM 节点的某些属性</h2><p>比如 offsetTop, offsetLeft, offsetWidth, offsetHeight, scrollTop/Left/Width/Height, clientTop/Left/Width/Height, getComputedStyle()等等，参考<a href="http://www.yiotabytes.com/2011/04/when-does-dom-access-slow-down.html" target="_blank" rel="noopener">When does DOM access slow down rendering?</a>。文章中也提到浏览器越来越聪明，会尽量避免这些不太必要的重排重绘。我暂时还不知道怎么验证是否发生了重排重绘。</p>
+<p>留个问题，CSS3 Transition 动画能不能减少重排呢？重绘肯定是少不了的。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2013/05/18/Using SVG/" rel="next" title="【翻译】使用SVG">
+                <i class="fa fa-chevron-left"></i> 【翻译】使用SVG
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2013/06/06/Events-in-Capture-Phase/" rel="prev" title="通过 body 的 error 事件捕获页面中所有图片的 error 事件">
+                通过 body 的 error 事件捕获页面中所有图片的 error 事件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+    
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">李长伟</p>
+              <p class="site-description motion-element" itemprop="description">李长伟的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#批量增删节点"><span class="nav-number">1.</span> <span class="nav-text">批量增删节点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#通过elem-innerHTML批量删除和添加子节点。"><span class="nav-number">1.1.</span> <span class="nav-text">通过elem.innerHTML批量删除和添加子节点。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过elem-insertAdjacentHTML批量添加子节点。"><span class="nav-number">1.2.</span> <span class="nav-text">通过elem.insertAdjacentHTML批量添加子节点。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过创建一个-fragment-来批量添加子节点。"><span class="nav-number">1.3.</span> <span class="nav-text">通过创建一个 fragment 来批量添加子节点。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过创建一个-range-来批量删除一组连续节点。"><span class="nav-number">1.4.</span> <span class="nav-text">通过创建一个 range 来批量删除一组连续节点。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#批量修改节点和样式"><span class="nav-number">2.</span> <span class="nav-text">批量修改节点和样式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#通过修改-class-属性代替多次修改-style-属性"><span class="nav-number">2.1.</span> <span class="nav-text">通过修改 class 属性代替多次修改 style 属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#将节点隐藏或者删除后，批量修改，然后再显示或者添加到-DOM-树中。不管修改了多少次，只重新布局两次。"><span class="nav-number">2.2.</span> <span class="nav-text">将节点隐藏或者删除后，批量修改，然后再显示或者添加到 DOM 树中。不管修改了多少次，只重新布局两次。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#先克隆节点，然后对克隆出来的节点做相应修改，然后再将原节点替换下来。"><span class="nav-number">2.3.</span> <span class="nav-text">先克隆节点，然后对克隆出来的节点做相应修改，然后再将原节点替换下来。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#尽量缩小修改的影响"><span class="nav-number">2.4.</span> <span class="nav-text">尽量缩小修改的影响</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#让对经常变化的节点脱离文档流，比如使用-absolute-或者-fixed-的-position。这样，当该节点重排时不会影响其以后的兄弟节点。"><span class="nav-number">2.5.</span> <span class="nav-text">让对经常变化的节点脱离文档流，比如使用 absolute 或者 fixed 的 position。这样，当该节点重排时不会影响其以后的兄弟节点。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#少使用-table-布局，很小的改动会导致整个-table-的重新布局。"><span class="nav-number">2.6.</span> <span class="nav-text">少使用 table 布局，很小的改动会导致整个 table 的重新布局。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#访问-DOM-节点的某些属性"><span class="nav-number">3.</span> <span class="nav-text">访问 DOM 节点的某些属性</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李长伟</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v6.6.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.js"></script>
+
+  
+  
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.css">
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+   <script>
+        var gitalk = new Gitalk({
+          clientID: '621ce74dae06b19c2e65',
+          clientSecret: '7f314e6e41cd4753fbd21a92c6813e5d353f9c8b',
+          repo: 'lichangwei.github.io',
+          owner: 'lichangwei',
+          admin: ['lichangwei'],
+          id: md5(location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

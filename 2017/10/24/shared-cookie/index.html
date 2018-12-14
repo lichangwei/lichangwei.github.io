@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="今天是 1024 程序猿的节日，今天不加班，回家加俩菜。  问题昨天同事报出一个问题，给某家客户部署测试环境时遇到一个问题，他们访问该测试环境时完全正常，但是客户却不能访问。这是为什么呢？ 原来是这样的，测试环境部署在阿里云上，包括两个系统，称他们分别是系统 A 和系统 B 吧。系统 A 通过https://customer.exmaple.com 访问，系统 B 作为系统 A 的子系统以ifr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cookie 的共享规则">
+<meta property="og:url" content="http://lichangwei.github.io/2017/10/24/shared-cookie/index.html">
+<meta property="og:site_name" content="飞鹰走码">
+<meta property="og:description" content="今天是 1024 程序猿的节日，今天不加班，回家加俩菜。  问题昨天同事报出一个问题，给某家客户部署测试环境时遇到一个问题，他们访问该测试环境时完全正常，但是客户却不能访问。这是为什么呢？ 原来是这样的，测试环境部署在阿里云上，包括两个系统，称他们分别是系统 A 和系统 B 吧。系统 A 通过https://customer.exmaple.com 访问，系统 B 作为系统 A 的子系统以ifr">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-07T02:38:38.123Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Cookie 的共享规则">
+<meta name="twitter:description" content="今天是 1024 程序猿的节日，今天不加班，回家加俩菜。  问题昨天同事报出一个问题，给某家客户部署测试环境时遇到一个问题，他们访问该测试环境时完全正常，但是客户却不能访问。这是为什么呢？ 原来是这样的，测试环境部署在阿里云上，包括两个系统，称他们分别是系统 A 和系统 B 吧。系统 A 通过https://customer.exmaple.com 访问，系统 B 作为系统 A 的子系统以ifr">
+
+
+
+
+
+
+  <link rel="canonical" href="http://lichangwei.github.io/2017/10/24/shared-cookie/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Cookie 的共享规则 | 飞鹰走码</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion .logo-line-before i { left: initial; }
+    .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">飞鹰走码</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">飞鹰走码</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
+</form>
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'jKpsnJjixMaVpfnXVc3L','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lichangwei.github.io/2017/10/24/shared-cookie/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李长伟">
+      <meta itemprop="description" content="李长伟的博客">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="飞鹰走码">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">Cookie 的共享规则
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2017-10-24 00:00:00" itemprop="dateCreated datePublished" datetime="2017-10-24T00:00:00+08:00">2017-10-24</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-07 10:38:38" itemprop="dateModified" datetime="2018-12-07T10:38:38+08:00">2018-12-07</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>今天是 1024 程序猿的节日，今天不加班，回家加俩菜。</p>
+</blockquote>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>昨天同事报出一个问题，给某家客户部署测试环境时遇到一个问题，他们访问该测试环境时完全正常，但是客户却不能访问。这是为什么呢？</p>
+<p>原来是这样的，测试环境部署在阿里云上，包括两个系统，称他们分别是系统 A 和系统 B 吧。系统 A 通过<code>https://customer.exmaple.com</code> 访问，系统 B 作为系统 A 的子系统以<code>iframe</code>方式嵌入到系统 A，并且通过<code>https://customer.exmaple.com:8010</code>访问。部署完成之后我们同事正常访问，但是客户能访问系统 A，但是不能访问被<code>iframe</code>嵌入系统 B。通过浏览器控制台可以看到报错.</p>
+<blockquote>
+<p>Failed to load resource: net::ERR_TUNNEL_CONNECTION_FAILED.</p>
+</blockquote>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><p>从报错的信息上看，隧道连接失败，隧道还不通，也就是请求就没有发送到服务器端去。我很快注意到系统 B 使用<code>https</code>协议和 8010 端口，并猜想会不会<code>https</code>协议必须使用 443 端口。我部署<code>https</code>系统较少，没有看到或留意非 443 端口的<code>https</code>应用。但是这个猜测很快被同事证明是错误的，因为我们的另外一个客户也是这样部署的，但是能够正常访问，突然感觉自己的网络方面的知识还是很欠缺的，其实这个也是很容易推断出来的，因为<code>https</code>协议就是在 http 协议的基础上加了 SSL。http 协议支持的端口<code>https</code>也应该支持。</p>
+<p>请求根本就没有发送到服务器端去，不可能是服务器端的问题，这也被另一个现象佐证：我们同事可以正常访问。可以确定是客户网络问题，考虑到 8010 端口的<code>https</code>实在少见，猜测是客户网络设置中禁止了非 443 端口的<code>https</code>协议，那么怎么解决这个问题呢？让用户调整网络设置当然是最简单的，但是客户公司是整个集团统一设置的网络安全策略，想修改一定要有足够理由才行，在这之前还是想想有没有其他方案吧。</p>
+<p>如果系统 A 和系统 B 使用相同的<code>https</code>协议，相同的 443 端口，但是不同的域名呢？很快就找到 CTO 申请了一个<code>customer-s.example.com</code>，部署之后发现上面的错误没有了，系统 B 的页面可以访问了，但是页面还是出不来，系统 B 的请求大多报错了。</p>
+<blockquote>
+<p>Uncaught Type Error: Cannot read property ‘job’ of undefined</p>
+</blockquote>
+<p>从浏览器端的错误信息可以看出该页面没有给出合适的初始化数据。经过后端同事诊断之后发现是系统 A 的<code>Cookie</code>没有带过去，所以请求出现错误。啊？这是什么道理？访问系统 B 为什么要让浏览器自动带上系统 A 设置的<code>Cookie</code>？</p>
+<p>原来系统 A 和系统 B 并没有实现单点登录，而是系统 A 在即将打开系统 B 的<code>iframe</code>时，首先调用系统 B 的登录接口换取登录<code>URL</code>和<code>token</code>，并在<code>iframe</code>中打开系统 B，系统 B 的后端没有完备的数据给客户端使用，还会通过<code>http</code>请求从系统 A 中获取数据，而系统 A 不知道系统 B 的服务器端程序要获取哪个用户的数据，怎么办呢？</p>
+<p>猜测故事是这样的，开发阶段两个系统使用相同的 localhost 域名使用不同的端口，同时部署在本地，调试系统 B 的服务器端代码时发现原来可以获得系统 A 设置的<code>Cookie</code>，那我把系统 A 的<code>Cookie</code>带上去访问系统 A 的接口，模拟了一个浏览器请求，不就可以系统 A 获取当前用户的数据了吗？这样也就不需要系统 A 单独为系统 B 开发接口了，就这么办了。这里不去评价糟糕的设计，乱七八糟的设计最终也算是跑通了。</p>
+<p>终于说到了这篇文章的主题了，<code>Cookie</code>的作用域是整个域名，跨协议（<code>HTTP</code>或<code>HTTPS</code>，可以指定<code>Cookie</code>仅适用于<code>HTTPS</code>），跨端口共享。了解更详细内容请参考<a href="https://tools.ietf.org/html/rfc6265#section-8.5" target="_blank" rel="noopener">RFC6265</a>。这是我以前没有注意到的，又长知识了。</p>
+<p>由于解耦两个系统的工作量较大，目前还是采取跟客户沟通，对<code>HTTPS</code>协议开放某个非 433 的端口。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li>在解决问题过程中暴露了我两个知识点上的欠缺。</li>
+<li><code>HTTPS</code>协议和<code>HTTP</code>协议一样，可以绑定在不同的端口上。</li>
+<li><code>Cookie</code>的作用域是整个域名，跨协议跨端口共享。</li>
+<li>在遇到复杂系统通信时，需要做一些架构评审，防止出现上面提到的很不专业的处理方法。</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/30/callback-hell-and-async-program/" rel="next" title="【Node系列】回调地狱和异步编程">
+                <i class="fa fa-chevron-left"></i> 【Node系列】回调地狱和异步编程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/01/12/iis-url-rewrite/" rel="prev" title="IIS 的 URL 重写（反向代理）">
+                IIS 的 URL 重写（反向代理） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+    
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">李长伟</p>
+              <p class="site-description motion-element" itemprop="description">李长伟的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决"><span class="nav-number">2.</span> <span class="nav-text">解决</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李长伟</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v6.6.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.js"></script>
+
+  
+  
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.css">
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+   <script>
+        var gitalk = new Gitalk({
+          clientID: '621ce74dae06b19c2e65',
+          clientSecret: '7f314e6e41cd4753fbd21a92c6813e5d353f9c8b',
+          repo: 'lichangwei.github.io',
+          owner: 'lichangwei',
+          admin: ['lichangwei'],
+          id: md5(location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

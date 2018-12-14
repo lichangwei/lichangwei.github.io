@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="昨天接到一个专利搜索结果页面的 bug：在某个搜索条件下，IE10 浏览器不能正常显示。 1. 重现问题我们这里没有 IE10 浏览器，一般都是通过 Windows8.1 上的 IE11 浏览器模拟实现，所以我立即在 IE11 上验证，没有想到 IE11 竟然也重现了这个问题，所以我也没有必要去模拟 IE10 了。  开发环境：我们组有三台服务器，一台装 Ubuntu 用来做普通服务器用，剩下两台">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IE 浏览器的阻止 XSS 攻击功能">
+<meta property="og:url" content="http://lichangwei.github.io/2015/08/12/ie-prevent-xss/index.html">
+<meta property="og:site_name" content="飞鹰走码">
+<meta property="og:description" content="昨天接到一个专利搜索结果页面的 bug：在某个搜索条件下，IE10 浏览器不能正常显示。 1. 重现问题我们这里没有 IE10 浏览器，一般都是通过 Windows8.1 上的 IE11 浏览器模拟实现，所以我立即在 IE11 上验证，没有想到 IE11 竟然也重现了这个问题，所以我也没有必要去模拟 IE10 了。  开发环境：我们组有三台服务器，一台装 Ubuntu 用来做普通服务器用，剩下两台">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-07T02:47:38.815Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="IE 浏览器的阻止 XSS 攻击功能">
+<meta name="twitter:description" content="昨天接到一个专利搜索结果页面的 bug：在某个搜索条件下，IE10 浏览器不能正常显示。 1. 重现问题我们这里没有 IE10 浏览器，一般都是通过 Windows8.1 上的 IE11 浏览器模拟实现，所以我立即在 IE11 上验证，没有想到 IE11 竟然也重现了这个问题，所以我也没有必要去模拟 IE10 了。  开发环境：我们组有三台服务器，一台装 Ubuntu 用来做普通服务器用，剩下两台">
+
+
+
+
+
+
+  <link rel="canonical" href="http://lichangwei.github.io/2015/08/12/ie-prevent-xss/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>IE 浏览器的阻止 XSS 攻击功能 | 飞鹰走码</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion .logo-line-before i { left: initial; }
+    .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">飞鹰走码</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">飞鹰走码</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
+</form>
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'jKpsnJjixMaVpfnXVc3L','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lichangwei.github.io/2015/08/12/ie-prevent-xss/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李长伟">
+      <meta itemprop="description" content="李长伟的博客">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="飞鹰走码">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">IE 浏览器的阻止 XSS 攻击功能
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2015-08-12 00:00:00" itemprop="dateCreated datePublished" datetime="2015-08-12T00:00:00+08:00">2015-08-12</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2018-12-07 10:47:38" itemprop="dateModified" datetime="2018-12-07T10:47:38+08:00">2018-12-07</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>昨天接到一个专利搜索结果页面的 bug：在某个搜索条件下，IE10 浏览器不能正常显示。</p>
+<h3 id="1-重现问题"><a href="#1-重现问题" class="headerlink" title="1. 重现问题"></a>1. 重现问题</h3><p>我们这里没有 IE10 浏览器，一般都是通过 Windows8.1 上的 IE11 浏览器模拟实现，所以我立即在 IE11 上验证，没有想到 IE11 竟然也重现了这个问题，所以我也没有必要去模拟 IE10 了。</p>
+<blockquote>
+<p>开发环境：我们组有三台服务器，一台装 Ubuntu 用来做普通服务器用，剩下两台都用来测试网站在 IE 上兼容性，一台是 Windows Server 2012 安装了 IE8，一台是 Windows 8.1 安装了 IE11。IE9，IE10 都是通过 IE11 模拟测试的。</p>
+</blockquote>
+<p>重现的时候发现两个问题，一个是页面顶部给出提示“Invalid input”(非法输入)，这是我们系统给出的错误提示。另一个就是 IE 给的提示信息“Internet Explorer has modified this page to help prevent cross-site scripting.”</p>
+<h3 id="2-从错误提示着手进行调试"><a href="#2-从错误提示着手进行调试" class="headerlink" title="2. 从错误提示着手进行调试"></a>2. 从错误提示着手进行调试</h3><p>因为有我们系统“非法输入”的错误提示，所以我决定通过调试来确定是哪里出错了。</p>
+<p>根据经验猜测这个错误很可能是由某个 AJAX 请求出错造成的，在锁定了 AJAX 之后，又对比该请求在 Chrome 和 IE11 浏览器中的不同，发现某个字段中括号（英文的左右括号）被替换成了#，由于该字段是由后台写在<code>&lt;script&gt;&lt;/script&gt;</code>，所以首先去查看网页源代码，令人吃惊的是网页源代码中竟然括号也变成#，这不得不让我怀疑是后台针对 IE 浏览器做了特殊处理。虽然我们知道后台不应该这么做，并且得到后台确切的答案（他们不会这么做）以后，我们决定通过 Fiddler 代理来查看请求和响应数据，而通过 Fiddler 查看到的响应是正确的，难道是 IE 浏览器在搞鬼？</p>
+<h3 id="3-从-IE-浏览器的关于-XSS-的提示着手"><a href="#3-从-IE-浏览器的关于-XSS-的提示着手" class="headerlink" title="3. 从 IE 浏览器的关于 XSS 的提示着手"></a>3. 从 IE 浏览器的关于 XSS 的提示着手</h3><p>在网上搜索了“Internet Explorer has modified this page to help prevent cross-site scripting.”，找到了一些<a href="http://answers.microsoft.com/en-us/ie/forum/ie9-windows_7/internet-explorer-9-has-modified-the-page-to-help/84157078-964f-e011-8dfc-68b599b31bf5?tab=MoreHelp&amp;auth=1" target="_blank" rel="noopener">文章</a>，大致说这是由于 IE 检测到页面中可能带有跨站脚本攻击代码，而对页面代码做了一些修改，以保护用户免受跨站脚本攻击。<br>并且提供了一些解决方案：点击<code>Tools-&gt;Internet Options-&gt;Security-&gt;Custom level</code>，在弹出的对话框中禁用 XSS Filter。这样设置以后页面确实正常显示了。可见该问题确实是有 IE 误判造成的。</p>
+<p>但是我们做为在线网络服务的提供商，不能依靠用户修改浏览器设置来解决问题，并且该设置并不是针对某个具体网站，而是整个互联网，意味着用户彻底放弃了 IE 针对 XSS 攻击的保护，得不偿失。还要继续寻找其他方案。终于在<a href="https://msdn.microsoft.com/zh-cn/library/dd565647%28v=vs.85%29.aspx?f=255&amp;MSPPError=-2147217396" target="_blank" rel="noopener">另一篇文章</a>中找到答案。给页面添加一个响应头</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">X-XSS-Protection: 0</span><br></pre></td></tr></table></figure>
+<p>这样就通过禁用响应头彻底解决了该问题。</p>
+<p>###4. 解决问题以后的一些思考<br>问题解决了，但是还是有写疑问，我们很容易找到 IE 误判为 XSS 攻击的代码，却不知道为什么会被判断为 XSS 攻击代码。只在<a href="http://p42.us/ie8xss/Abusing_IE8s_XSS_Filters.pdf" target="_blank" rel="noopener">这篇文章</a>中找了一些示例，但是我们的页面源代码中都不符合这些规则。估计 IE 官方也不会给出这些规则，否则很容易被黑客利用，设计能够避开这些规则的 XSS 攻击代码。</p>
+<p>另外还想谈谈 IE 的阻止 XSS 攻击的功能，我们有时也会在 Chrome 看到相似的提示，但是 Chrome 给出另外一种选择，大概意思是我已经了解可能的风险，并且要继续访问，通过次选项用户可以比较方便地继续浏览其非常信任的网站。在这件事件上，IE 显得非常保守，没有给出第二种选择，用户遇到这种情况，只会怀疑网站除了问题，也不会知道怎样才能查看网页内容。经过 IE 修改后的代码一般很难正确运行，而 IE 却尝试继续运行。远不如 Chrome 实在，检测到危险代码，干脆放弃执行代码，并给用户醒目提示。</p>
+<p>IE 对（疑似）XSS 代码处理也真够不遗余力的，连查看源代码都不放弃，个人认为这是 IE 设计上的缺陷，查看源代码，我看的是<strong>“源”</strong>代码，将响应当做普通的不可执行的文档处理，不可能出现 XSS 攻击，还有就此时 IE 修改了源代码，却没有给出任何提示。</p>
+<p>打完收工，睡觉。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2014/06/05/html-code-guide/" rel="next" title="设计规范">
+                <i class="fa fa-chevron-left"></i> 设计规范
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/09/06/knockout/" rel="prev" title="Knockout简介">
+                Knockout简介 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+    
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">李长伟</p>
+              <p class="site-description motion-element" itemprop="description">李长伟的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-重现问题"><span class="nav-number">1.</span> <span class="nav-text">1. 重现问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-从错误提示着手进行调试"><span class="nav-number">2.</span> <span class="nav-text">2. 从错误提示着手进行调试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-从-IE-浏览器的关于-XSS-的提示着手"><span class="nav-number">3.</span> <span class="nav-text">3. 从 IE 浏览器的关于 XSS 的提示着手</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李长伟</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v6.6.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.js"></script>
+
+  
+  
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.css">
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+   <script>
+        var gitalk = new Gitalk({
+          clientID: '621ce74dae06b19c2e65',
+          clientSecret: '7f314e6e41cd4753fbd21a92c6813e5d353f9c8b',
+          repo: 'lichangwei.github.io',
+          owner: 'lichangwei',
+          admin: ['lichangwei'],
+          id: md5(location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
