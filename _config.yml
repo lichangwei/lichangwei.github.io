@@ -3,18 +3,18 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: 飞鹰走码 
+title: 飞鹰走码
 subtitle: 飞鹰走码
-author: 李长伟 
+author: 李长伟
 language: zh-CN
-timezone: 
+timezone:
 
 # custom Site settings
 # more detail check out docs
-SEOTitle: 李长伟的博客 
+SEOTitle: 李长伟的博客
 header-img: http://owxa05m5s.bkt.clouddn.com/lion-blur-bg.jpg
-email: lichangwei@love.com 
-description: "李长伟的博客"
+email: lichangwei@love.com
+description: '李长伟的博客'
 keyword: # seo key words
 
 favicon: # your favicon png
@@ -25,50 +25,48 @@ favicon: # your favicon png
 url: http://lichangwei.github.io
 root: /
 permalink: :year/:month/:day/:title/
-permalink_defaults: 
+permalink_defaults:
 
 # SNS settings
 # RSS:
-weibo_username: 
-zhihu_username: 
+weibo_username:
+zhihu_username:
 github_username: lichangwei
 twitter_username: lichangwei
-facebook_username:  
-linkedin_username:  
+facebook_username:
+linkedin_username:
 
 # Build settings
-anchorjs: false                        # if you want to customize anchor. check out line:181 of `post.html`
+anchorjs: false # if you want to customize anchor. check out line:181 of `post.html`
 
-
-# Disqus settings 
-disqus_username: 
+# Disqus settings
+disqus_username:
 
 # Duoshuo settings
-duoshuo_username:  # 你的多说帐号
+duoshuo_username: # 你的多说帐号
 # Share component is depend on Comment so we can NOT use share only.
-duoshuo_share: true                     # set to false if you want to use Comment without Sharing
+duoshuo_share: true # set to false if you want to use Comment without Sharing
 
 # Use livere
-use_livere: 
+use_livere:
 
 # Analytics settings
 # Baidu Analytics
 ba_track_id: b1cbd873d9c466a6c24f70c7ab90056c
 # Google Analytics
-ga_track_id:             # Format: UA-xxxxxx-xx
-ga_domain: 
+ga_track_id: # Format: UA-xxxxxx-xx
+ga_domain:
 
 # Sidebar settings
 sidebar-about-description: 但行好事，莫问前程 # 个人描述
-sidebar-avatar: https://avatars1.githubusercontent.com/u/718802?v=4&s=460    # use absolute URL
-
+sidebar-avatar: https://avatars1.githubusercontent.com/u/718802?v=4&s=460 # use absolute URL
 
 # Featured Tags
-featured-tags: true                     # whether or not using Feature-Tags
-featured-condition-size: 1              # A tag will be featured if the size of it is more than this condition value
+featured-tags: true # whether or not using Feature-Tags
+featured-condition-size: 1 # A tag will be featured if the size of it is more than this condition value
 
 # friends
-friends:  # 友链
+friends: # 友链
 
 # Directory
 source_dir: source
@@ -78,7 +76,7 @@ archive_dir: archives
 category_dir: categories
 code_dir: downloads/code
 i18n_dir: :lang
-skip_render: 
+skip_render:
 
 # Writing
 new_post_name: :year-:month-:day-:title.md # File name of new posts
@@ -91,15 +89,15 @@ post_asset_folder: true
 relative_link: false
 future: true
 highlight:
-  enable: true
-  line_number: false
-  auto_detect: false
-  tab_replace: 
+    enable: true
+    line_number: false
+    auto_detect: false
+    tab_replace:
 
 # Category & Tag
 default_category: uncategorized
-category_map: 
-tag_map: 
+category_map:
+tag_map:
 
 # Date / Time format
 ## Hexo uses Moment.js to parse and display date
@@ -116,34 +114,33 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 
-markdown: 
-  plugins: 
-    - markdown-it-abbr
-    - markdown-it-footnote
-    - markdown-it-ins
-    - markdown-it-sub
-    - markdown-it-sup
-    - markdown-it-emoji
+markdown:
+    plugins:
+        - markdown-it-abbr
+        - markdown-it-footnote
+        - markdown-it-ins
+        - markdown-it-sub
+        - markdown-it-sup
+        - markdown-it-emoji
 
 ## Themes: https://hexo.io/themes/
-theme: Anisina
+theme: next
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
-deploy: 
-  type: git
-  repo: git@github.com:lichangwei/lichangwei.github.io.git
-  branch: master
-
+deploy:
+    type: git
+    repo: git@github.com:lichangwei/lichangwei.github.io.git
+    branch: master
 
 # img CDN path
-cdn-url:  # 你的CDN地址
+cdn-url: # 你的CDN地址
 
 # Qiniu imageView2 API
 # More info http://developer.qiniu.com/code/v6/api/kodo-api/image/imageview2.html
-clip-content: "?imageView2/1/w/1400/h/400/interlace/1/q/90"
-clip-avatar: "?imageView2/2/w/300/h/300/interlace/1/q/90"
-clip-home-post-bg: "?imageView2/1/w/800/h/300/interlace/1/q/70"
+clip-content: '?imageView2/1/w/1400/h/400/interlace/1/q/90'
+clip-avatar: '?imageView2/2/w/300/h/300/interlace/1/q/90'
+clip-home-post-bg: '?imageView2/1/w/800/h/300/interlace/1/q/70'
 
 # post default images
 post-default-img: http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg #博文默认的图片
@@ -152,8 +149,7 @@ post-default-img-mobile: http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg #移�
 # search api , set your custom key
 swiftype_key: jKpsnJjixMaVpfnXVc3L
 
-
-# archive page title 
-archive: 
+# archive page title
+archive:
     title: archives
     description: 可以根据归档日期检索所有文件
