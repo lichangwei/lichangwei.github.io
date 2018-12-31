@@ -104,17 +104,17 @@
 
 
 
-  <meta name="description" content="相信很多人都看到过网上流传的各种面试题解析，其中一个便是JavaScript的连续赋值。首先要申明的是，这种题目不应该作为普通前端岗位的面试题目存在，也更不应该编写这样的代码。 网上有很多文章都在解析这到题目，题目基本一样，我在下面贴出了最常见的一个。 var a = &amp;#123; n: 1 &amp;#125;;var b = a;a.x = a = &amp;#123; n: 2 &amp;#125;;console">
+  <meta name="description" content="相信很多都看到过 JavaScript 连续赋值面试题的解读文章，在本文中我们不去猜测，而是通过 Proxy 来揭示这一过程，你将会得到一个意想不到的结论。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="通过`Proxy`揭秘`JavaScript`的连续赋值">
 <meta property="og:url" content="http://lichangwei.github.io/2018/12/12/continuous-assignment/index.html">
 <meta property="og:site_name" content="飞鹰走码">
-<meta property="og:description" content="相信很多人都看到过网上流传的各种面试题解析，其中一个便是JavaScript的连续赋值。首先要申明的是，这种题目不应该作为普通前端岗位的面试题目存在，也更不应该编写这样的代码。 网上有很多文章都在解析这到题目，题目基本一样，我在下面贴出了最常见的一个。 var a = &amp;#123; n: 1 &amp;#125;;var b = a;a.x = a = &amp;#123; n: 2 &amp;#125;;console">
+<meta property="og:description" content="相信很多都看到过 JavaScript 连续赋值面试题的解读文章，在本文中我们不去猜测，而是通过 Proxy 来揭示这一过程，你将会得到一个意想不到的结论。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-12-14T08:48:19.182Z">
+<meta property="og:updated_time" content="2018-12-28T01:07:07.656Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="通过`Proxy`揭秘`JavaScript`的连续赋值">
-<meta name="twitter:description" content="相信很多人都看到过网上流传的各种面试题解析，其中一个便是JavaScript的连续赋值。首先要申明的是，这种题目不应该作为普通前端岗位的面试题目存在，也更不应该编写这样的代码。 网上有很多文章都在解析这到题目，题目基本一样，我在下面贴出了最常见的一个。 var a = &amp;#123; n: 1 &amp;#125;;var b = a;a.x = a = &amp;#123; n: 2 &amp;#125;;console">
+<meta name="twitter:description" content="相信很多都看到过 JavaScript 连续赋值面试题的解读文章，在本文中我们不去猜测，而是通过 Proxy 来揭示这一过程，你将会得到一个意想不到的结论。">
 
 
 
@@ -386,7 +386,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-14 16:48:19" itemprop="dateModified" datetime="2018-12-14T16:48:19+08:00">2018-12-14</time>
+                <time title="修改时间：2018-12-28 09:07:07" itemprop="dateModified" datetime="2018-12-28T09:07:07+08:00">2018-12-28</time>
               
             
           </span>
@@ -426,8 +426,9 @@
       
 
       
-        <p>相信很多人都看到过网上流传的各种面试题解析，其中一个便是<code>JavaScript</code>的连续赋值。首先要申明的是，这种题目不应该作为普通前端岗位的面试题目存在，也更不应该编写这样的代码。</p>
-<p>网上有很多文章都在解析这到题目，题目基本一样，我在下面贴出了最常见的一个。</p>
+        <p>相信很多都看到过 JavaScript 连续赋值面试题的解读文章，在本文中我们不去猜测，而是通过 Proxy 来揭示这一过程，你将会得到一个意想不到的结论。</p>
+<a id="more"></a>
+<p>首先要申明的是，这种题目不应该作为普通前端岗位的面试题目存在，也更不应该编写这样的代码。网上有很多文章都在解析这到题目，题目基本一样，我在下面贴出了最常见的一个。</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> a = &#123; <span class="attr">n</span>: <span class="number">1</span> &#125;;</span><br><span class="line"><span class="keyword">var</span> b = a;</span><br><span class="line">a.x = a = &#123; <span class="attr">n</span>: <span class="number">2</span> &#125;;</span><br><span class="line"><span class="built_in">console</span>.log(a.x);</span><br><span class="line"><span class="built_in">console</span>.log(b.x);</span><br></pre></td></tr></table></figure>
 <p>答案可能很难回答，但是要想知道答案却很简单，只要在控制台执行一下即可：<code>undefined</code>, <code>{n:2}</code>. 对于这个答案网上有很多推测，但是好像统统错误。我也曾对这个答案做过各种推断，尝试解释这个答案，尝试自圆其说。但是很快我意识到这样做是错误的，我们应该阅读<code>ECMAScript</code>规范，应该阅读<code>V8</code>引擎的源码。规范难读，源码难看，还能怎么做呢？好了，下面我通过<code>Proxy</code>来揭露连续赋值的过程。首先我们改造一下代码，将<code>a</code>改成一个代理对象，这样对<code>a</code>的修改将一目了然。</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 初始化代码</span></span><br><span class="line"><span class="keyword">var</span> a = <span class="keyword">new</span> <span class="built_in">Proxy</span>(</span><br><span class="line">    &#123; <span class="attr">n</span>: <span class="number">1</span> &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">        get: <span class="function"><span class="keyword">function</span>(<span class="params">target, prop</span>) </span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'get'</span>, prop, target[prop]);</span><br><span class="line">            <span class="keyword">return</span> target[prop];</span><br><span class="line">        &#125;,</span><br><span class="line">        set: <span class="function"><span class="keyword">function</span>(<span class="params">target, prop, value</span>) </span>&#123;</span><br><span class="line">            <span class="built_in">console</span>.log(<span class="string">'set'</span>, prop, value);</span><br><span class="line">            target[prop] = value;</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;</span><br><span class="line">);</span><br><span class="line"><span class="keyword">var</span> b = a;</span><br></pre></td></tr></table></figure>
@@ -488,6 +489,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/27/storage-decorator/" rel="prev" title="通过装饰器自动同步本地存储">
+                通过装饰器自动同步本地存储 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -552,7 +557,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">53</span>
+                    <span class="site-state-item-count">54</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
