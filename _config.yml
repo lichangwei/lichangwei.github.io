@@ -77,6 +77,7 @@ category_dir: categories
 code_dir: downloads/code
 i18n_dir: :lang
 skip_render:
+    - '*.html'
 
 # Writing
 new_post_name: :year-:month-:day-:title.md # File name of new posts
@@ -129,9 +130,12 @@ theme: next
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-    type: git
-    repo: git@github.com:lichangwei/lichangwei.github.io.git
-    branch: master
+    - type: git
+      repo: git@github.com:lichangwei/lichangwei.github.io.git
+      branch: master
+    - type: git
+      repo: git@git.coding.net:lichangwei/lichangwei.coding.me.git
+      branch: master
 
 # img CDN path
 cdn-url: # 你的CDN地址
