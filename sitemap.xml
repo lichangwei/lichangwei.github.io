@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://lichangwei.github.io/2019/02/25/where-is-my-nginx-config-file/</loc>
+    
+    <lastmod>2019-03-03T16:04:50.707Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://lichangwei.github.io/2019/02/11/ssh-wihtout-password/</loc>
     
     <lastmod>2019-02-11T07:01:26.281Z</lastmod>
