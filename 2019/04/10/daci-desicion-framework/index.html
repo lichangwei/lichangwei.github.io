@@ -104,28 +104,26 @@
 
 
 
-  <meta name="description" content="在上篇文章我们提到如何使用 WWW-Authenticate 实现登录和认证。这一次我们讲一下另一种实现方式。服务器端提供一个登录认证页面，浏览器端需要跳转到该页面，用户输入 PIN 码之后，发送请求，浏览器验证之后跳转当前页面来。以下是更详细的步骤。  浏览器端点击认证按钮，然后请求电视机（服务器端，下同）提供的一个认证页面。  GET http://192.168.1.199:7999/web">
+  <meta name="description" content="相信大家都遇到这样的情况，拉了一堆人开会讨论一个问题，整个过程热火朝天，会议也一再拖延，但是最后还是没有结论。有没有什么方法能够改善这个状态呢？我今天就给大家介绍一个Atlassian提出的一种方案：DACI框架。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用页面跳转完成登录和认证">
-<meta property="og:url" content="http://lichangwei.github.io/2013/09/06/Using-Redirect-to-Login-and-Authentication/index.html">
+<meta property="og:title" content="想提高决策的效率？试试 DACI 框架">
+<meta property="og:url" content="http://lichangwei.github.io/2019/04/10/daci-desicion-framework/index.html">
 <meta property="og:site_name" content="飞鹰走码">
-<meta property="og:description" content="在上篇文章我们提到如何使用 WWW-Authenticate 实现登录和认证。这一次我们讲一下另一种实现方式。服务器端提供一个登录认证页面，浏览器端需要跳转到该页面，用户输入 PIN 码之后，发送请求，浏览器验证之后跳转当前页面来。以下是更详细的步骤。  浏览器端点击认证按钮，然后请求电视机（服务器端，下同）提供的一个认证页面。  GET http://192.168.1.199:7999/web">
+<meta property="og:description" content="相信大家都遇到这样的情况，拉了一堆人开会讨论一个问题，整个过程热火朝天，会议也一再拖延，但是最后还是没有结论。有没有什么方法能够改善这个状态呢？我今天就给大家介绍一个Atlassian提出的一种方案：DACI框架。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://lichangwei.github.io/images/Redirect-1.png">
-<meta property="og:image" content="http://lichangwei.github.io/images/Redirect-2.png">
-<meta property="og:image" content="http://lichangwei.github.io/images/Redirect-error-case.png">
-<meta property="og:updated_time" content="2018-12-07T02:59:54.150Z">
+<meta property="og:image" content="https://www.atlassian.com/dam/jcr:ca6c0868-4ab0-4b77-9cc9-b7a1479ebb7f/DACI-Add-More-Language-updated.jpg">
+<meta property="og:updated_time" content="2019-04-12T01:10:36.188Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用页面跳转完成登录和认证">
-<meta name="twitter:description" content="在上篇文章我们提到如何使用 WWW-Authenticate 实现登录和认证。这一次我们讲一下另一种实现方式。服务器端提供一个登录认证页面，浏览器端需要跳转到该页面，用户输入 PIN 码之后，发送请求，浏览器验证之后跳转当前页面来。以下是更详细的步骤。  浏览器端点击认证按钮，然后请求电视机（服务器端，下同）提供的一个认证页面。  GET http://192.168.1.199:7999/web">
-<meta name="twitter:image" content="http://lichangwei.github.io/images/Redirect-1.png">
+<meta name="twitter:title" content="想提高决策的效率？试试 DACI 框架">
+<meta name="twitter:description" content="相信大家都遇到这样的情况，拉了一堆人开会讨论一个问题，整个过程热火朝天，会议也一再拖延，但是最后还是没有结论。有没有什么方法能够改善这个状态呢？我今天就给大家介绍一个Atlassian提出的一种方案：DACI框架。">
+<meta name="twitter:image" content="https://www.atlassian.com/dam/jcr:ca6c0868-4ab0-4b77-9cc9-b7a1479ebb7f/DACI-Add-More-Language-updated.jpg">
 
 
 
 
 
 
-  <link rel="canonical" href="http://lichangwei.github.io/2013/09/06/Using-Redirect-to-Login-and-Authentication/">
+  <link rel="canonical" href="http://lichangwei.github.io/2019/04/10/daci-desicion-framework/">
 
 
 
@@ -135,7 +133,7 @@
   };
 </script>
 
-  <title>使用页面跳转完成登录和认证 | 飞鹰走码</title>
+  <title>想提高决策的效率？试试 DACI 框架 | 飞鹰走码</title>
   
 
 
@@ -339,7 +337,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://lichangwei.github.io/2013/09/06/Using-Redirect-to-Login-and-Authentication/">
+    <link itemprop="mainEntityOfPage" href="http://lichangwei.github.io/2019/04/10/daci-desicion-framework/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="李长伟">
@@ -356,7 +354,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">使用页面跳转完成登录和认证
+          <h2 class="post-title" itemprop="name headline">想提高决策的效率？试试 DACI 框架
 
               
             
@@ -382,7 +380,7 @@
                 
               
 
-              <time title="创建时间：2013-09-06 00:00:00" itemprop="dateCreated datePublished" datetime="2013-09-06T00:00:00+08:00">2013-09-06</time>
+              <time title="创建时间：2019-04-10 00:00:00" itemprop="dateCreated datePublished" datetime="2019-04-10T00:00:00+08:00">2019-04-10</time>
             
 
             
@@ -399,7 +397,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-07 10:59:54" itemprop="dateModified" datetime="2018-12-07T10:59:54+08:00">2018-12-07</time>
+                <time title="修改时间：2019-04-12 09:10:36" itemprop="dateModified" datetime="2019-04-12T09:10:36+08:00">2019-04-12</time>
               
             
           </span>
@@ -439,24 +437,51 @@
       
 
       
-        <p>在上篇文章我们提到如何使用 WWW-Authenticate 实现登录和认证。这一次我们讲一下另一种实现方式。服务器端提供一个登录认证页面，浏览器端需要跳转到该页面，用户输入 PIN 码之后，发送请求，浏览器验证之后跳转当前页面来。以下是更详细的步骤。</p>
-<ol>
-<li>浏览器端点击认证按钮，然后请求电视机（服务器端，下同）提供的一个认证页面。</li>
+        <p>相信大家都遇到这样的情况，拉了一堆人开会讨论一个问题，整个过程热火朝天，会议也一再拖延，但是最后还是没有结论。有没有什么方法能够改善这个状态呢？我今天就给大家介绍一个<code>Atlassian</code>提出的一种方案：<code>DACI</code>框架。</p>
+<a id="more"></a>
+<h1 id="什么是DACI"><a href="#什么是DACI" class="headerlink" title="什么是DACI?"></a>什么是<code>DACI</code>?</h1><p><code>DACI</code>是一个框架，通过定义角色促进我们做出重大决定。这个框架非常简单，<code>DACI</code>分别代码四个角色，如下：</p>
+<table>
+<thead>
+<tr>
+<th>简写</th>
+<th>描述</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D</td>
+<td><code>Driver</code>，即会议的驱动人</td>
+<td>他负责召集参会人，分享会议信息，安排会议时间地点等工作</td>
+</tr>
+<tr>
+<td>A</td>
+<td><code>Approver</code>，即会议的审批人</td>
+<td>他将作出最终的决定</td>
+</tr>
+<tr>
+<td>C</td>
+<td><code>Contributors</code>，即贡献者</td>
+<td>他们可以对议题给出自己的看法和专业见解，但不能做决定</td>
+</tr>
+<tr>
+<td>I</td>
+<td><code>Informed</code>，即会议最终的决定会通知给这些人</td>
+</tr>
+</tbody>
+</table>
+<p>要确保每个团队成员都能拥护团队做出的最终决定<code>DACI</code>才能起作用。如果不能说出自己的顾虑并且相信它们会被充分考虑，团队将会将会陷入无尽的争吵，并且什么决定也做不了。个别成员可能为了追求他支持的方案，而希望官方决定最终失败。</p>
+<h1 id="实施步骤"><a href="#实施步骤" class="headerlink" title="实施步骤"></a>实施步骤</h1><h2 id="第一步-创建跟踪页面（5-分钟）"><a href="#第一步-创建跟踪页面（5-分钟）" class="headerlink" title="第一步 创建跟踪页面（5 分钟）"></a>第一步 创建跟踪页面（5 分钟）</h2><p>将正在考虑的内容以及相关的研究，利弊，建议等记录在案，有利于核心成员提供建议，有利于决策者做出最终决定。可以通过<a href="https://marketplace.atlassian.com/apps/1216027/team-playbook-daci" target="_blank" rel="noopener">Team Playbook – DACI</a>插件在<code>Confluence</code>上创建一个页面。如果你并不使用<code>Confluence</code>可以下载<a href="https://www.atlassian.com/dam/jcr:f6b56375-3d78-496a-857e-ca47e89816ce/DACI-Decision-template.pdf" target="_blank" rel="noopener">模板</a>打印出来再填写表单。</p>
+<h2 id="第二步-定义各种角色（10-分钟）"><a href="#第二步-定义各种角色（10-分钟）" class="headerlink" title="第二步 定义各种角色（10 分钟）"></a>第二步 定义各种角色（10 分钟）</h2><ol>
+<li>谁是驱动人？<br>一个决策有一个驱动人，他不需要推动整个项目，只需要推动这个决策。</li>
+<li>谁是审批人？<br>一个决策有一个审批人。</li>
+<li>谁是贡献者？<br>一个决策可能有多个贡献者，贡献者可能来自核心团队之外，任何具有相关知识或经验的人都可以作为贡献者。</li>
+<li>谁应该被告知？<br>任何直接受该决定影响的人都需要被告知，很可能来自核心团队之外。</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GET http://192.168.1.199:7999/webauth/auth_default?app_name=Sample%20Web%20App&amp;app_url=http%3A%2F%2F192.168.1.199%3A3000%2Ftest%2Fbravia.html&amp;return_url=http%3A%2F%2F192.168.1.199%3A3000%2Ftest%2Fbravia.html%3Fserver%3D192.168.1.199%26port%3D7999%26device_id%3D3%26x%3D1%26y%3D2%23zzz&amp;auth_level=generic HTTP/1.1</span><br></pre></td></tr></table></figure>
-<p>该请求中包含一些重要的参数信息：<br>app_name 该应用的名称，显示给用户确认。<br>app_url 该应用的网址，显示给用户确认。<br>return_url 认证完成之后，通过该网址跳回本应用。<br>auth_level 认证等级，将会体现到该应用对电视机操控权限上。</p>
-<ol start="2">
-<li>电视机接收到认证页面请求，创建 PIN 码并显示在电视机上（如下图），返回该页面源码。<br><img src="../../../../images/Redirect-1.png" alt="电视机上显示PIN码"></li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">&lt;!DOCTYPE HTML&gt;</span><br></pre></td></tr></table></figure>
-<ol start="3">
-<li>浏览器端显示该页面（如下图），用户输入 PIN 码并发送认证请求。<br><img src="../../../../images/Redirect-2.png" alt="浏览器上显示认证页面"></li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST http://192.168.1.199:7999/webauth/auth_default_submit HTTP/1.1</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">pin_code=5184&amp;response=allow&amp;token=1378462608431&amp;app_name=Sample+Web+App&amp;app_url=http%3A%2F%2F192.168.1.199%3A3000%2Ftest%2Fbravia.html&amp;return_url=http%3A%2F%2F192.168.1.199%3A3000%2Ftest%2Fbravia.html%3Fserver%3D192.168.1.199%26port%3D7999%26device_id%3D3%26x%3D1%26y%3D2%23zzz&amp;auth_level=generic</span><br></pre></td></tr></table></figure>
-<ol start="4">
-<li>电视机收到认证请求，判断 PIN 码是否正确，如果不正确，则再次回到第二步中的认证页面，并提示错误，如下图。<br><img src="../../../../images/Redirect-error-case.png" alt="PIN码输入错误"><br>如果正确，则跳转到 return_url 页面。</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">HTTP/1.1 302 Found</span><br><span class="line">Location: http://192.168.1.199:3000/test/bravia.html?server=192.168.1.199&amp;port=7999&amp;device_id=3&amp;x=1&amp;y=2&amp;result=authorized#zzz</span><br><span class="line">Set-Cookie: auth=9336226396260589431055355817107579663142096251022247731126844883; path=/; max-age=1209600; expires=Fri, 20 Sep 2013 10:49:56 GMT</span><br></pre></td></tr></table></figure>
+<h2 id="第三步-制定进击计划（15-分钟）"><a href="#第三步-制定进击计划（15-分钟）" class="headerlink" title="第三步 制定进击计划（15 分钟）"></a>第三步 制定进击计划（15 分钟）</h2><p>现在就要思考需要收集哪些信息才能做出决定，让我们来看看<a href="https://marketplace.atlassian.com/apps/1216027/team-playbook-daci" target="_blank" rel="noopener">Team Playbook – DACI</a>中包含哪些信息：</p>
+<p>截止日期 Due date - 作出决定的截止日期。<br>背景 Background - 为什么需要做此决策？<br>现状 Current state - 你现在在哪里。<br>支持数据 Supporting data - 您为完成决策所做的研究。<br>可选项 Options considered - 每个选项都有一列的表格，您可以在其中总结利弊，风险，权衡，估计成本或工作量等。<br>建议 Recommendations - 贡献者的意见。<br>常见问题解答 FAQs - 回答常见问题或预期问题。<br>参考文献 References - 参考资料的链接列表，以及相关原因的简要说明。<br>行动项目 Action items - 与决定相关的任务或后续行动清单。<br>结果 Outcome - 最终决策</p>
+<h2 id="第四步-让您的团队参与进来"><a href="#第四步-让您的团队参与进来" class="headerlink" title="第四步 让您的团队参与进来"></a>第四步 让您的团队参与进来</h2><p>将跟踪页面发给你的团队成员，请求他们的意见。如果需要某人来填写页面的某些部分，现在就去找他们。如果你觉得事情已经停滞不前，就把驱动人和贡献者拉到一个会议室里，如果能带上审批人，也是个好主意。让他们充分表达他们的关注点，建议，其他选项等等。面对面沟通非常有效，可以快速回到正轨。</p>
+<p>以上内容主要来自<a href="https://www.atlassian.com/team-playbook/plays/daci" target="_blank" rel="noopener"><code>Atlassian</code>官网</a>，下面是他们公司某团队使用<code>DACI</code>框架决定要不要支持更多语言的例子，给你做个参考。<br><img src="https://www.atlassian.com/dam/jcr:ca6c0868-4ab0-4b77-9cc9-b7a1479ebb7f/DACI-Add-More-Language-updated.jpg" alt=""></p>
 
       
     </div>
@@ -487,8 +512,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2013/09/06/Using-WWW-Authenticate-to-Login-Authentication/" rel="next" title="使用WWW-Authenticate实现登录认证">
-                <i class="fa fa-chevron-left"></i> 使用WWW-Authenticate实现登录认证
+              <a href="/2019/04/07/koa-router-decors@4.0.0/" rel="next" title="koa-router-decors@4.0.0 功能介绍">
+                <i class="fa fa-chevron-left"></i> koa-router-decors@4.0.0 功能介绍
               </a>
             
           </div>
@@ -496,10 +521,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2013/09/11/Software-Product-Quality-Cannot-be-rely-on-Test/" rel="prev" title="软件产品质量不能依靠测试来保证">
-                软件产品质量不能依靠测试来保证 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -548,8 +569,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -593,6 +623,22 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是DACI"><span class="nav-number">1.</span> <span class="nav-text">什么是DACI?</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实施步骤"><span class="nav-number">2.</span> <span class="nav-text">实施步骤</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一步-创建跟踪页面（5-分钟）"><span class="nav-number">2.1.</span> <span class="nav-text">第一步 创建跟踪页面（5 分钟）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第二步-定义各种角色（10-分钟）"><span class="nav-number">2.2.</span> <span class="nav-text">第二步 定义各种角色（10 分钟）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第三步-制定进击计划（15-分钟）"><span class="nav-number">2.3.</span> <span class="nav-text">第三步 制定进击计划（15 分钟）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第四步-让您的团队参与进来"><span class="nav-number">2.4.</span> <span class="nav-text">第四步 让您的团队参与进来</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       

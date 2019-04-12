@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://lichangwei.github.io/2019/04/10/daci-desicion-framework/</loc>
+    
+    <lastmod>2019-04-12T01:10:36.188Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://lichangwei.github.io/2019/04/07/koa-router-decors@4.0.0/</loc>
     
     <lastmod>2019-04-07T15:17:49.142Z</lastmod>
