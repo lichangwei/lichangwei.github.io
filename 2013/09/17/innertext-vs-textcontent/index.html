@@ -438,7 +438,7 @@
         <p>为什么 innerText 会导致重排？我在我的上篇<a href="http://kellegous.com/j/2013/01/26/layout-performance" target="_blank" rel="noopener">关于重排的文章</a>末尾提出了这个问题。这里简单地总结一下，有些 DOM API 可能会因为不必要的重排，从而导致严重的性能问题。我将在这些文章中，着重提出这些年我发现的关于 Web 性能的古怪问题。</p>
 <p>As with many other things in browsers, innerText’s behavior seemed to have happened due to overlapping (and, perhaps, under-defined) use cases. 当你要获取 DOM 节点中的文本时，你会遇到两个问题，节点中原始文本是什么？用户看到的文本是什么？虽然类似，但是显然有所不同。在浏览器中，可以通过 textContent 获得前者，通过 innerHTML 获得后者。</p>
 <p>我们用以下例子来解释他们的最重要的不同点，看看以下 HTML 节点的 innerText 和 textContent。</p>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"t"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>lions, tigers<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"visibility:hidden"</span>&gt;</span>and bears<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"t"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>lions, tigers<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">"visibility:hidden"</span>&gt;</span>and bears<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>innerText: <code>lions, tigers</code><br>textContent: <code>lions,\n tigersand bears</code></p>
 <p>注意以下不同点：（1）.那些没有显示出来元素也不会出现在 innerText 中（2）innerText 中的换行符遵循布局中换行符的规则。理解 innerText 最好的方式就是，它大概就是你选择该节点的内容然后拷贝获得的文本。而 textContent 是各个子节点的文本内容组成的文本。</p>
 <h2 id="innerText-可能不是你想要的"><a href="#innerText-可能不是你想要的" class="headerlink" title="innerText 可能不是你想要的"></a>innerText 可能不是你想要的</h2><p>innerText 最大的特点是需要从布局系统中获得一些信息然后决定文本是怎样显示给用户的，这就是为什么 innerText 成为一个让性能变糟的一个属性。很多库喜欢用<code>innerText</code>而不用<code>textContent</code>仅仅是因为 IE 中先有<code>innerText</code>。下面让我们演示选择<code>innerText</code>和<code>textContent</code>时对性能的影响。</p>
@@ -562,7 +562,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">63</span>
+                    <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

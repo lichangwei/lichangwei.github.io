@@ -104,12 +104,12 @@
 
 
 
-  <meta name="description" content="在上篇文章我们提到如何使用 WWW-Authenticate 实现登录和认证。这一次我们讲一下另一种实现方式。服务器端提供一个登录认证页面，浏览器端需要跳转到该页面，用户输入 PIN 码之后，发送请求，浏览器验证之后跳转当前页面来。以下是更详细的步骤。  浏览器端点击认证按钮，然后请求电视机（服务器端，下同）提供的一个认证页面。  GET http://192.168.1.199:7999/web">
+  <meta name="description" content="在上篇文章我们提到如何使用 WWW-Authenticate 实现登录和认证。这一次我们讲一下另一种实现方式。服务器端提供一个登录认证页面，浏览器端需要跳转到该页面，用户输入 PIN 码之后，发送请求，浏览器验证之后跳转当前页面来。以下是更详细的步骤。  浏览器端点击认证按钮，然后请求电视机（服务器端，下同）提供的一个认证页面。  1GET http://192.168.1.199:7999/we">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用页面跳转完成登录和认证">
 <meta property="og:url" content="http://lichangwei.github.io/2013/09/06/Using-Redirect-to-Login-and-Authentication/index.html">
 <meta property="og:site_name" content="飞鹰走码">
-<meta property="og:description" content="在上篇文章我们提到如何使用 WWW-Authenticate 实现登录和认证。这一次我们讲一下另一种实现方式。服务器端提供一个登录认证页面，浏览器端需要跳转到该页面，用户输入 PIN 码之后，发送请求，浏览器验证之后跳转当前页面来。以下是更详细的步骤。  浏览器端点击认证按钮，然后请求电视机（服务器端，下同）提供的一个认证页面。  GET http://192.168.1.199:7999/web">
+<meta property="og:description" content="在上篇文章我们提到如何使用 WWW-Authenticate 实现登录和认证。这一次我们讲一下另一种实现方式。服务器端提供一个登录认证页面，浏览器端需要跳转到该页面，用户输入 PIN 码之后，发送请求，浏览器验证之后跳转当前页面来。以下是更详细的步骤。  浏览器端点击认证按钮，然后请求电视机（服务器端，下同）提供的一个认证页面。  1GET http://192.168.1.199:7999/we">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://lichangwei.github.io/images/Redirect-1.png">
 <meta property="og:image" content="http://lichangwei.github.io/images/Redirect-2.png">
@@ -117,7 +117,7 @@
 <meta property="og:updated_time" content="2018-12-07T02:59:54.150Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用页面跳转完成登录和认证">
-<meta name="twitter:description" content="在上篇文章我们提到如何使用 WWW-Authenticate 实现登录和认证。这一次我们讲一下另一种实现方式。服务器端提供一个登录认证页面，浏览器端需要跳转到该页面，用户输入 PIN 码之后，发送请求，浏览器验证之后跳转当前页面来。以下是更详细的步骤。  浏览器端点击认证按钮，然后请求电视机（服务器端，下同）提供的一个认证页面。  GET http://192.168.1.199:7999/web">
+<meta name="twitter:description" content="在上篇文章我们提到如何使用 WWW-Authenticate 实现登录和认证。这一次我们讲一下另一种实现方式。服务器端提供一个登录认证页面，浏览器端需要跳转到该页面，用户输入 PIN 码之后，发送请求，浏览器验证之后跳转当前页面来。以下是更详细的步骤。  浏览器端点击认证按钮，然后请求电视机（服务器端，下同）提供的一个认证页面。  1GET http://192.168.1.199:7999/we">
 <meta name="twitter:image" content="http://lichangwei.github.io/images/Redirect-1.png">
 
 
@@ -443,20 +443,20 @@
 <ol>
 <li>浏览器端点击认证按钮，然后请求电视机（服务器端，下同）提供的一个认证页面。</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GET http://192.168.1.199:7999/webauth/auth_default?app_name=Sample%20Web%20App&amp;app_url=http%3A%2F%2F192.168.1.199%3A3000%2Ftest%2Fbravia.html&amp;return_url=http%3A%2F%2F192.168.1.199%3A3000%2Ftest%2Fbravia.html%3Fserver%3D192.168.1.199%26port%3D7999%26device_id%3D3%26x%3D1%26y%3D2%23zzz&amp;auth_level=generic HTTP/1.1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GET http://192.168.1.199:7999/webauth/auth_default?app_name=Sample%20Web%20App&amp;app_url=http%3A%2F%2F192.168.1.199%3A3000%2Ftest%2Fbravia.html&amp;return_url=http%3A%2F%2F192.168.1.199%3A3000%2Ftest%2Fbravia.html%3Fserver%3D192.168.1.199%26port%3D7999%26device_id%3D3%26x%3D1%26y%3D2%23zzz&amp;auth_level=generic HTTP/1.1</span><br></pre></td></tr></table></figure>
 <p>该请求中包含一些重要的参数信息：<br>app_name 该应用的名称，显示给用户确认。<br>app_url 该应用的网址，显示给用户确认。<br>return_url 认证完成之后，通过该网址跳回本应用。<br>auth_level 认证等级，将会体现到该应用对电视机操控权限上。</p>
 <ol start="2">
 <li>电视机接收到认证页面请求，创建 PIN 码并显示在电视机上（如下图），返回该页面源码。<br><img src="../../../../images/Redirect-1.png" alt="电视机上显示PIN码"></li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">&lt;!DOCTYPE HTML&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">&lt;!DOCTYPE HTML&gt;</span><br></pre></td></tr></table></figure>
 <ol start="3">
 <li>浏览器端显示该页面（如下图），用户输入 PIN 码并发送认证请求。<br><img src="../../../../images/Redirect-2.png" alt="浏览器上显示认证页面"></li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST http://192.168.1.199:7999/webauth/auth_default_submit HTTP/1.1</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">pin_code=5184&amp;response=allow&amp;token=1378462608431&amp;app_name=Sample+Web+App&amp;app_url=http%3A%2F%2F192.168.1.199%3A3000%2Ftest%2Fbravia.html&amp;return_url=http%3A%2F%2F192.168.1.199%3A3000%2Ftest%2Fbravia.html%3Fserver%3D192.168.1.199%26port%3D7999%26device_id%3D3%26x%3D1%26y%3D2%23zzz&amp;auth_level=generic</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">POST http://192.168.1.199:7999/webauth/auth_default_submit HTTP/1.1</span><br><span class="line">Content-Type: application/x-www-form-urlencoded</span><br><span class="line">pin_code=5184&amp;response=allow&amp;token=1378462608431&amp;app_name=Sample+Web+App&amp;app_url=http%3A%2F%2F192.168.1.199%3A3000%2Ftest%2Fbravia.html&amp;return_url=http%3A%2F%2F192.168.1.199%3A3000%2Ftest%2Fbravia.html%3Fserver%3D192.168.1.199%26port%3D7999%26device_id%3D3%26x%3D1%26y%3D2%23zzz&amp;auth_level=generic</span><br></pre></td></tr></table></figure>
 <ol start="4">
 <li>电视机收到认证请求，判断 PIN 码是否正确，如果不正确，则再次回到第二步中的认证页面，并提示错误，如下图。<br><img src="../../../../images/Redirect-error-case.png" alt="PIN码输入错误"><br>如果正确，则跳转到 return_url 页面。</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">HTTP/1.1 302 Found</span><br><span class="line">Location: http://192.168.1.199:3000/test/bravia.html?server=192.168.1.199&amp;port=7999&amp;device_id=3&amp;x=1&amp;y=2&amp;result=authorized#zzz</span><br><span class="line">Set-Cookie: auth=9336226396260589431055355817107579663142096251022247731126844883; path=/; max-age=1209600; expires=Fri, 20 Sep 2013 10:49:56 GMT</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 302 Found</span><br><span class="line">Location: http://192.168.1.199:3000/test/bravia.html?server=192.168.1.199&amp;port=7999&amp;device_id=3&amp;x=1&amp;y=2&amp;result=authorized#zzz</span><br><span class="line">Set-Cookie: auth=9336226396260589431055355817107579663142096251022247731126844883; path=/; max-age=1209600; expires=Fri, 20 Sep 2013 10:49:56 GMT</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -564,7 +564,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">63</span>
+                    <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

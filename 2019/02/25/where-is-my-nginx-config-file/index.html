@@ -437,14 +437,14 @@
       
         <p>我虽是前端工程师，也经常会去 Linux 服务器上修改 Nginx 配置文件并且重启，但是那么多的服务器，每个服务器上安装 Nginx 的版本和方法也不尽相同，导致 Nginx 配置文件的位置并不相同，那怎么才能快速地找到 Nginx 配置文件呢？这里介绍一个简单的方法。</p>
 <h2 id="如何快速找到-Nginx-配置文件"><a href="#如何快速找到-Nginx-配置文件" class="headerlink" title="如何快速找到 Nginx 配置文件"></a>如何快速找到 Nginx 配置文件</h2><p>不知道你是否还记得检查 Nginx 配置文件是否合法的那个命令吗？对的，就是<code>nginx -t</code>。如果通过检查，你会看到类似以下信息，</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nginx -t</span><br><span class="line">nginx: the configuration file /usr/<span class="built_in">local</span>/etc/nginx/nginx.conf syntax is ok</span><br><span class="line">nginx: configuration file /usr/<span class="built_in">local</span>/etc/nginx/nginx.conf <span class="built_in">test</span> is successful</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nginx -t</span><br><span class="line">nginx: the configuration file /usr/<span class="built_in">local</span>/etc/nginx/nginx.conf syntax is ok</span><br><span class="line">nginx: configuration file /usr/<span class="built_in">local</span>/etc/nginx/nginx.conf <span class="built_in">test</span> is successful</span><br></pre></td></tr></table></figure>
 <p>如果没有通过检查，就有各种可能错误，比如以下就是一种可能：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nginx -t</span><br><span class="line">nginx: the configuration file /usr/<span class="built_in">local</span>/etc/nginx/nginx.conf syntax is ok</span><br><span class="line">nginx: [emerg] open() <span class="string">"/aa/aa.log"</span> failed (2: No such file or directory)</span><br><span class="line">nginx: configuration file /usr/<span class="built_in">local</span>/etc/nginx/nginx.conf <span class="built_in">test</span> failed</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">nginx -t</span><br><span class="line">nginx: the configuration file /usr/<span class="built_in">local</span>/etc/nginx/nginx.conf syntax is ok</span><br><span class="line">nginx: [emerg] open() <span class="string">"/aa/aa.log"</span> failed (2: No such file or directory)</span><br><span class="line">nginx: configuration file /usr/<span class="built_in">local</span>/etc/nginx/nginx.conf <span class="built_in">test</span> failed</span><br></pre></td></tr></table></figure>
 <p>你可能已经注意到不管配置文件是否正确，<code>nginx -t</code>命令都会告诉你 Nginx 配置文件在哪里，所以通过执行<code>nginx -t</code>命令可以帮我们找到 Nginx 配置文件。</p>
 <h2 id="如何快速找到任何我想要的文件"><a href="#如何快速找到任何我想要的文件" class="headerlink" title="如何快速找到任何我想要的文件"></a>如何快速找到任何我想要的文件</h2><p>你可能会说，上面的方法不具有通用性，如果我想找到其他文件就没用了。的确是这样，不过我接下来介绍一个命令，它可以帮你快速找到任意一个文件。</p>
 <p>我们要安装命令是<code>locate</code>命令，它和<code>find -name</code>作用类似，但是速度更快，因为不会检索文件目录，而是去事先建立好的数据库里查询。这个数据库每天更新一次，因次如果你的文件是刚刚创建的，是不能立即搜索到的，需要手动执行<code>updatedb</code>命令才行。</p>
 <p>说了那么多，我们来看看怎么安装吧？</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">yum install mlocate</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install mlocate</span><br></pre></td></tr></table></figure>
 <p>安装好了，就可以用起来了，该命令常见参数如下：<br>-b：只匹配 Base Name，比如<code>locate -b &#39;\passwd&#39;</code>；<br>-i：忽略大小写，比如<code>locate -i PASSWD</code><br>-r：正则表达式。</p>
 <p>它也有配置文件，一般位于<code>/etc/updatedb.conf</code>，通过它可以配置，哪些后缀的文件会被忽略，哪些目录下的文件会被忽略等。必要时可以修改该配置文件。</p>
 
@@ -563,7 +563,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">63</span>
+                    <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

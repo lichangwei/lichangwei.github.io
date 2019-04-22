@@ -433,7 +433,7 @@
 <li><p><strong>生成秘钥</strong><br>通过<code>ssh-keygen</code>可以生成一对秘钥。这是一个交互式命令，需要你回答几个问题，不过不要担心，一般你只需要一路回车即可。</p>
 </li>
 <li><p><strong>将公钥添加到远程主机中</strong><br><code>ssh-copy-id</code>命令可以把本地主机的公钥复制到远程主机的<code>authorized_keys</code>文件中，它还会给远程主机的用户主目录和<code>~/.ssh</code>, 和<code>~/.ssh/authorized_keys</code>设置合适的权限。</p>
- <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh-copy-id -i ~/.ssh/id_rsa.pub user@server</span><br></pre></td></tr></table></figure>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-copy-id -i ~/.ssh/id_rsa.pub user@server</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 <p>大功告成，现在你再通过<code>ssh user@server</code>登录服务器时就不需要输入密码了，是不是很方便呢？</p>
@@ -544,7 +544,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">63</span>
+                    <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

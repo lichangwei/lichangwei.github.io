@@ -448,7 +448,7 @@
 </li>
 </ol>
 <p>在我们当前的应用中，服务器端语言使用的 Node，框架是 Express。Session 管理我们可以使用的是 Express 自带的 Session 中间件。代码如下：</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> app = <span class="keyword">new</span> express();</span><br><span class="line">app.use(express.session());</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> express = <span class="built_in">require</span>(<span class="string">'express'</span>);</span><br><span class="line"><span class="keyword">var</span> app = <span class="keyword">new</span> express();</span><br><span class="line">app.use(express.session());</span><br></pre></td></tr></table></figure>
 <p>Express 的 Session 中间件没有 API 可以得到用户是否已经在别处登录。另外一个问题就是即便我们自己实现 Session 控制，那么也是不可取的，因为项目特殊性，用户在登录以后就加在几乎所有的资源，也只有在登录，申请设备和获取已申请设备清单时才会发送一个服务器端的请求。之后用户只需要按下启动按钮，之后虚拟设备就运行在 Web App 中了，第三方应用就可以通过 SSDP 协议发现设备并与该设备进行 HTTP 通信了。以后只有部分静态资源文件会从 Node Server 上获取之后，就没有其他的请求了。所以自从获取已申请设备清单以后，就没有会修改最后操作时间的请求了。</p>
 <p>W 给出的一个方案：使用 socket.io，保持与服务器端通信。可行倒是可行，但是我们要为了一个需求大动干戈吗？这个要划一个问号。然后我跟 W 说，我去跟 Tony 商量一下，看看他的目的是什么，再决定怎么做。</p>
 <p>在跟 Tony 的交流中，发现他有过这样的经历：开发阶段两个人使用了同一个账号同时登录，这两个浏览器中自然有着同样的设备列表，然后都启动了某个设备，这时候在局域网中就有了两个有着同样 UUID 的虚拟设备，他们 IP 不同，设别描述文件地址也不同，设备状态也不同。有些 SSDP 客户端会因此而崩溃掉。所以他想让一个账号不能同时在两处登录就能解决该问题了。</p>
@@ -561,7 +561,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">63</span>
+                    <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

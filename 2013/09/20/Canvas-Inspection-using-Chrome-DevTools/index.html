@@ -104,12 +104,12 @@
 
 
 
-  <meta name="description" content="简介使用过 Canvas 元素的人都知道 Canvas 很难调试。使用 Canvas 通常要调用一长串难以跟踪的 API。 function draw() &amp;#123;    context.clearRect(0, 0, 258, 258);    context.fillStyle = &apos;#EEEEEE&apos;;    context.beginPath();    context.arc(129,">
+  <meta name="description" content="简介使用过 Canvas 元素的人都知道 Canvas 很难调试。使用 Canvas 通常要调用一长串难以跟踪的 API。 12345678function draw() &amp;#123;    context.clearRect(0, 0, 258, 258);    context.fillStyle = &apos;#EEEEEE&apos;;    context.beginPath();    context.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【翻译】使用 Chrome 开发者工具调试 Canvas">
 <meta property="og:url" content="http://lichangwei.github.io/2013/09/20/Canvas-Inspection-using-Chrome-DevTools/index.html">
 <meta property="og:site_name" content="飞鹰走码">
-<meta property="og:description" content="简介使用过 Canvas 元素的人都知道 Canvas 很难调试。使用 Canvas 通常要调用一长串难以跟踪的 API。 function draw() &amp;#123;    context.clearRect(0, 0, 258, 258);    context.fillStyle = &apos;#EEEEEE&apos;;    context.beginPath();    context.arc(129,">
+<meta property="og:description" content="简介使用过 Canvas 元素的人都知道 Canvas 很难调试。使用 Canvas 通常要调用一长串难以跟踪的 API。 12345678function draw() &amp;#123;    context.clearRect(0, 0, 258, 258);    context.fillStyle = &apos;#EEEEEE&apos;;    context.beginPath();    context.">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://www.html5rocks.com/static/demos/canvas-inspection/images/enable-canvas-inspection.png">
 <meta property="og:image" content="http://www.html5rocks.com/static/demos/canvas-inspection/images/experiments.png">
@@ -123,7 +123,7 @@
 <meta property="og:updated_time" content="2018-12-07T02:57:47.766Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【翻译】使用 Chrome 开发者工具调试 Canvas">
-<meta name="twitter:description" content="简介使用过 Canvas 元素的人都知道 Canvas 很难调试。使用 Canvas 通常要调用一长串难以跟踪的 API。 function draw() &amp;#123;    context.clearRect(0, 0, 258, 258);    context.fillStyle = &apos;#EEEEEE&apos;;    context.beginPath();    context.arc(129,">
+<meta name="twitter:description" content="简介使用过 Canvas 元素的人都知道 Canvas 很难调试。使用 Canvas 通常要调用一长串难以跟踪的 API。 12345678function draw() &amp;#123;    context.clearRect(0, 0, 258, 258);    context.fillStyle = &apos;#EEEEEE&apos;;    context.beginPath();    context.">
 <meta name="twitter:image" content="http://www.html5rocks.com/static/demos/canvas-inspection/images/enable-canvas-inspection.png">
 
 
@@ -446,7 +446,7 @@
 
       
         <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>使用过 Canvas 元素的人都知道 Canvas 很难调试。使用 Canvas 通常要调用一长串难以跟踪的 API。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">draw</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    context.clearRect(<span class="number">0</span>, <span class="number">0</span>, <span class="number">258</span>, <span class="number">258</span>);</span><br><span class="line">    context.fillStyle = <span class="string">'#EEEEEE'</span>;</span><br><span class="line">    context.beginPath();</span><br><span class="line">    context.arc(<span class="number">129</span>, <span class="number">129</span>, <span class="number">127</span>, <span class="number">0</span>, <span class="number">6.28</span>, <span class="literal">true</span>);</span><br><span class="line">    context.closePath();</span><br><span class="line">    context.fill();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">draw</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    context.clearRect(<span class="number">0</span>, <span class="number">0</span>, <span class="number">258</span>, <span class="number">258</span>);</span><br><span class="line">    context.fillStyle = <span class="string">'#EEEEEE'</span>;</span><br><span class="line">    context.beginPath();</span><br><span class="line">    context.arc(<span class="number">129</span>, <span class="number">129</span>, <span class="number">127</span>, <span class="number">0</span>, <span class="number">6.28</span>, <span class="literal">true</span>);</span><br><span class="line">    context.closePath();</span><br><span class="line">    context.fill();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>有时候你希望记录发送给 Canvas 上下文的指令，并且逐条执行指令。幸运的是在 Chrome 开发者工具里有一个新的 Canvas 审查特性可以帮你做到这一点。</p>
 <p>在这篇文章里，我会给你演示怎样使用这个特性来调试你的 Canvas 行为。它支持 2D 和 WebGL 上下文，所以无论你在使用哪个，都可以使用它直接获取调试信息。</p>
 <h2 id="准备开始"><a href="#准备开始" class="headerlink" title="准备开始"></a>准备开始</h2><p>在 Chrome 地址栏打开<code>about:flags</code>页面，并选中“启用开发者工具实验”（英文：Enable Developer Tools experiments，以上是 Chrome 中文版翻译）。<br><img src="http://www.html5rocks.com/static/demos/canvas-inspection/images/enable-canvas-inspection.png" alt="Figure 1 - Enabling Developer Tools Experiments in about:flags"></p>
@@ -585,7 +585,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">63</span>
+                    <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

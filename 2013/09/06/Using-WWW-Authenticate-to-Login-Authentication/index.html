@@ -444,21 +444,21 @@
 <ol>
 <li>浏览器向电视机（服务器端，下同）发送请求。</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST http://192.168.1.199:7999/sony/3/accessControl HTTP/1.1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">POST http://192.168.1.199:7999/sony/3/accessControl HTTP/1.1</span><br></pre></td></tr></table></figure>
 <ol start="2">
 <li>电视机没有收到认证信息，创建 PIN 码并显示在电视机上（如下图），返回 401 未认证错误。</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">HTTP/1.1 401 Unauthorized</span><br><span class="line">WWW-Authenticate: Basic realm=&quot;Private Page&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 401 Unauthorized</span><br><span class="line">WWW-Authenticate: Basic realm=&quot;Private Page&quot;</span><br></pre></td></tr></table></figure>
 <p><img src="../../../../images/WWW-Authentication-1.png" alt="显示PIN码"></p>
 <ol start="3">
 <li>浏览器收到 401 未认证错误，将会显示一个如下登录框。并显示出服务器端给的提示信息<code>Private Page</code>.<br><img src="../../../../images/WWW-Authentication-2.png" alt="浏览器显示登录框"><br>用户在密码一栏中输入 PIN 码之后点击登录，浏览器将会重新再发一次请求。这次请求跟上次请求唯一不同就是多了一个 header。</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">POST http://192.168.1.199:7999/sony/3/accessControl HTTP/1.1</span><br><span class="line">Authorization: Basic OjgyNzU=</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">POST http://192.168.1.199:7999/sony/3/accessControl HTTP/1.1</span><br><span class="line">Authorization: Basic OjgyNzU=</span><br></pre></td></tr></table></figure>
 <p>我们在 Chrome 的控制台执行以下代码<code>atob(&#39;OjgyNzU=&#39;)</code>，可以看到结果是<code>:8275</code>，也就是<code>: + PIN</code>。也许你已经猜到了，Authorization 的值就是<code>Basic base64(&lt;username&gt;:&lt;password&gt;)</code>。</p>
 <ol start="4">
 <li>电视机收到带有 Authorization 头部的请求以后，调用类似<code>atob</code>的方法解码，得到 PIN 码判断是否正确，如果正确则验证成功，如果不正确则继续返回和第 2 步一样的响应。在这里，我们输入了正确的 PIN 码，所以服务器端返回了 200 状态吗。</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Set-Cookie: auth=0757981464307829417712055147089187584491446610025428754976019263; path=/; max-age=1209600; expires=Fri Sep 20 2013 17:09:39 GMT</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">HTTP/1.1 200 OK</span><br><span class="line">Set-Cookie: auth=0757981464307829417712055147089187584491446610025428754976019263; path=/; max-age=1209600; expires=Fri Sep 20 2013 17:09:39 GMT</span><br></pre></td></tr></table></figure>
 <p>以上这种方法的客户端并不一定要是浏览器，在手机原生应用中也可以做到，一般需要 HTTP 客户端库来辅助发送请求并解析响应。当然还需要自己做一个登录框。</p>
 
       
@@ -567,7 +567,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">63</span>
+                    <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

@@ -441,11 +441,11 @@
 <p>Opera 的工程师在测试中发现，Opera 10 Alpha 在很多老网站上的运作很不正常。原来，有很多网站使用了“浏览器嗅探”技术，也就是说网站会针对不同的浏览器提供不同的内容或功能。然而不幸的是，这些网站无法识别两位数的浏览器版本号，于是 Opera 就成了首当其冲的受害者——它们把 Opera 10.0 误认为是 Opera 1.0，并因此向 Opera 10 提供不完整的功能，甚至有些网站干脆拒绝 Opera 10 的访问。<br>这当然是 Opera 不愿意看到的。于是，Opera 的工程师们决定，将用户代理信息中的版本号定格在 9.8，并另外启用 Version 字段来标识真正的版本号。当然他们也考虑过选用 9.99 这个最接近 10 的可用作版本号的数字，不过出于预留空间的考虑，最终还是决定采用 9.8 作为象征性的版本号——它正好介于（Opera 9 的最后一个版本号）9.6 与 10 之间。</p>
 </blockquote>
 <p>正是因为 Opera 这么委曲求全的决策，所以一直以为蓝光机中是 Opera9.8。而很多 CSS3 特性都不被 Opera9.8 支持。包括我们这里将会被用到的 CSS3 Transition。所以很自然地使用 jQuery 提供的 animate 方法实现。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// top from 0 to 94</span></span><br><span class="line">$list.animate(&#123; <span class="attr">top</span>: top &#125;, <span class="string">'fast'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// do some thing</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// top from 0 to 94</span></span><br><span class="line">$list.animate(&#123; <span class="attr">top</span>: top &#125;, <span class="string">'fast'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// do some thing</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <p>在蓝光机中该动画只会执行三步，分别是 top = 0, ~59, 94px，所以会给人一种很不平滑的感觉。</p>
 <p>很长时间以后才注意到蓝光机中的浏览器是 Opera12.11. 然后开始尝试使用 CSS3 Transition。</p>
-<figure class="highlight css"><table><tr><td class="code"><pre><span class="line"><span class="selector-tag">transition</span>: <span class="selector-tag">top</span> 300<span class="selector-tag">ms</span> <span class="selector-tag">linear</span>;</span><br></pre></td></tr></table></figure>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">$list.css(<span class="string">'top'</span>, top);</span><br></pre></td></tr></table></figure>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">transition</span>: <span class="selector-tag">top</span> 300<span class="selector-tag">ms</span> <span class="selector-tag">linear</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$list.css(<span class="string">'top'</span>, top);</span><br></pre></td></tr></table></figure>
 <p>以上动画效果在桌面浏览器上运行的非常好，但是在蓝光机上依然没有明显改善，反而感觉有点晃动。优化失败。</p>
 <p>在尝试将其他部分动画也使用 CSS3 Transition 时发现一个问题，就是修改某个属性之前，如果该属性没有显式声明，那么各个浏览器处理方式不同。以 width 为例，这时通过<code>elem.style.width</code>得到一个空字符串。Chrome26 中，width 会从 0 过渡到 XX px，而在 Opera12 以及 Firefox20 中 width 直接变成 XX px，并且不会触发 transitionend 事件。这个小问题让我耽误了不少时间。</p>
 <p>###使用方法</p>
@@ -576,7 +576,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">63</span>
+                    <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

@@ -104,17 +104,17 @@
 
 
 
-  <meta name="description" content="####解释什么是 Deferred，以及优点是什么。Deferred，意为延迟执行，是 jQuery 的回调函数解决方案，对所有的异步操作提供统一和更加方便的编程接口。使用 Deferred 实现的\$.ajax 有以下几种有点。（1）链式调用（2）指定多个回调（3）为多个操作指定回调  $.ajax(&apos;test.html&apos;)  .done(function()&amp;#123;console.lo">
+  <meta name="description" content="####解释什么是 Deferred，以及优点是什么。Deferred，意为延迟执行，是 jQuery 的回调函数解决方案，对所有的异步操作提供统一和更加方便的编程接口。使用 Deferred 实现的\$.ajax 有以下几种有点。（1）链式调用（2）指定多个回调（3）为多个操作指定回调  1234567$.ajax(&apos;test.html&apos;)  .done(function()&amp;#123;con">
 <meta property="og:type" content="article">
 <meta property="og:title" content="jQuery 面试题">
 <meta property="og:url" content="http://lichangwei.github.io/2013/05/17/jQuery-Interview-Questions/index.html">
 <meta property="og:site_name" content="飞鹰走码">
-<meta property="og:description" content="####解释什么是 Deferred，以及优点是什么。Deferred，意为延迟执行，是 jQuery 的回调函数解决方案，对所有的异步操作提供统一和更加方便的编程接口。使用 Deferred 实现的\$.ajax 有以下几种有点。（1）链式调用（2）指定多个回调（3）为多个操作指定回调  $.ajax(&apos;test.html&apos;)  .done(function()&amp;#123;console.lo">
+<meta property="og:description" content="####解释什么是 Deferred，以及优点是什么。Deferred，意为延迟执行，是 jQuery 的回调函数解决方案，对所有的异步操作提供统一和更加方便的编程接口。使用 Deferred 实现的\$.ajax 有以下几种有点。（1）链式调用（2）指定多个回调（3）为多个操作指定回调  1234567$.ajax(&apos;test.html&apos;)  .done(function()&amp;#123;con">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2018-12-09T14:34:23.797Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="jQuery 面试题">
-<meta name="twitter:description" content="####解释什么是 Deferred，以及优点是什么。Deferred，意为延迟执行，是 jQuery 的回调函数解决方案，对所有的异步操作提供统一和更加方便的编程接口。使用 Deferred 实现的\$.ajax 有以下几种有点。（1）链式调用（2）指定多个回调（3）为多个操作指定回调  $.ajax(&apos;test.html&apos;)  .done(function()&amp;#123;console.lo">
+<meta name="twitter:description" content="####解释什么是 Deferred，以及优点是什么。Deferred，意为延迟执行，是 jQuery 的回调函数解决方案，对所有的异步操作提供统一和更加方便的编程接口。使用 Deferred 实现的\$.ajax 有以下几种有点。（1）链式调用（2）指定多个回调（3）为多个操作指定回调  1234567$.ajax(&apos;test.html&apos;)  .done(function()&amp;#123;con">
 
 
 
@@ -438,18 +438,18 @@
         <ol>
 <li>####解释什么是 Deferred，以及优点是什么。<br>Deferred，意为延迟执行，是 jQuery 的回调函数解决方案，对所有的异步操作提供统一和更加方便的编程接口。使用 Deferred 实现的\$.ajax 有以下几种有点。（1）链式调用（2）指定多个回调（3）为多个操作指定回调</li>
 </ol>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">$.ajax(<span class="string">'test.html'</span>)</span><br><span class="line">  .done(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="string">'Done.'</span>)&#125;)</span><br><span class="line">  .fail(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="string">'Fail.'</span>)&#125;)</span><br><span class="line">  .done(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="string">'OK.'</span>));</span><br><span class="line">$.when($.ajax(<span class="string">'test1.html'</span>), $.ajax(<span class="string">'test2.html'</span>))</span><br><span class="line">  .done(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="string">'Done.'</span>)&#125;)</span><br><span class="line">  .fail(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="string">'Fail.'</span>)&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$.ajax(<span class="string">'test.html'</span>)</span><br><span class="line">  .done(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="string">'Done.'</span>)&#125;)</span><br><span class="line">  .fail(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="string">'Fail.'</span>)&#125;)</span><br><span class="line">  .done(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="string">'OK.'</span>));</span><br><span class="line">$.when($.ajax(<span class="string">'test1.html'</span>), $.ajax(<span class="string">'test2.html'</span>))</span><br><span class="line">  .done(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="string">'Done.'</span>)&#125;)</span><br><span class="line">  .fail(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;<span class="built_in">console</span>.log(<span class="string">'Fail.'</span>)&#125;);</span><br></pre></td></tr></table></figure>
 <ol>
 <li>####你如何给一个事件处理函数命名空间，为什么要这样做？</li>
 </ol>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 主要用于jQuery插件，当需要取消某插件的效果时，可以通过unbind('.namespace')一次性删除该插件绑定的所有事件，而不会影响到其他插件或者用户手动绑定的事件。</span></span><br><span class="line"><span class="keyword">var</span> $btn = $(<span class="string">'XXX'</span>);</span><br><span class="line"><span class="comment">// 比如我们写了一个实现拖拽的插件，该插件监听了mousedown，mousemove和mouseup事件。</span></span><br><span class="line">$btn.bind(<span class="string">'mousedown.dragdrop'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;);</span><br><span class="line">$btn.bind(<span class="string">'mousemove.dragdrop'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;);</span><br><span class="line">$btn.bind(<span class="string">'mouseup.dragdrop'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;);</span><br><span class="line"><span class="comment">// 当某个节点不支持拖拽时，取消拖拽相关的事件监听，就可以使用如下方法，一次性删除。</span></span><br><span class="line">$btn.unbind(<span class="string">'.dragdrop'</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 主要用于jQuery插件，当需要取消某插件的效果时，可以通过unbind('.namespace')一次性删除该插件绑定的所有事件，而不会影响到其他插件或者用户手动绑定的事件。</span></span><br><span class="line"><span class="keyword">var</span> $btn = $(<span class="string">'XXX'</span>);</span><br><span class="line"><span class="comment">// 比如我们写了一个实现拖拽的插件，该插件监听了mousedown，mousemove和mouseup事件。</span></span><br><span class="line">$btn.bind(<span class="string">'mousedown.dragdrop'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;);</span><br><span class="line">$btn.bind(<span class="string">'mousemove.dragdrop'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;);</span><br><span class="line">$btn.bind(<span class="string">'mouseup.dragdrop'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;);</span><br><span class="line"><span class="comment">// 当某个节点不支持拖拽时，取消拖拽相关的事件监听，就可以使用如下方法，一次性删除。</span></span><br><span class="line">$btn.unbind(<span class="string">'.dragdrop'</span>);</span><br></pre></td></tr></table></figure>
 <ol>
 <li><p>####请指出’$’和’$.fn’的区别？或者说出’\$.fn’的用途。</p>
 </li>
 <li><p>####解释 chaining。</p>
 </li>
 </ol>
-<figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 链式调用，如果对象的方法不需要一个明确意义的返回值，那么可以返回自身。</span></span><br><span class="line">$(<span class="string">'XXX'</span>)</span><br><span class="line">    .css(<span class="string">'width'</span>, <span class="string">'100px'</span>)</span><br><span class="line">    .show()</span><br><span class="line">    .click(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 链式调用，如果对象的方法不需要一个明确意义的返回值，那么可以返回自身。</span></span><br><span class="line">$(<span class="string">'XXX'</span>)</span><br><span class="line">    .css(<span class="string">'width'</span>, <span class="string">'100px'</span>)</span><br><span class="line">    .show()</span><br><span class="line">    .click(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;);</span><br></pre></td></tr></table></figure>
 <ol>
 <li><p>####你知道那些针对 jQuery 的优化方法。<br>（1）将一个 jQuery 对象保存起来，如果多次使用的话。</p>
 </li>
@@ -486,8 +486,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2013/05/13/HTML-CSS-Interview-Questions/" rel="next" title="HTML & CSS 面试题">
-                <i class="fa fa-chevron-left"></i> HTML & CSS 面试题
+              <a href="/2013/05/13/Unskilled-Interview-Questions/" rel="next" title="非技术类面试题">
+                <i class="fa fa-chevron-left"></i> 非技术类面试题
               </a>
             
           </div>
@@ -563,7 +563,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">63</span>
+                    <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

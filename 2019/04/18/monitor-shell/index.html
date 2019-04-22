@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-CN">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.6.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.6.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.6.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '6.6.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="我们在公司内部通过verdaccio创建了私有npm仓库，但是verdaccio不太稳定，每周都可能会挂掉一次两次的，在网上也没有找到好的解决方法。随着挂掉次数越来越多，痛定思痛，决定写个脚本主动监控verdaccio并在其挂掉以后自动重启。 判断服务是否正常运行怎么判断verdaccio是否正常正常呢？如果是我肉眼判断的话，我直接打开verdaccio的主页，比如http://example:4">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用 Shell 实现服务的监控和重启">
+<meta property="og:url" content="http://lichangwei.github.io/2019/04/18/monitor-shell/index.html">
+<meta property="og:site_name" content="飞鹰走码">
+<meta property="og:description" content="我们在公司内部通过verdaccio创建了私有npm仓库，但是verdaccio不太稳定，每周都可能会挂掉一次两次的，在网上也没有找到好的解决方法。随着挂掉次数越来越多，痛定思痛，决定写个脚本主动监控verdaccio并在其挂掉以后自动重启。 判断服务是否正常运行怎么判断verdaccio是否正常正常呢？如果是我肉眼判断的话，我直接打开verdaccio的主页，比如http://example:4">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-04-22T02:45:44.731Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用 Shell 实现服务的监控和重启">
+<meta name="twitter:description" content="我们在公司内部通过verdaccio创建了私有npm仓库，但是verdaccio不太稳定，每周都可能会挂掉一次两次的，在网上也没有找到好的解决方法。随着挂掉次数越来越多，痛定思痛，决定写个脚本主动监控verdaccio并在其挂掉以后自动重启。 判断服务是否正常运行怎么判断verdaccio是否正常正常呢？如果是我肉眼判断的话，我直接打开verdaccio的主页，比如http://example:4">
+
+
+
+
+
+
+  <link rel="canonical" href="http://lichangwei.github.io/2019/04/18/monitor-shell/">
+
+
+
+<script id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>使用 Shell 实现服务的监控和重启 | 飞鹰走码</title>
+  
+
+
+
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-131853143-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-131853143-1');
+</script>
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion .logo-line-before i { left: initial; }
+    .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">飞鹰走码</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+    
+      
+        <h1 class="site-subtitle" itemprop="description">飞鹰走码</h1>
+      
+    
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
+
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+
+    
+    
+    
+      
+    
+
+    
+
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
+
+  </li>
+
+      
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="st-search-show-outputs">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    
+
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input">
+</form>
+
+<script>
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'jKpsnJjixMaVpfnXVc3L','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lichangwei.github.io/2019/04/18/monitor-shell/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李长伟">
+      <meta itemprop="description" content="李长伟的博客">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="飞鹰走码">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">使用 Shell 实现服务的监控和重启
+
+              
+            
+          </h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-04-18 00:00:00" itemprop="dateCreated datePublished" datetime="2019-04-18T00:00:00+08:00">2019-04-18</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-04-22 10:45:44" itemprop="dateModified" datetime="2019-04-22T10:45:44+08:00">2019-04-22</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>我们在公司内部通过<a href="https://verdaccio.org/" target="_blank" rel="noopener">verdaccio</a>创建了私有<code>npm</code>仓库，但是<code>verdaccio</code>不太稳定，每周都可能会挂掉一次两次的，在网上也没有找到好的解决方法。随着挂掉次数越来越多，痛定思痛，决定写个脚本主动监控<code>verdaccio</code>并在其挂掉以后自动重启。</p>
+<h2 id="判断服务是否正常运行"><a href="#判断服务是否正常运行" class="headerlink" title="判断服务是否正常运行"></a>判断服务是否正常运行</h2><p>怎么判断<code>verdaccio</code>是否正常正常呢？如果是我肉眼判断的话，我直接打开<code>verdaccio</code>的主页，比如<code>http://example:4873</code>，如果能看到页面内容则说明服务正常，如果看到”无法访问次网站“等字样则说明服务挂掉了。为了实现自动化的监控和重启，我们必须通过脚本程序来做，在此我们可以通过<a href="http://man.linuxde.net/curl" target="_blank" rel="noopener"><code>curl</code>命令</a>来获取<code>http://example:4873</code>页面的响应码，如果返回<code>200</code>则说明服务正常，否则服务挂掉了。我们使用<a href="http://man.linuxde.net/curl" target="_blank" rel="noopener"><code>curl</code>命令</a>的参数<code>-I</code>只显示响应头。然后通过判断响应头中是否包含<code>HTTP/1.1 200 OK</code>字样来检查服务是否正常。因此就有了以下程序：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">header=`curl -I http://example:4873`</span><br><span class="line"><span class="keyword">if</span> [[ <span class="variable">$header</span> =~ <span class="string">'HTTP/1.1 200 OK'</span> ]]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">'ok'</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">'not ok'</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+<p>通过以上代码我们就可以监控服务是否正常了，我们再来拓展一下思路，其实我们还可以通过检查<code>verdaccio</code>服务进程是否存在来判断<code>verdaccio</code>服务正常与否。怎么判断进程是否存在呢？这里不再详细介绍，请参考一下代码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查询有几个进程占用了`4873`端口</span></span><br><span class="line">count=`lsof -ti :4873 | wc -l`</span><br><span class="line"><span class="keyword">if</span> [[ <span class="variable">$count</span> -ne 0 ]]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">'ok'</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">'not ok'</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+<p>第二种方案不如第一种直观，我仍然把它写出来主要是提醒各位多多思考，不要拘泥于某一种方案。接下来我们仍然采用第一种更加直观的方案继续进行。</p>
+<h2 id="服务挂了以后自动重启"><a href="#服务挂了以后自动重启" class="headerlink" title="服务挂了以后自动重启"></a>服务挂了以后自动重启</h2><p>在上一节中我们已经能够检查服务是否正常了，在这一节中我们要实现的是自动重启服务，这个就非常简单了，想想我们是怎么启动<code>verdaccio</code>的，嗯，我们是在控制台中输入一下命令，<code>nohup verdaccio &amp;</code>，其中<code>nohup</code>让命令永远执行下去，即使用户退出也没有关系，<code>&amp;</code>让程序在后台运行。两者结合起来就可以程序永久地在后台运行。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">header=`curl -I http://example:4873`</span><br><span class="line"><span class="keyword">if</span> [[ <span class="variable">$header</span> =~ <span class="string">'HTTP/1.1 200 OK'</span> ]]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">'ok'</span>;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line marked">    <span class="comment"># 重启服务</span></span><br><span class="line marked">    nohup verdaccio &amp;</span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+<h2 id="定期监控服务运行状况"><a href="#定期监控服务运行状况" class="headerlink" title="定期监控服务运行状况"></a>定期监控服务运行状况</h2><p>通过前面两个步骤我们已经写出一个脚本，它会检查服务是否正常运行，如果服务挂掉了就会重启。这还是这个检查工作是一次性的，需要我们不停地执行脚本。当然可以通过<a href="http://man.linuxde.net/crontab" target="_blank" rel="noopener"><code>crontab</code>命令</a>（以后再介绍）实现，不过在这里我们将通过写一个死循环逻辑来实现每隔一段时间来检查服务是否正常运行。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line marked"><span class="keyword">while</span> <span class="literal">true</span></span><br><span class="line marked"><span class="keyword">do</span></span><br><span class="line">    header=`curl -I http://example:4873`</span><br><span class="line">    <span class="keyword">if</span> [[ <span class="variable">$header</span> =~ <span class="string">'HTTP/1.1 200 OK'</span> ]]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">'ok'</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="comment"># 重启服务</span></span><br><span class="line">        nohup verdaccio &amp;</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line marked">    <span class="comment"># 每个10秒检查一次</span></span><br><span class="line marked">    sleep 10s</span><br><span class="line marked"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<p><code>sleep</code>命令会让程序暂停一段时间，很适合用在循环方式运行的监控脚本中，它有一个参数表示要暂停的时间，时间单位可以是<code>s</code>秒，<code>m</code>分钟，<code>h</code>小时和<code>d</code>天。默认为秒。我们也可以传入小数<code>0.1s</code>来实现毫秒级的睡眠，但是<code>sleep</code>命令只能保证<code>10ms</code>的睡眠，如果你对时间精度要求特别高的话，<code>sleep</code>命令就无能为力了。</p>
+<h2 id="重启服务以后记录日志"><a href="#重启服务以后记录日志" class="headerlink" title="重启服务以后记录日志"></a>重启服务以后记录日志</h2><p>当服务挂了以后除了重启以外，还需要将重启行为记入到日志文件中，方便以后我们查看什么时候服务被重启了，最终代码如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"></span><br><span class="line marked"><span class="comment"># 获取脚本目录</span></span><br><span class="line marked">shell_folder=$(<span class="built_in">cd</span> `dirname <span class="variable">$0</span>`; <span class="built_in">pwd</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">true</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    header=`curl -I http://example:4873`</span><br><span class="line">    <span class="keyword">if</span> [[ <span class="variable">$header</span> =~ <span class="string">'HTTP/1.1 200 OK'</span> ]]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">'ok'</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="comment"># 重启服务并记录日志</span></span><br><span class="line">        nohup verdaccio &amp;</span><br><span class="line marked">        <span class="built_in">echo</span> `date +%Y-%m-%d\ %H:%M:%S` <span class="string">"restart"</span> &gt;&gt; <span class="variable">$shell_folder</span>/verdaccio.restart.log</span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line">    <span class="comment"># 每个10秒检查一次</span></span><br><span class="line">    sleep 10s</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<p>执行命令<code>nohup sh verdaccio.sh &amp;</code>就启动了一个守护进程，实现了每隔<code>10</code>秒检查一次服务是否运行正常，如果挂掉就会重启的功能，并且还会记录到日志中。</p>
+<p>如果你是在<code>Ubuntu</code>服务器上运行该命令，可能会遇到这个错误<code>[[: not found</code>，这是因为<code>sh</code>只是一个符号链接，最终指向是一个叫做<code>dash</code>的程序，自<code>Ubuntu 6.10</code>以后，系统的默认<code>shell /bin/sh</code>被改成了<code>dash</code>。<code>dash(the Debian Almquist shell)</code> 是一个比<code>bash</code>小很多但仍兼容<code>POSIX</code>标准的<code>shell</code>，它占用的磁盘空间更少，执行<code>shell</code>脚本比<code>bash</code>更快，依赖的库文件更少，当然，在功能上无法与<code>bash</code>相比。所以在<code>Ubuntu</code>上我们需要指定使用<code>bash</code>，即<code>nohup bash verdaccio.sh &amp;</code>。</p>
+<h2 id="如何取消服务自动重启"><a href="#如何取消服务自动重启" class="headerlink" title="如何取消服务自动重启"></a>如何取消服务自动重启</h2><p>如果有一天，你想关闭<code>verdaccio</code>服务，守护进程就会检测到该服务挂掉，并自动重启该服务。导致你想关闭该服务也不行了。所以我们首先要先关闭守护进程，如何关闭呢？我们可以使用<a href="http://man.linuxde.net/jobs" target="_blank" rel="noopener"><code>jobs</code>命令</a>查看守护进程ID，然后杀掉该进程。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">jobs</span> -l</span><br><span class="line"><span class="built_in">kill</span> -9 &lt;id&gt;</span><br></pre></td></tr></table></figure></p>
+<h2 id="针对verdaccio的特殊方案"><a href="#针对verdaccio的特殊方案" class="headerlink" title="针对verdaccio的特殊方案"></a>针对<code>verdaccio</code>的特殊方案</h2><p>其实<code>verdaccio</code>是用Node写的，因此可以通过<code>pm2</code>让其达到自动重启的功能，命令如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 启动</span></span><br><span class="line">pm2 start <span class="built_in">which</span> verdaccio </span><br><span class="line"><span class="comment"># 停止</span></span><br><span class="line">pm2 stop <span class="built_in">which</span> verdaccio </span><br><span class="line"><span class="comment"># 查看日志</span></span><br><span class="line">pm2 show verdaccio</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/10/daci-desicion-framework/" rel="next" title="想提高决策的效率？试试 DACI 框架">
+                <i class="fa fa-chevron-left"></i> 想提高决策的效率？试试 DACI 框架
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+  </div>
+
+
+          </div>
+          
+
+  
+    <div id="gitalk-container">
+    </div>
+    
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">李长伟</p>
+              <p class="site-description motion-element" itemprop="description">李长伟的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">64</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </div>
+
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#判断服务是否正常运行"><span class="nav-number">1.</span> <span class="nav-text">判断服务是否正常运行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务挂了以后自动重启"><span class="nav-number">2.</span> <span class="nav-text">服务挂了以后自动重启</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定期监控服务运行状况"><span class="nav-number">3.</span> <span class="nav-text">定期监控服务运行状况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重启服务以后记录日志"><span class="nav-number">4.</span> <span class="nav-text">重启服务以后记录日志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何取消服务自动重启"><span class="nav-number">5.</span> <span class="nav-text">如何取消服务自动重启</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#针对verdaccio的特殊方案"><span class="nav-number">6.</span> <span class="nav-text">针对verdaccio的特殊方案</span></a></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">李长伟</span>
+
+  
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 – <a href="https://theme-next.org" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a> v6.6.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+    
+
+    
+  </div>
+
+  
+
+<script>
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script src="/js/src/utils.js?v=6.6.0"></script>
+
+  <script src="/js/src/motion.js?v=6.6.0"></script>
+
+
+
+  
+  
+
+  
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
+
+  
+
+
+  <script src="/js/src/bootstrap.js?v=6.6.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.js"></script>
+
+  
+  
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.css">
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+   <script>
+        var gitalk = new Gitalk({
+          clientID: '621ce74dae06b19c2e65',
+          clientSecret: '7f314e6e41cd4753fbd21a92c6813e5d353f9c8b',
+          repo: 'lichangwei.github.io',
+          owner: 'lichangwei',
+          admin: ['lichangwei'],
+          id: md5(location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

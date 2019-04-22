@@ -437,16 +437,16 @@
       
         <h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>在一个项目中，需要显示一个 YouTube 视频被观看了多少次，这个数字一般是个很长的数字，为了更好的体验，也是国际标准，三位三位地断开，对应千（thousand），百万（million），十亿（billion），当然对中国用户来讲，不是特别友好，中国人喜欢四位四位隔开，对应万，亿，万亿。。。但是无论如何，都比看到 567232349723 这样的一串数字好很多。<br>言归正传，这个该如何实现呢？以下就以 567232349723 数字为例。</p>
 <h2 id="普通的解决办法"><a href="#普通的解决办法" class="headerlink" title="普通的解决办法"></a>普通的解决办法</h2><p>首先，可以这样理解，就是从数字的最后一位开始，往前数，数到 3，加一个逗号，如此循环下去……直到第一个数字（因为逗号不能加在开始位置，比如不能“,123”）。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> array = <span class="string">'567232349723'</span>.split(<span class="string">''</span>);</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = array.length - <span class="number">1</span>, j = <span class="number">1</span>; i &gt; <span class="number">0</span>; i--, j++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (j % <span class="number">3</span> === <span class="number">0</span>) &#123;</span><br><span class="line">        array.splice(i, <span class="number">0</span>, <span class="string">','</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(array.join(<span class="string">''</span>));</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> array = <span class="string">'567232349723'</span>.split(<span class="string">''</span>);</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> i = array.length - <span class="number">1</span>, j = <span class="number">1</span>; i &gt; <span class="number">0</span>; i--, j++) &#123;</span><br><span class="line">    <span class="keyword">if</span> (j % <span class="number">3</span> === <span class="number">0</span>) &#123;</span><br><span class="line">        array.splice(i, <span class="number">0</span>, <span class="string">','</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(array.join(<span class="string">''</span>));</span><br></pre></td></tr></table></figure>
 <p>受不了了，看似特别简单的问题，要写那么长一段代码。从标题你就看到了，这不是我们想要的答案，我们将要使用正则表达式来解决这个问题。首先来明确几个概念：</p>
 <p><strong>零宽断言（零宽度正预测先行断言）</strong>：形式为<code>(?=exp)</code>。<strong>零宽</strong>，就是不匹配任何内容，明确一点就是它表示的是一个位置，就像^, \$一样。<strong>断言</strong>，就是说它需要满足一定条件。</p>
 <p><strong>负向零宽断言（零宽度负预测先行断言）</strong>：形式为<code>(?!exp)</code>。所谓负向，就是不满足某种条件。</p>
 <p>这两个别名都含有“先行”二字，它表示匹配的位置是表达式前面的位置。这么说来，肯定还会有一种用于匹配表达式后面的位置。你说的对，还有“零宽度正回顾后发断言”，形式为<code>(?&lt;=exp)</code>，以及“零宽度负回顾后发断言”，形式为<code>(?&lt;!exp)</code>。但是在 javascript 中并不支持这两中形式。这次不多说明。  </p>
 <p>###正则表达式办法<br>我们现在看看哪些位置需要添加逗号，首先这个位置不能是开始位置，也就是<code>(?!^)</code>，其次这个位置后面总是有 3n（n &gt; 0）个数字，直到结束，也就是<code>(\d{3})+$</code>，组合起来就是<code>(?=(?!^)(\d{3})+$)</code>。</p>
 <p>所以答案就是</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="string">'567232349723'</span>.replace(<span class="regexp">/(?=(?!^)(\d&#123;3&#125;)+$)/g</span>, <span class="string">','</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'567232349723'</span>.replace(<span class="regexp">/(?=(?!^)(\d&#123;3&#125;)+$)/g</span>, <span class="string">','</span>);</span><br></pre></td></tr></table></figure>
 <p>注意了，以上正则对于整数已经足够了，加入你想也适应于小数呢？比如“123456.123456”，这时候我们只处理前面几位，所以上面的“直到结束”应该修改为“直到结束或者小数点”，那么答案来了，就是<code>[$\.]</code>，所以适用于小数的正则为</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="string">'567232.49723'</span>.replace(<span class="regexp">/(?=(?!^)(\d&#123;3&#125;)+[$\.])/g</span>, <span class="string">','</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'567232.49723'</span>.replace(<span class="regexp">/(?=(?!^)(\d&#123;3&#125;)+[$\.])/g</span>, <span class="string">','</span>);</span><br></pre></td></tr></table></figure>
 <p>如果想适用更多情况，会使得你的正则越来越复杂，也越来越容易出错，所以要根据你实际需要来决定，不多不少最好。</p>
 <h2 id="工具推荐"><a href="#工具推荐" class="headerlink" title="工具推荐"></a>工具推荐</h2><ol>
 <li><a href="">http://www.regexper.com/</a></li>
@@ -568,7 +568,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">63</span>
+                    <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

@@ -438,16 +438,16 @@
         <p>这周四，同事<code>Katrina</code>告诉我一个奇怪的问题：在我们的一台服务器上原来已经有了一个网站，现在需要再部署另一个网站。分别通过两个不同的域名来访问，这很简单，使用基于域名的虚拟主机就可以做到。但是奇怪的是<code>nginx -s reload</code>重载之后，通过两个域名访问到的都是那个老的网站。</p>
 <p>为了方便描述，我们假设老的网站叫做“网站 A”，对应域名是“a.com”，新部署的网站叫做“网站 B”，对应的域名是“b.com”。</p>
 <p>在我接手这个问题以后，我首先看了网站 B 对应的配置文件</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name b.com;</span><br><span class="line">    access_log /var/<span class="built_in">log</span>/nginx/logs/access.log main;</span><br><span class="line">    error_log  /var/<span class="built_in">log</span>/nginx/logs/error.log;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">       root /var/www;</span><br><span class="line">       index index.html;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name b.com;</span><br><span class="line">    access_log /var/<span class="built_in">log</span>/nginx/logs/access.log main;</span><br><span class="line">    error_log  /var/<span class="built_in">log</span>/nginx/logs/error.log;</span><br><span class="line"></span><br><span class="line">    location / &#123;</span><br><span class="line">       root /var/www;</span><br><span class="line">       index index.html;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>看起来没有任何问题。我首先 ping 了一下域名<code>ping b.com</code>发现异常<code>ping: cannot resolve b.com: Unknown host</code>。因此我怀疑是不是域名配置有什么问题，我找了运维也没有发现配置有任何可疑之处，只好作罢。在这之前我还是比较怀疑的，毕竟我们是依靠域名做的虚拟主机。我也查了 nginx 的日志文件，看到了 b.com 域名的访问记录，也基本证明了域名配置正确。（事后回顾：我现在再<code>ping b.com</code>就正常了，当时可能是域名解析的缓存问题）</p>
 <p>然后我想到我以前见到过的默认虚拟主机<code>default_server</code>配置，我大概了解这个特性，但是不了解具体用法。所以搜索了一番。了解到在匹配虚拟主机时，首先测试请求的 IP 地址和端口（通过 listen 指定配置）是否匹配，然后才测试 Host（通过 server_name 指令配置）是否匹配，如果没有匹配到，nginx 把这个请求交给默认虚拟主机处理。虚拟主机是配置在 listen 指令，也就是 IP 和端口上，所有不同的 IP+Port 组合可以设置不同的默认服务器。根据以上信息，我尝试设置默认虚拟主机，但是仍然没有任何改变。</p>
 <p>这时候我开始怀疑人生了，我开始怀疑是不是这台服务器上有两个 nginx，是不是修改错了配置文件，我要测试一下。我通过<code>sudo nginx -s stop</code>停止 nginx 服务器，立马访问<code>a.com</code>发现不能访问了，也就是说确定是这个 nginx 服务器了，没有问题。我紧接着通过<code>sudo nginx</code>重启 nginx 服务，但是很不幸，报错了，居然报错了。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nginx: [emerg] open() <span class="string">"/var/log/nginx/logs/error.log"</span> failed (2: No such file or directory)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx: [emerg] open() <span class="string">"/var/log/nginx/logs/error.log"</span> failed (2: No such file or directory)</span><br></pre></td></tr></table></figure>
 <p>本来好好的，怎么突然找不到文件了呢，我一度怀疑是我启动姿势不对，还特地去问了同事，然后急忙注释掉”error_log /var/log/nginx/logs/error.log;”这句话才成功地启动了。</p>
 <p>到这里可以看出，原来是错误日志文件找不到，所以重载失败，但是没有给出任何错误提示。为什么会这样呢？我明明记得有时候也会报错的？</p>
 <p>经过各种搜索才发现，原来重载时 master 进程首先检查配置的语法有效性，如果有语法错误会报错，比如你将第一行替换成<code>server1 {</code>试试。如果通过语法检测，就会尝试配置，打开日志文件，尝试分配新的监听端口等，这一步如果有错误，就回滚改变，继续使用原来的配置。如果尝试配置成功，就会使用新的配置创建新的 worker 进程，并给旧的 worker 进程发一个关闭的消息。旧的 worker 进程收到关闭消息后，继续处理当前正在处理的请求，等完成以后就会关闭。关于重载过程请参考<a href="http://nginx.org/en/docs/beginners_guide.html" target="_blank" rel="noopener">官方文档</a>。</p>
 <p>通过上面对于重载过程的讲解不难看出，重载时如果打开日志文件出现错误就回滚了，并不会报错。会让你误以为成功了。其实还有另一个命令，它可以检查配置是否正确，不仅可以进行语法检查，还能检查到上述的错误日志文件不存在的问题。它就是：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">nginx -t</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nginx -t</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -555,7 +555,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">63</span>
+                    <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

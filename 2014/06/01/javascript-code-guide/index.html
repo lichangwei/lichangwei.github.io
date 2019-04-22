@@ -104,17 +104,17 @@
 
 
 
-  <meta name="description" content="1 变量 如非必要，请不要使用全局变量；局部变量应该尽可能缩小其作用域。  声明全局变量必须使用window.前缀；声明局部变量必须使用var关键字。比如   (function() &amp;#123;    // 局部变量    var config = &amp;#123;&amp;#125;;    // 全局变量    window.global = &amp;#123;&amp;#125;;&amp;#125;)();  同时声明多">
+  <meta name="description" content="1 变量 如非必要，请不要使用全局变量；局部变量应该尽可能缩小其作用域。  声明全局变量必须使用window.前缀；声明局部变量必须使用var关键字。比如   123456(function() &amp;#123;    // 局部变量    var config = &amp;#123;&amp;#125;;    // 全局变量    window.global = &amp;#123;&amp;#125;;&amp;#125;)();">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Javascript编码规范">
 <meta property="og:url" content="http://lichangwei.github.io/2014/06/01/javascript-code-guide/index.html">
 <meta property="og:site_name" content="飞鹰走码">
-<meta property="og:description" content="1 变量 如非必要，请不要使用全局变量；局部变量应该尽可能缩小其作用域。  声明全局变量必须使用window.前缀；声明局部变量必须使用var关键字。比如   (function() &amp;#123;    // 局部变量    var config = &amp;#123;&amp;#125;;    // 全局变量    window.global = &amp;#123;&amp;#125;;&amp;#125;)();  同时声明多">
+<meta property="og:description" content="1 变量 如非必要，请不要使用全局变量；局部变量应该尽可能缩小其作用域。  声明全局变量必须使用window.前缀；声明局部变量必须使用var关键字。比如   123456(function() &amp;#123;    // 局部变量    var config = &amp;#123;&amp;#125;;    // 全局变量    window.global = &amp;#123;&amp;#125;;&amp;#125;)();">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2018-12-07T02:52:25.678Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Javascript编码规范">
-<meta name="twitter:description" content="1 变量 如非必要，请不要使用全局变量；局部变量应该尽可能缩小其作用域。  声明全局变量必须使用window.前缀；声明局部变量必须使用var关键字。比如   (function() &amp;#123;    // 局部变量    var config = &amp;#123;&amp;#125;;    // 全局变量    window.global = &amp;#123;&amp;#125;;&amp;#125;)();  同时声明多">
+<meta name="twitter:description" content="1 变量 如非必要，请不要使用全局变量；局部变量应该尽可能缩小其作用域。  声明全局变量必须使用window.前缀；声明局部变量必须使用var关键字。比如   123456(function() &amp;#123;    // 局部变量    var config = &amp;#123;&amp;#125;;    // 全局变量    window.global = &amp;#123;&amp;#125;;&amp;#125;)();">
 
 
 
@@ -441,22 +441,22 @@
 <li><p>声明全局变量必须使用<code>window.</code>前缀；声明局部变量必须使用<code>var</code>关键字。比如</p>
 </li>
 </ol>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 局部变量</span></span><br><span class="line">    <span class="keyword">var</span> config = &#123;&#125;;</span><br><span class="line">    <span class="comment">// 全局变量</span></span><br><span class="line">    <span class="built_in">window</span>.global = &#123;&#125;;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 局部变量</span></span><br><span class="line">    <span class="keyword">var</span> config = &#123;&#125;;</span><br><span class="line">    <span class="comment">// 全局变量</span></span><br><span class="line">    <span class="built_in">window</span>.global = &#123;&#125;;</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
 <ol>
 <li>同时声明多个变量时，每个变量独立申明。</li>
 </ol>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 好的做法</span></span><br><span class="line"><span class="keyword">var</span> var1 = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">var</span> var2 = <span class="string">'string'</span>;</span><br><span class="line"><span class="keyword">var</span> var3 = <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 好的做法</span></span><br><span class="line"><span class="keyword">var</span> var1 = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">var</span> var2 = <span class="string">'string'</span>;</span><br><span class="line"><span class="keyword">var</span> var3 = <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
 <p>以前我们经常看到以下写法，以下做法会导致在末尾新增变量声明或者删除第一个变量声明时不方便。</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 不好的做法</span></span><br><span class="line"><span class="keyword">var</span> var1 = <span class="number">1</span>,</span><br><span class="line">    var2 = <span class="string">'string'</span>,</span><br><span class="line">    var3 = <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 不好的做法</span></span><br><span class="line"><span class="keyword">var</span> var1 = <span class="number">1</span>,</span><br><span class="line">    var2 = <span class="string">'string'</span>,</span><br><span class="line">    var3 = <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
 <ol>
 <li>鼓励延迟初始化</li>
 </ol>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="string">``</span><span class="string">`</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">1. 命名规范：命名应能够表达该变量的含义，首字母小写的驼峰格式。比如：</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">`</span><span class="string">``</span>js</span><br><span class="line"><span class="keyword">var</span> isInited = <span class="literal">false</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">``</span><span class="string">`</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">1. 命名规范：命名应能够表达该变量的含义，首字母小写的驼峰格式。比如：</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">`</span><span class="string">``</span>js</span><br><span class="line"><span class="keyword">var</span> isInited = <span class="literal">false</span>;</span><br></pre></td></tr></table></figure>
 <p>例外：在循环体内可以使用 i, j, k 等无意义但是被广泛使用的变量。</p>
 <h2 id="2-常量"><a href="#2-常量" class="headerlink" title="2 常量"></a>2 常量</h2><ol>
 <li>命名规范：命名应能够表达该变量的含义，首字母小写的驼峰格式。比如<code>Math</code>的常量<code>PI</code>,<code>SQRT1_2</code>等等。</li>
 </ol>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> SECONDS_IN_A_DAY = <span class="number">60</span> * <span class="number">60</span> * <span class="number">24</span>;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> SECONDS_IN_A_DAY = <span class="number">60</span> * <span class="number">60</span> * <span class="number">24</span>;</span><br></pre></td></tr></table></figure>
 <h2 id="3-语句"><a href="#3-语句" class="headerlink" title="3 语句"></a>3 语句</h2><h3 id="3-1-行"><a href="#3-1-行" class="headerlink" title="3.1 行"></a>3.1 行</h3><ol>
 <li>语句必须以分号结束。</li>
 <li>每一行要控制在 120 字符以内。</li>
@@ -502,7 +502,7 @@
 <li>行级注释<code>// comment</code>主要用与代码行或代码片段</li>
 <li>块状注释<code>/* comment */</code>主要用于函数。</li>
 </ol>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @desc 记忆函数，对于耗时的运算，运算一次以后就讲结果保存起来，下次就直接返回结果。</span></span><br><span class="line"><span class="comment"> * @param &#123;function&#125; func 运算非常耗时的函数。</span></span><br><span class="line"><span class="comment"> * @param &#123;object&#125; thisObject func的主体对象</span></span><br><span class="line"><span class="comment"> * @param &#123;function&#125; serialize 参数序列化函数，将参数序列化为一个字符串。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">memorize</span>(<span class="params">func, thisObject, serialize</span>) </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @desc 记忆函数，对于耗时的运算，运算一次以后就讲结果保存起来，下次就直接返回结果。</span></span><br><span class="line"><span class="comment"> * @param &#123;function&#125; func 运算非常耗时的函数。</span></span><br><span class="line"><span class="comment"> * @param &#123;object&#125; thisObject func的主体对象</span></span><br><span class="line"><span class="comment"> * @param &#123;function&#125; serialize 参数序列化函数，将参数序列化为一个字符串。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">memorize</span>(<span class="params">func, thisObject, serialize</span>) </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="4-2-注释书写原则"><a href="#4-2-注释书写原则" class="headerlink" title="4.2 注释书写原则"></a>4.2 注释书写原则</h3><ol>
 <li>在写注释之前，看看是否能够通过修改方法名，函数名让其变得见名知意，从而不需要注释。</li>
 <li>注释应该记录代码不能明显体现出来的思路或你对代码的评价。</li>
@@ -521,20 +521,20 @@
 <li><p>不要在块作用域中声明函数<br>不要写成:</p>
 </li>
 </ol>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (x) &#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (x) &#123;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>虽然有很多 JS 引擎都支持块做域内声明函数，但它不是 ECMAScript 规范(见<a href="http://www.ecma-international.org/publications/standards/Ecma-262.htm" target="_blank" rel="noopener">ECMA-262</a>, 第 13 和 14 条)。各个浏览器的实现可能不兼容, 也可能与未来的 ECMAScript 草案相违背。ECMAScript 只允许在脚本的根语句或函数中声明函数，如果确实需要在块中定义函数, 建议使用函数表达式来初始化变量:</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (x) &#123;</span><br><span class="line">    <span class="keyword">var</span> foo = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (x) &#123;</span><br><span class="line">    <span class="keyword">var</span> foo = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ol>
 <li>命名规范：命名应能够表达该变量的含义，首字母小写的驼峰格式。比如：</li>
 </ol>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">returnTrue</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">returnTrue</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <ol>
 <li>Getter/Setter 命名<br>这里单独说明 Getter/Setter 命名规范，一般情况下不需要使用 Getter/Setter 方法，直接暴露相应地对象属性即可。如确有必要，请使用 getXxx 和 setXxx 命名，对于 boolean 值，可以使用 isXxx/hasXxx/canDoXxx 等命名。</li>
 </ol>
 <h2 id="6-模块"><a href="#6-模块" class="headerlink" title="6 模块"></a>6 模块</h2><ol>
 <li>建议按照 CMD 或 AMD 规范实现模块，并使用 seajs 或 requirejs 等库加载或管理模块。</li>
 </ol>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line">define(<span class="function"><span class="keyword">function</span>(<span class="params">require, exports, module</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> $ = <span class="built_in">require</span>(<span class="string">'$'</span>);</span><br><span class="line">    exports.init = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// do something</span></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">define(<span class="function"><span class="keyword">function</span>(<span class="params">require, exports, module</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> $ = <span class="built_in">require</span>(<span class="string">'$'</span>);</span><br><span class="line">    exports.init = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// do something</span></span><br><span class="line">    &#125;;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <h2 id="7-文件"><a href="#7-文件" class="headerlink" title="7 文件"></a>7 文件</h2><ol>
 <li>命名规范：命名应能表达该文件的作用。全部小写，单词以连字符分隔，比如<code>category-manager.js</code>。</li>
 <li>编码规范：统一使用 UTF-8（无 BOM）格式。</li>
@@ -542,7 +542,7 @@
 <h2 id="8-HTML，CSS-和-Javascript"><a href="#8-HTML，CSS-和-Javascript" class="headerlink" title="8 HTML，CSS 和 Javascript"></a>8 HTML，CSS 和 Javascript</h2><ol>
 <li>HTML 中引用 javascript 文件时，建议去掉 type 属性。只有当 script 标签存放的不是 javascript 时才需要特别声明。</li>
 </ol>
-<figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"path/to/js.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">    $(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">        <span class="comment">// do something</span></span></span><br><span class="line"><span class="undefined">    &#125;);</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/template"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;i18n.noData&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"path/to/js.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="javascript">    $(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">        <span class="comment">// do something</span></span></span><br><span class="line"><span class="undefined">    &#125;);</span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">type</span>=<span class="string">"text/template"</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="xml">    <span class="tag">&lt;<span class="name">div</span>&gt;</span>&#123;i18n.noData&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br><span class="line"><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>##终极条款</p>
 <ol>
 <li>在修改别人的代码时，应该先学习别人的编码规范，并遵守该规范，如果有的话。</li>
@@ -667,7 +667,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">63</span>
+                    <span class="site-state-item-count">64</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
