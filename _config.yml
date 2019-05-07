@@ -151,9 +151,14 @@ post-default-img: http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg #博文默认
 post-default-img-mobile: http://owxa05m5s.bkt.clouddn.com/16-8-new-bg.jpg #移动端显示的图片
 
 # search api , set your custom key
-swiftype_key: jKpsnJjixMaVpfnXVc3L
+swiftype_key:
 
 # archive page title
 archive:
     title: archives
     description: 可以根据归档日期检索所有文件
+
+search:
+    path: search
+    field: post
+    content: true
