@@ -28,7 +28,7 @@ title: 运行时指定 Webpack 的 publicPath
 }
 ```
 
-但是这样就把静态资源的地址写死了，而测试环境和生成环境的静态资源往往存在在不同的地方。OK，下面我就通过`__webpack_public_path__`变量来实现。
+但是这样就把静态资源的地址写死了，而测试环境和生产环境的静态资源往往存在在不同的地方。OK，下面我就通过`__webpack_public_path__`变量来实现。
 
 ## 解决方法
 
@@ -44,9 +44,7 @@ output: {
 2. 在`html`模板文件中添加以下代码
 
 ```html
-<script>
-    window.webpackPublicPath = '<这里可以由后端负责填写>';
-</script>
+<script>window.webpackPublicPath = '<域名，可以由后端运行时改写，或由前端发布资源时改写>';</script>
 ```
 
 3. 上个步骤中后端已经给我们提供了静态资源访问地址了，那么怎么应用到静态资源中呢？创建一个新文件，名字自己定，比如叫做`webpack.js`。
