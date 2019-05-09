@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://lichangwei.github.io/2019/04/28/how-to-write-a-good-email/</loc>
+    
+    <lastmod>2019-05-09T02:18:09.237Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://lichangwei.github.io/2018/02/08/webpack-public-path/</loc>
+    
+    <lastmod>2019-05-08T08:30:16.297Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://lichangwei.github.io/2019/04/18/monitor-shell/</loc>
     
     <lastmod>2019-04-22T02:45:44.731Z</lastmod>
@@ -432,13 +446,6 @@
     <loc>http://lichangwei.github.io/2017/10/24/shared-cookie/</loc>
     
     <lastmod>2018-12-07T02:38:38.123Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://lichangwei.github.io/2018/02/08/webpack-public-path/</loc>
-    
-    <lastmod>2018-12-07T02:38:19.483Z</lastmod>
     
   </url>
   
