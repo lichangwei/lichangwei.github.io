@@ -104,23 +104,24 @@
 
 
 
-  <meta name="description" content="李长伟的博客">
-<meta property="og:type" content="website">
-<meta property="og:title" content="飞鹰走码">
-<meta property="og:url" content="http://lichangwei.github.io/archives/2013/11/index.html">
+  <meta name="description" content="1. 为什么要编写模拟数据？肯定会有不少同事疑惑，为什么要编写模拟数据？编写和维护模拟数据都会增加工作量。但是请想想你有没有遇到过以下情形：  任务工期太短，立马去做，再加加班，应该还能完成。但是后端还在设计数据库表结构，接口还没有动工呢，怎么办？  时间紧，不能等，这个就不要多说了吧，相信大家不止一次遇到这种情况。即便时间比较宽裕，也不能等后端开发完成才开始，还要考虑后端延期的风险。否则到了上线">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何编写模拟数据">
+<meta property="og:url" content="http://lichangwei.github.io/2019/05/12/mock-server/index.html">
 <meta property="og:site_name" content="飞鹰走码">
-<meta property="og:description" content="李长伟的博客">
+<meta property="og:description" content="1. 为什么要编写模拟数据？肯定会有不少同事疑惑，为什么要编写模拟数据？编写和维护模拟数据都会增加工作量。但是请想想你有没有遇到过以下情形：  任务工期太短，立马去做，再加加班，应该还能完成。但是后端还在设计数据库表结构，接口还没有动工呢，怎么办？  时间紧，不能等，这个就不要多说了吧，相信大家不止一次遇到这种情况。即便时间比较宽裕，也不能等后端开发完成才开始，还要考虑后端延期的风险。否则到了上线">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-05-15T03:34:19.515Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="飞鹰走码">
-<meta name="twitter:description" content="李长伟的博客">
+<meta name="twitter:title" content="如何编写模拟数据">
+<meta name="twitter:description" content="1. 为什么要编写模拟数据？肯定会有不少同事疑惑，为什么要编写模拟数据？编写和维护模拟数据都会增加工作量。但是请想想你有没有遇到过以下情形：  任务工期太短，立马去做，再加加班，应该还能完成。但是后端还在设计数据库表结构，接口还没有动工呢，怎么办？  时间紧，不能等，这个就不要多说了吧，相信大家不止一次遇到这种情况。即便时间比较宽裕，也不能等后端开发完成才开始，还要考虑后端延期的风险。否则到了上线">
 
 
 
 
 
 
-  <link rel="canonical" href="http://lichangwei.github.io/archives/2013/11/">
+  <link rel="canonical" href="http://lichangwei.github.io/2019/05/12/mock-server/">
 
 
 
@@ -130,7 +131,7 @@
   };
 </script>
 
-  <title>归档 | 飞鹰走码</title>
+  <title>如何编写模拟数据 | 飞鹰走码</title>
   
 
 
@@ -187,7 +188,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -245,7 +246,7 @@
         
         
           
-          <li class="menu-item menu-item-archives menu-item-active">
+          <li class="menu-item menu-item-archives">
 
     
     
@@ -274,19 +275,6 @@
 
   
     
-
-    
-    
-      
-      
-    
-      
-      
-    
-    
-
-  
-
 
   
 
@@ -333,77 +321,224 @@
           <div id="content" class="content">
             
 
+  <div id="posts" class="posts-expand">
+    
+
+  
+
   
   
   
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
 
-      
-      <span class="archive-page-counter">
-        
-        
-         
-          
-        不错! 目前共计 66 篇日志。 继续努力。
-      </span>
-      
-
-      
-
-        
-        
-        
-
-        
-          
-          <div class="collection-title">
-            <h2 class="archive-year" id="archive-year-2013">2013</h2>
-          </div>
-        
-        
-
-        
+  
 
   <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://lichangwei.github.io/2019/05/12/mock-server/">
 
-      <h3 class="post-title">
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="李长伟">
+      <meta itemprop="description" content="李长伟的博客">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="飞鹰走码">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2013/11/23/Good-UI-2/" itemprop="url">
-              
-                <span itemprop="name">【翻译】优秀的用户界面设计（二）</span>
-              
-            </a>
         
-      </h3>
+          <h2 class="post-title" itemprop="name headline">如何编写模拟数据
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2013-11-23T00:00:00+08:00" content="2013-11-23">
-          11-23
-        </time>
-      </div>
+              
+            
+          </h2>
+        
 
-    </header>
-  </article>
+        <div class="post-meta">
+          <span class="post-time">
 
+            
+            
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-05-12 00:00:00" itemprop="dateCreated datePublished" datetime="2019-05-12T00:00:00+08:00">2019-05-12</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-05-15 11:34:19" itemprop="dateModified" datetime="2019-05-15T11:34:19+08:00">2019-05-15</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
+      
 
+      
+        <h2 id="1-为什么要编写模拟数据？"><a href="#1-为什么要编写模拟数据？" class="headerlink" title="1. 为什么要编写模拟数据？"></a>1. 为什么要编写模拟数据？</h2><p>肯定会有不少同事疑惑，为什么要编写模拟数据？编写和维护模拟数据都会增加工作量。但是请想想你有没有遇到过以下情形：</p>
+<blockquote>
+<p>任务工期太短，立马去做，再加加班，应该还能完成。但是后端还在设计数据库表结构，接口还没有动工呢，怎么办？</p>
+</blockquote>
+<p><strong>时间紧，不能等</strong>，这个就不要多说了吧，相信大家不止一次遇到这种情况。即便时间比较宽裕，也不能等后端开发完成才开始，还要考虑后端延期的风险。否则到了上线前天晚上，后端跑来告诉你说他接口开发好了，你就懵逼了。</p>
+<blockquote>
+<p>后端接口终于好了，我可以安心些 <code>Bug</code> 了。。。503。。。哎哎哎，XXX，怎么503了？。。。哎呦卧槽，你这服务太不稳定了，能不能上线啊？。。。</p>
+</blockquote>
+<p><strong>后端服务不稳定</strong>，恭喜你成为后端接口的第一个用户，实际上就是个小白鼠。在掘金上有人开玩笑说<a href="https://juejin.im/pin/5cd94619f265da4cf6e1d103" target="_blank" rel="noopener">“不要叫我前端了，叫我后端API测试工程师算了”</a>，以此来吐槽后端接口的不稳定。</p>
+<blockquote>
+<p>测试今天给我报了一个 <code>Bug</code>，说是用户名大于20个字符时截断了，但是没有显示点点点。老子不服，还不是因为联调时后端给我的用户名都很短，本来我也想到了，但是用户名来自单点登录系统，改起来很麻烦，后来一忙就忘了。</p>
+</blockquote>
+<p><strong>边界条件覆盖少</strong>，导致很多问题要到测试环境甚至生产环境才被发现。庆幸测试发现了，不然被用户发现那就是线上故障了。</p>
+<h2 id="2-编写模拟数据的最佳实践"><a href="#2-编写模拟数据的最佳实践" class="headerlink" title="2. 编写模拟数据的最佳实践"></a>2. 编写模拟数据的最佳实践</h2><p>相信你看完以上几个案例之后，也会认为模拟数据很有必要。那好，我们来看看应该怎样编写模拟数据。</p>
+<h3 id="2-1-模拟后端接口"><a href="#2-1-模拟后端接口" class="headerlink" title="2.1 模拟后端接口"></a>2.1 模拟后端接口</h3><p>确认需求之后，首先和后端定义接口，然后两边同事开工。我们创建一个 <code>mock server</code>，其规格和前后端接口完全一致，只是它的逻辑是简化后的，甚至是写死的。</p>
+<h3 id="2-2-手动编写数据"><a href="#2-2-手动编写数据" class="headerlink" title="2.2 手动编写数据"></a>2.2 手动编写数据</h3><p>网上有不少生成模拟数据的第三方库，为什么还要手动编写呢？原因如下：</p>
+<ol>
+<li>学习成本低<blockquote>
+<p>你不需要学习和使用第三方库的 <code>DSL</code> ，也不受限第三方库的 <code>DSL</code> 的表达能力。你编写的就是普通代码。</p>
+</blockquote>
+</li>
+<li>数据有意义<blockquote>
+<p>试想在页面中看到 <code>bW9kdWxlPXNoYXJl</code> 你能知道他代表什么吗？如果看到 <code>Steve Jobs</code> 呢？</p>
+</blockquote>
+</li>
+<li>边界覆盖高<blockquote>
+<p>假设用户名长度在1-6之间，那么我们在编写用户列表数据时，就可以写三条数据，用户名分别是<code>A</code>，<code>Abel</code>，<code>Albert</code>，我们刻意有针对性编写的模拟数据在很大程度上起到单元测试的功能。</p>
+</blockquote>
+</li>
+<li>流程更完整<blockquote>
+<p>必要时我们可以实现一些简单的逻辑，让操作流程更加流畅。比如在用户新增了一个用户之后，用户列表中就真的多了这个用户。</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="2-3-代码版本管理"><a href="#2-3-代码版本管理" class="headerlink" title="2.3 代码版本管理"></a>2.3 代码版本管理</h3><p>模拟数据本质上就是代码，也需要你不断维护，也就产生了不同版本，加入代码版本管理以后，你就不用担心数据丢失，无法恢复的问题了。</p>
+
+      
     </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/28/how-to-write-a-good-email/" rel="next" title="如何正确地使用电子邮件">
+                <i class="fa fa-chevron-left"></i> 如何正确地使用电子邮件
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+  </div>
 
 
           </div>
           
+
+  
+    <div id="gitalk-container">
+    </div>
+    
+  
+
+
 
         </div>
         
@@ -424,8 +559,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -469,6 +613,22 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-为什么要编写模拟数据？"><span class="nav-number">1.</span> <span class="nav-text">1. 为什么要编写模拟数据？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-编写模拟数据的最佳实践"><span class="nav-number">2.</span> <span class="nav-text">2. 编写模拟数据的最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-模拟后端接口"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 模拟后端接口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-手动编写数据"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 手动编写数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-代码版本管理"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 代码版本管理</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
@@ -615,6 +775,10 @@
   
 
   
+  <script src="/js/src/scrollspy.js?v=6.6.0"></script>
+<script src="/js/src/post-details.js?v=6.6.0"></script>
+
+
 
   
 
@@ -637,6 +801,32 @@
 
 
 
+
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.min.js"></script>
+
+  
+  
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1.4.0/dist/gitalk.css">
+
+  
+  
+  <script src="//cdn.jsdelivr.net/npm/js-md5@0.7.3/src/md5.min.js"></script>
+
+   <script>
+        var gitalk = new Gitalk({
+          clientID: '621ce74dae06b19c2e65',
+          clientSecret: '7f314e6e41cd4753fbd21a92c6813e5d353f9c8b',
+          repo: 'lichangwei.github.io',
+          owner: 'lichangwei',
+          admin: ['lichangwei'],
+          id: md5(location.pathname),
+          distractionFreeMode: 'true'
+        })
+        gitalk.render('gitalk-container')
+       </script>
 
 
   
