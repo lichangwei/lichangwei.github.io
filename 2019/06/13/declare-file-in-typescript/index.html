@@ -104,28 +104,24 @@
 
 
 
-  <meta name="description" content="关于用户体验，我们经常听到这样的言论，除非到了非注册不可的时候，才让用户注册账号。过早地强迫用户注册，只会吓走用户。以今天看到的一个站点孢子社区为例，首页是一张背景图片，一张 LOGO 图标，一个登陆按钮和一个注册按钮，可谓非常简洁。“孢子”这个名字对我来说比较亲切，我挺喜欢玩《植物大战僵尸》，里面有个孢子射手。背景图片也很亲切，是一群光着身子的小孩子欢笑跳跃，对我也说，也非常亲切，我很想知道这个">
+  <meta name="description" content="最近我将一个老项目改造成 TypeScript 项目，项目中有一些模型类型，这写类型在多个文件中都会使用，比如对用户的增删改查逻辑会分散在多个文件中，他们都会使用 User 这个类型，如果我把对 User 类型的生命放在任何一个文件中都会导致文件之间的互相引用，如果创建一个文件专门用来保存这个类型，又会导致文件更多并且这个文件内容略显单薄。后来就想到将所有的模型类型存放到一个单独的文件中，可以命名">
 <meta property="og:type" content="article">
-<meta property="og:title" content="强迫注册和注册强迫症">
-<meta property="og:url" content="http://lichangwei.github.io/2013/06/07/essay/index.html">
+<meta property="og:title" content="集中地声明 TypeScript 类型">
+<meta property="og:url" content="http://lichangwei.github.io/2019/06/13/declare-file-in-typescript/index.html">
 <meta property="og:site_name" content="飞鹰走码">
-<meta property="og:description" content="关于用户体验，我们经常听到这样的言论，除非到了非注册不可的时候，才让用户注册账号。过早地强迫用户注册，只会吓走用户。以今天看到的一个站点孢子社区为例，首页是一张背景图片，一张 LOGO 图标，一个登陆按钮和一个注册按钮，可谓非常简洁。“孢子”这个名字对我来说比较亲切，我挺喜欢玩《植物大战僵尸》，里面有个孢子射手。背景图片也很亲切，是一群光着身子的小孩子欢笑跳跃，对我也说，也非常亲切，我很想知道这个">
+<meta property="og:description" content="最近我将一个老项目改造成 TypeScript 项目，项目中有一些模型类型，这写类型在多个文件中都会使用，比如对用户的增删改查逻辑会分散在多个文件中，他们都会使用 User 这个类型，如果我把对 User 类型的生命放在任何一个文件中都会导致文件之间的互相引用，如果创建一个文件专门用来保存这个类型，又会导致文件更多并且这个文件内容略显单薄。后来就想到将所有的模型类型存放到一个单独的文件中，可以命名">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://lichangwei.github.io/images/baoz.me-home.png">
-<meta property="og:image" content="http://lichangwei.github.io/images/baoz.me-register.png">
-<meta property="og:image" content="http://lichangwei.github.io/images/headin.cn.png">
-<meta property="og:updated_time" content="2018-12-07T03:01:29.734Z">
+<meta property="og:updated_time" content="2019-06-13T07:53:44.439Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="强迫注册和注册强迫症">
-<meta name="twitter:description" content="关于用户体验，我们经常听到这样的言论，除非到了非注册不可的时候，才让用户注册账号。过早地强迫用户注册，只会吓走用户。以今天看到的一个站点孢子社区为例，首页是一张背景图片，一张 LOGO 图标，一个登陆按钮和一个注册按钮，可谓非常简洁。“孢子”这个名字对我来说比较亲切，我挺喜欢玩《植物大战僵尸》，里面有个孢子射手。背景图片也很亲切，是一群光着身子的小孩子欢笑跳跃，对我也说，也非常亲切，我很想知道这个">
-<meta name="twitter:image" content="http://lichangwei.github.io/images/baoz.me-home.png">
+<meta name="twitter:title" content="集中地声明 TypeScript 类型">
+<meta name="twitter:description" content="最近我将一个老项目改造成 TypeScript 项目，项目中有一些模型类型，这写类型在多个文件中都会使用，比如对用户的增删改查逻辑会分散在多个文件中，他们都会使用 User 这个类型，如果我把对 User 类型的生命放在任何一个文件中都会导致文件之间的互相引用，如果创建一个文件专门用来保存这个类型，又会导致文件更多并且这个文件内容略显单薄。后来就想到将所有的模型类型存放到一个单独的文件中，可以命名">
 
 
 
 
 
 
-  <link rel="canonical" href="http://lichangwei.github.io/2013/06/07/essay/">
+  <link rel="canonical" href="http://lichangwei.github.io/2019/06/13/declare-file-in-typescript/">
 
 
 
@@ -135,7 +131,7 @@
   };
 </script>
 
-  <title>强迫注册和注册强迫症 | 飞鹰走码</title>
+  <title>集中地声明 TypeScript 类型 | 飞鹰走码</title>
   
 
 
@@ -341,7 +337,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://lichangwei.github.io/2013/06/07/essay/">
+    <link itemprop="mainEntityOfPage" href="http://lichangwei.github.io/2019/06/13/declare-file-in-typescript/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="李长伟">
@@ -358,7 +354,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">强迫注册和注册强迫症
+          <h2 class="post-title" itemprop="name headline">集中地声明 TypeScript 类型
 
               
             
@@ -384,24 +380,12 @@
                 
               
 
-              <time title="创建时间：2013-06-07 00:00:00" itemprop="dateCreated datePublished" datetime="2013-06-07T00:00:00+08:00">2013-06-07</time>
+              <time title="创建时间：2019-06-13 00:00:00 / 修改时间：15:53:44" itemprop="dateCreated datePublished" datetime="2019-06-13T00:00:00+08:00">2019-06-13</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-07 11:01:29" itemprop="dateModified" datetime="2018-12-07T11:01:29+08:00">2018-12-07</time>
               
             
           </span>
@@ -441,15 +425,10 @@
       
 
       
-        <p>关于用户体验，我们经常听到这样的言论，除非到了非注册不可的时候，才让用户注册账号。过早地强迫用户注册，只会吓走用户。以今天看到的一个站点<a href="http://baoz.me/" target="_blank" rel="noopener">孢子社区</a>为例，首页是一张背景图片，一张 LOGO 图标，一个登陆按钮和一个注册按钮，可谓非常简洁。“孢子”这个名字对我来说比较亲切，我挺喜欢玩《植物大战僵尸》，里面有个孢子射手。背景图片也很亲切，是一群光着身子的小孩子欢笑跳跃，对我也说，也非常亲切，我很想知道这个网站是干什么的，但是孢子社区的首页并没有告诉我，而是在门口安排了两个保安（登录按钮和注册按钮），要检查我的身份证，刚才提及的亲切感顿时灰飞烟灭。<br><img src="../../../../images/baoz.me-home.png" alt="孢子首页截屏"><br><img src="../../../../images/baoz.me-register.png" alt="孢子注册页面截屏"></p>
-<p>当我意识是他们强迫我注册，才让我不想进去看看里面有什么东西的，并且我又临时决定写这样一篇博客时，我决定去注册一下，去看看里面有什么东西。注册页面也挺简单：要填写一个邮箱，一个昵称，和一个密码。注意这里并没有要我再填写一次密码，这是最近比较流行的注册方式。顺便看看内容，还好。其中一个图片令人捧腹，所谓<a href="http://f.baoz.cn/f/9793b729aab2d6416d566b788db562a5" target="_blank" rel="noopener">百鸟朝凤</a>，图片有色。</p>
-<p>使用一小段时间之后，发现都不是非注册不可。我不发帖不留言。所以该网站就因为首页的注册按钮丢失了我这个潜在的用户。</p>
-<p>本公司是一家家电产业的公司，生产基于 Android 系统的手机，相机，电视等，为了丰富他们的使用价值，希望吸引开发者多多开发其上的应用。但是考虑到如下因素，以电视机为例，为了开发电视机上的应用，不是每个个人开发者都可以去买一台电视机，也不是每家公司都有足够电视机供员工调试开发使用。所以本公司就想开发一个模拟应用，称之为应用 D，它能够模拟电视机开放出来的接口。我的建议很简单，用户打开应用 D 以后，就看到一堆可以申请的设备，包括电视机，相机等，一键申请设备之后，就会显示在用户设备列表中，用户就可以使用他们。当用户关掉应用 D，所有的设备都消失，当应用再次打开应用 D 时，需要重新申请才可以继续使用。当然如果感觉这样比较麻烦，那么可以在应用 D 本地数据中保留用户已经申请的设备，使得用户再次打开应用 D 时，可以看到以前申请的各种设备。但公司领导还是希望用户打开应用 D 之后，首先注册账号，以便把申请的设备保存到服务器端，然后本公司可以跟踪用户喜欢申请那些设备，以及使用时间长短等等。我也提出，这些问题也可以通过记录用户的操作，比如点击申请等来跟踪，但是注册不是必须的。还有很重要的一点，如果你要用户注册账号，你就要保证用户账号安全。近几年来，已经发生了不少大公司用户信息被盗取的案例。不幸的是本公司也在其列。</p>
-<p>面对每天要登录的各种应用各种网站，我总是在想，苹果拥有那么多终端，那么多的用户账号，为什么不提供一种功能，类似 Open ID，不管是网页还是本地 APP，开发者只需要一个添加一句话，甚至只要在 APP 的配置中给予权限，用户就可以使用 Apple ID 一键该网站或者 APP。这是一种多么令人向往的美好。</p>
-<p>关于 Open ID，国内用的比较多的，当属新浪微博，腾讯 QQ，校内网等等。令人郁闷的是很多网站在我使用 Open ID 首次登录以后，还让我填写昵称和邮箱，他妈的这和我重新注册账号有什么区别？？？使用新浪微博账号登录以后，还很有能会在我不知情的情况下，替我发条微博，趁机给自己的产品做个广告。让我的隐私暴露的体无完肤啊！！！你们能有点节操吗？</p>
-<p>顺便吐槽一下<a href="headin.cn">海丁网</a>，每次报名参加一次讲座的时候，都要填写邮箱，手机号码，职位和公司名称。我从来没有见过这么 SB 的网站。<br><img src="../../../../images/headin.cn.png" alt="海丁网报名页面截屏"></p>
-<p>标题中还有一个词叫做注册强迫症，就是我看到一个新的网站，就想使用我的常用 ID 把它注册了。我有轻微的强迫注册症，但是这不妨碍我讨厌被强迫注册。我有三个常用 ID，第一个是被逼的没办法只能注册时，或者对网站内容或者网站所有者不屑时使用的 ID，再或者像上一段中提及的那些没有节操的网站，即便当时填写了一些个人信息，你可以想象，有多大的可信度，有多大的数据挖掘价值。第二个是全世界唯一的 UUID，用于常用 ID 已经被注册的情况。第三个是我真实姓名，用于我很喜欢的一些网站。有时候最初觉得某个网站不好，所以没有使用真实姓名注册，而后来越来越觉得好时，我还会使用真实姓名注册下来。我也会因为没有使用我的真实姓名注册到 gmail 邮箱而遗憾。所以从我的个人习惯来看，强迫用户注册真不是好主意。</p>
-<p>真是希望网站开发者或者老板能够认识到这一点，你有好用的产品，有有价值的内容，还怕没有用户？</p>
+        <p>最近我将一个老项目改造成 TypeScript 项目，项目中有一些模型类型，这写类型在多个文件中都会使用，比如对用户的增删改查逻辑会分散在多个文件中，他们都会使用 User 这个类型，如果我把对 User 类型的生命放在任何一个文件中都会导致文件之间的互相引用，如果创建一个文件专门用来保存这个类型，又会导致文件更多并且这个文件内容略显单薄。后来就想到将所有的模型类型存放到一个单独的文件中，可以命名为<code>types.ts</code>，并确保该文件在<code>tsconfig.json</code>中的<code>includes</code>或<code>files</code>中，这样就可以文件中直接使用了。比如以下就是我的<code>types.ts</code>。<br><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">declare</span> <span class="keyword">namespace</span> GW &#123;</span><br><span class="line">    <span class="keyword">export</span> <span class="keyword">type</span> Image = &#123;</span><br><span class="line">        id: <span class="built_in">string</span>;</span><br><span class="line">        url: <span class="built_in">string</span>;</span><br><span class="line">        alt: <span class="built_in">string</span>;</span><br><span class="line">        description: <span class="built_in">string</span>;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">export</span> <span class="keyword">type</span> User = &#123;</span><br><span class="line">        id?: <span class="built_in">string</span>;</span><br><span class="line">        name: <span class="built_in">string</span>;</span><br><span class="line">        phone: <span class="built_in">string</span>;</span><br><span class="line">        email: <span class="built_in">string</span>;</span><br><span class="line">        username: <span class="built_in">string</span>;</span><br><span class="line">        password: <span class="built_in">string</span>;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在其他文件中直接使用，代码如下：<br><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> PostAddStore&#123;</span><br><span class="line">    show = <span class="function">(<span class="params">post: GW.Post</span>) =&gt;</span> &#123;</span><br><span class="line">        <span class="comment">// do something</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>为了让敏感信息在传输中更加安全，在我的项目还用到<code>jsencrypt</code>对密码字段进行加密，而<code>jsencrypt</code>是没有类型声明的，因此我在<code>types.ts</code>文件中对它进行了声明，代码如下：<br><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">interface</span> Window &#123;</span><br><span class="line">    JSEncrypt: <span class="keyword">new</span> () =&gt; &#123;</span><br><span class="line">        setKey: <span class="function">(<span class="params">publicKey: <span class="built_in">string</span></span>) =&gt;</span> <span class="built_in">void</span>;</span><br><span class="line">        encrypt: <span class="function">(<span class="params">content: <span class="built_in">string</span></span>) =&gt;</span> <span class="built_in">string</span>;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这就表明<code>JSEncrypt</code>是一个构造函数，通过它创建的对象包含2个函数属性，分别是<code>setKey</code>和<code>encrypt</code>，以及这两个函数的类型声明。</p>
 
       
     </div>
@@ -480,8 +459,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2013/06/06/Events-in-Capture-Phase/" rel="next" title="通过 body 的 error 事件捕获页面中所有图片的 error 事件">
-                <i class="fa fa-chevron-left"></i> 通过 body 的 error 事件捕获页面中所有图片的 error 事件
+              <a href="/2019/05/12/mock-server/" rel="next" title="如何编写模拟数据">
+                <i class="fa fa-chevron-left"></i> 如何编写模拟数据
               </a>
             
           </div>
@@ -489,10 +468,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2013/06/09/TotalResults-filed-in-Youtube-Open-API/" rel="prev" title="YouTube 开放 API 中返回数据不一致">
-                YouTube 开放 API 中返回数据不一致 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>

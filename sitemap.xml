@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://lichangwei.github.io/2019/06/13/declare-file-in-typescript/</loc>
+    
+    <lastmod>2019-06-13T07:53:44.439Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://lichangwei.github.io/2019/05/12/mock-server/</loc>
     
     <lastmod>2019-05-15T03:34:19.515Z</lastmod>
