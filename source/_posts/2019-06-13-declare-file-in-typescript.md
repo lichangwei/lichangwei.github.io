@@ -31,7 +31,7 @@ class PostAddStore{
 }
 ```
 
-为了让敏感信息在传输中更加安全，在我的项目还用到`jsencrypt`对密码字段进行加密，而`jsencrypt`是没有类型声明的，因此我在`types.ts`文件中对它进行了声明，代码如下：
+为了让敏感信息在传输中更加安全，在我的项目还用到`jsencrypt`对密码字段进行加密，而`jsencrypt`是没有类型声明的。`jsencrypt`给我们提供一个全局构造函数`JSEncrypt`，通过它创建的对象包含2个函数属性，分别是`setKey`和`encrypt`，以及这两个函数的类型声明。根据这些信息我在`types.ts`文件中对它进行了声明，代码如下：
 ```ts
 interface Window {
     JSEncrypt: new () => {
@@ -40,4 +40,4 @@ interface Window {
     };
 }
 ```
-这就表明`JSEncrypt`是一个构造函数，通过它创建的对象包含2个函数属性，分别是`setKey`和`encrypt`，以及这两个函数的类型声明。
+看起来以上代码非常简单，也非常直观，由于这中做法并不多件，所以我在网上找了很就才找到这种方法。
