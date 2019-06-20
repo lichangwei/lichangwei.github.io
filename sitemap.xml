@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://lichangwei.github.io/2019/06/18/crypto-password-between-browser-and-node-server/</loc>
+    
+    <lastmod>2019-06-18T08:28:14.589Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://lichangwei.github.io/2019/06/13/declare-file-in-typescript/</loc>
     
     <lastmod>2019-06-13T08:03:07.482Z</lastmod>

@@ -104,32 +104,24 @@
 
 
 
-  <meta name="description" content="以前我使用过Apache或Nginx实现反向代理，但是目前后端使用的是.Net语言，服务器操作系统是Windows Server，并且后端应用程序就部署在IIS上，因此不打算再安装Nginx，改为使用IIS。 在操作过程中，遇到各种问题也耽误了不少时间，现在将一些操作流程记录下来，以备再用。 项目简介项目采用前后端分离方式开发，两个代码仓库，并部署为两个应用。后端接口地址全部以/api打头，方便简">
+  <meta name="description" content="我们的官网项目有个简单的后台管理系统，不开放注册，目前只有一个管理在用，功能比较少，也比较简单，主要就是发布文章，维护一些配置项等。所以在技术选型上我们选择对前端友好的Node，这样只要一个前端同事开发维护即可。后来在安全测试时，收到了一个Issue，说是在登录时没有将密码字段加密。关于这个问题，我认为通过HTTPS协议来发送请求已经足够安全了，但是我还是听从了安全测试同事的建议，对敏感信息做了加">
 <meta property="og:type" content="article">
-<meta property="og:title" content="IIS 的 URL 重写（反向代理）">
-<meta property="og:url" content="http://lichangwei.github.io/2018/01/12/iis-url-rewrite/index.html">
+<meta property="og:title" content="在浏览器和 Node Server 之间加密敏感信息">
+<meta property="og:url" content="http://lichangwei.github.io/2019/06/18/crypto-password-between-browser-and-node-server/index.html">
 <meta property="og:site_name" content="飞鹰走码">
-<meta property="og:description" content="以前我使用过Apache或Nginx实现反向代理，但是目前后端使用的是.Net语言，服务器操作系统是Windows Server，并且后端应用程序就部署在IIS上，因此不打算再安装Nginx，改为使用IIS。 在操作过程中，遇到各种问题也耽误了不少时间，现在将一些操作流程记录下来，以备再用。 项目简介项目采用前后端分离方式开发，两个代码仓库，并部署为两个应用。后端接口地址全部以/api打头，方便简">
+<meta property="og:description" content="我们的官网项目有个简单的后台管理系统，不开放注册，目前只有一个管理在用，功能比较少，也比较简单，主要就是发布文章，维护一些配置项等。所以在技术选型上我们选择对前端友好的Node，这样只要一个前端同事开发维护即可。后来在安全测试时，收到了一个Issue，说是在登录时没有将密码字段加密。关于这个问题，我认为通过HTTPS协议来发送请求已经足够安全了，但是我还是听从了安全测试同事的建议，对敏感信息做了加">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://lichangwei.github.io/images/iis-url-rewrite/1.click-iis-root-select-arr.png">
-<meta property="og:image" content="http://lichangwei.github.io/images/iis-url-rewrite/2.server-proxy-setting.png">
-<meta property="og:image" content="http://lichangwei.github.io/images/iis-url-rewrite/3.enable-proxy.png">
-<meta property="og:image" content="http://lichangwei.github.io/images/iis-url-rewrite/4.select-url-rewrite.png">
-<meta property="og:image" content="http://lichangwei.github.io/images/iis-url-rewrite/5.add-rule.png">
-<meta property="og:image" content="http://lichangwei.github.io/images/iis-url-rewrite/6.add-condition.png">
-<meta property="og:image" content="http://lichangwei.github.io/images/iis-url-rewrite/7.add-operation.png">
-<meta property="og:updated_time" content="2018-12-07T02:38:05.653Z">
+<meta property="og:updated_time" content="2019-06-18T08:28:14.589Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="IIS 的 URL 重写（反向代理）">
-<meta name="twitter:description" content="以前我使用过Apache或Nginx实现反向代理，但是目前后端使用的是.Net语言，服务器操作系统是Windows Server，并且后端应用程序就部署在IIS上，因此不打算再安装Nginx，改为使用IIS。 在操作过程中，遇到各种问题也耽误了不少时间，现在将一些操作流程记录下来，以备再用。 项目简介项目采用前后端分离方式开发，两个代码仓库，并部署为两个应用。后端接口地址全部以/api打头，方便简">
-<meta name="twitter:image" content="http://lichangwei.github.io/images/iis-url-rewrite/1.click-iis-root-select-arr.png">
+<meta name="twitter:title" content="在浏览器和 Node Server 之间加密敏感信息">
+<meta name="twitter:description" content="我们的官网项目有个简单的后台管理系统，不开放注册，目前只有一个管理在用，功能比较少，也比较简单，主要就是发布文章，维护一些配置项等。所以在技术选型上我们选择对前端友好的Node，这样只要一个前端同事开发维护即可。后来在安全测试时，收到了一个Issue，说是在登录时没有将密码字段加密。关于这个问题，我认为通过HTTPS协议来发送请求已经足够安全了，但是我还是听从了安全测试同事的建议，对敏感信息做了加">
 
 
 
 
 
 
-  <link rel="canonical" href="http://lichangwei.github.io/2018/01/12/iis-url-rewrite/">
+  <link rel="canonical" href="http://lichangwei.github.io/2019/06/18/crypto-password-between-browser-and-node-server/">
 
 
 
@@ -139,7 +131,7 @@
   };
 </script>
 
-  <title>IIS 的 URL 重写（反向代理） | 飞鹰走码</title>
+  <title>在浏览器和 Node Server 之间加密敏感信息 | 飞鹰走码</title>
   
 
 
@@ -345,7 +337,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://lichangwei.github.io/2018/01/12/iis-url-rewrite/">
+    <link itemprop="mainEntityOfPage" href="http://lichangwei.github.io/2019/06/18/crypto-password-between-browser-and-node-server/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="李长伟">
@@ -362,7 +354,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">IIS 的 URL 重写（反向代理）
+          <h2 class="post-title" itemprop="name headline">在浏览器和 Node Server 之间加密敏感信息
 
               
             
@@ -388,24 +380,12 @@
                 
               
 
-              <time title="创建时间：2018-01-12 00:00:00" itemprop="dateCreated datePublished" datetime="2018-01-12T00:00:00+08:00">2018-01-12</time>
+              <time title="创建时间：2019-06-18 00:00:00 / 修改时间：16:28:14" itemprop="dateCreated datePublished" datetime="2019-06-18T00:00:00+08:00">2019-06-18</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2018-12-07 10:38:05" itemprop="dateModified" datetime="2018-12-07T10:38:05+08:00">2018-12-07</time>
               
             
           </span>
@@ -445,30 +425,14 @@
       
 
       
-        <p>以前我使用过<code>Apache</code>或<code>Nginx</code>实现反向代理，但是目前后端使用的是<code>.Net</code>语言，服务器操作系统是<code>Windows Server</code>，并且后端应用程序就部署在<code>IIS</code>上，因此不打算再安装<code>Nginx</code>，改为使用<code>IIS</code>。</p>
-<p>在操作过程中，遇到各种问题也耽误了不少时间，现在将一些操作流程记录下来，以备再用。</p>
-<h2 id="项目简介"><a href="#项目简介" class="headerlink" title="项目简介"></a>项目简介</h2><p>项目采用前后端分离方式开发，两个代码仓库，并部署为两个应用。后端接口地址全部以<code>/api</code>打头，方便简化转发规则。现在就需要在前端应用中将<code>/api</code>打头的请求转至后端应用。</p>
-<h2 id="IIS-默认不支持反向代理，需要额外安装插件"><a href="#IIS-默认不支持反向代理，需要额外安装插件" class="headerlink" title="IIS 默认不支持反向代理，需要额外安装插件"></a>IIS 默认不支持反向代理，需要额外安装插件</h2><p>很难想象<code>IIS</code>(Internet Information Service)竟然不默认支持反向代理，需要安装官方提供的两个插件。<br>安装插件：</p>
-<ol>
-<li><a href="https://www.iis.net/downloads/microsoft/application-request-routing" target="_blank" rel="noopener">Application Request Routing</a></li>
-<li><a href="https://www.iis.net/downloads/microsoft/url-rewrite" target="_blank" rel="noopener">URL Rewrite</a><br>安装完成之后重新启动一下<code>IIS</code>.</li>
-</ol>
-<h2 id="启用反向代理功能"><a href="#启用反向代理功能" class="headerlink" title="启用反向代理功能"></a>启用反向代理功能</h2><ol>
-<li>双击<code>IIS</code>根目录，双击<code>Application Request Routing Cache</code>，双击右侧的<code>Server Proxy Settings</code>。<br><img src="../../../../images/iis-url-rewrite/1.click-iis-root-select-arr.png" alt=""><br><img src="../../../../images/iis-url-rewrite/2.server-proxy-setting.png" alt=""></li>
-<li>勾选<code>Enable proxy</code><br><img src="../../../../images/iis-url-rewrite/3.enable-proxy.png" alt=""></li>
-</ol>
-<h2 id="添加入站规则"><a href="#添加入站规则" class="headerlink" title="添加入站规则"></a>添加入站规则</h2><ol>
-<li>点击前端应用，双击<code>URL Rewrite</code> -&gt; <code>Add Rules</code>(新建规则) -&gt; <code>Blank rule</code>(空白规则)<br><img src="../../../../images/iis-url-rewrite/4.select-url-rewrite.png" alt=""></li>
-<li><p>填写入站规则信息<br><img src="../../../../images/iis-url-rewrite/5.add-rule.png" alt=""></p>
-</li>
-<li><p>填写转发条件<br><img src="../../../../images/iis-url-rewrite/6.add-condition.png" alt=""></p>
-</li>
-<li><p>填写操作部分<br><img src="../../../../images/iis-url-rewrite/7.add-operation.png" alt=""></p>
-</li>
-<li><p>点击右侧应用</p>
-</li>
-</ol>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>反向代理的配置相比<code>Nginx</code>等复杂太多了，还需要额外理解 IIS 自己定义的一些概念，比如入站规则等。相信大部分刚毕业的同学跟我一样，一度特别喜欢有操作界面的软件，随着对系统掌握程度的增加，这个想法会慢慢的逆转。</p>
+        <p>我们的官网项目有个简单的后台管理系统，不开放注册，目前只有一个管理在用，功能比较少，也比较简单，主要就是发布文章，维护一些配置项等。所以在技术选型上我们选择对前端友好的<code>Node</code>，这样只要一个前端同事开发维护即可。后来在安全测试时，收到了一个Issue，说是在登录时没有将密码字段加密。关于这个问题，我认为通过<code>HTTPS</code>协议来发送请求已经足够安全了，但是我还是听从了安全测试同事的建议，对敏感信息做了加密处理。</p>
+<p>对于加密分类想必大家都听说过，分为对称加密和非对称加密，对称加密有计算量小，加密速度快等特点，但是由于加密和解密双方使用同样的秘钥，安全性得不到保证。非对称加密有一对秘钥，公钥和私钥，用公钥加密后，只能用对应的私钥才能解密。非对称加密加解密速度比对称加密要慢很多，它不需要公开解密秘钥，即私钥，安全性很高。我们的项目是访问量很小的后台管理类应用，对性能要求也不高，所以我决定使用非对称加密。</p>
+<p><code>Node</code>语言自带加密模块<a href="http://nodejs.cn/api/crypto.html" target="_blank" rel="noopener"><code>crypto</code></a>，在很早的版本中就提供了解密的API <code>crypto.privateDecrypt</code>，而在<code>10.12</code>版本中还添加了<code>crypto.generateKeyPair</code>新接口用来生成非对称加密的秘钥对。因此我打算在通过<code>npm scripts</code>生成秘钥对，前端在需要加密之前通过<code>AJAX</code>请求获取公钥，将敏感字段加密以后发给服务器。</p>
+<p>关于如何生成秘钥对，我们可以参考<code>Node</code>官方文档中的示例代码并稍作修改，代码如下：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> options = &#123;</span><br><span class="line">    modulusLength: <span class="number">1024</span>,</span><br><span class="line">    publicKeyEncoding: &#123;</span><br><span class="line">        type: <span class="string">'spki'</span>,</span><br><span class="line">        format: <span class="string">'pem'</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    privateKeyEncoding: &#123;</span><br><span class="line">        type: <span class="string">'pkcs1'</span>,</span><br><span class="line">        format: <span class="string">'pem'</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;;</span><br><span class="line">crypto.generateKeyPair(<span class="string">'rsa'</span>, options, (error, publicKey, privateKey) =&gt; &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(publicKey, privateKey);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>这样我们就获得了一对公钥秘钥，我们可以把它们保存一个本地文件或数据库中。</p>
+<p>在页面中需要引入<a href="https://www.npmjs.com/package/jsencrypt" target="_blank" rel="noopener"><code>jsencrypt</code></a>，在需要发送敏感信息之前先发请求活动公钥，得到公钥以后进行加密，比如：<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> crypt = <span class="keyword">new</span> <span class="built_in">window</span>.JSEncrypt();</span><br><span class="line">crypt.setKey(publicKey);</span><br><span class="line"><span class="comment">// 对密码字段进行加密</span></span><br><span class="line">password = crypt.encrypt(password);</span><br></pre></td></tr></table></figure></p>
+<p>在服务器端得到加密后的密码字段以后，调用以下我封装好的方法即可获得原始密码字段。请注意<code>padding</code>字段的设置，否则可能会报错哦。<br><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">decrypt</span>(<span class="params">encrypted, privateKey</span>) =&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">const</span> buffer = crypto.privateDecrypt(</span><br><span class="line">        &#123;</span><br><span class="line">            key: privateKey,</span><br><span class="line">            padding: crypto.constants.RSA_PKCS1_PADDING,</span><br><span class="line">        &#125;,</span><br><span class="line">        Buffer.from(encrypted, <span class="string">'base64'</span>),</span><br><span class="line">    );</span><br><span class="line">    <span class="keyword">return</span> buffer.toString(<span class="string">'utf8'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>到此我们就介绍完了如何在浏览器和<code>Node Server</code>之间传递敏感信息，是不是很简单呢？</p>
 
       
     </div>
@@ -499,8 +463,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/10/24/shared-cookie/" rel="next" title="Cookie 的共享规则">
-                <i class="fa fa-chevron-left"></i> Cookie 的共享规则
+              <a href="/2019/06/13/declare-file-in-typescript/" rel="next" title="集中地声明 TypeScript 类型">
+                <i class="fa fa-chevron-left"></i> 集中地声明 TypeScript 类型
               </a>
             
           </div>
@@ -508,10 +472,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/02/08/webpack-public-path/" rel="prev" title="运行时指定 Webpack 的 publicPath">
-                运行时指定 Webpack 的 publicPath <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -560,17 +520,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <div class="site-overview-wrap sidebar-panel">
+      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -614,22 +565,6 @@
         </div>
       </div>
 
-      
-      <!--noindex-->
-        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#项目简介"><span class="nav-number">1.</span> <span class="nav-text">项目简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IIS-默认不支持反向代理，需要额外安装插件"><span class="nav-number">2.</span> <span class="nav-text">IIS 默认不支持反向代理，需要额外安装插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启用反向代理功能"><span class="nav-number">3.</span> <span class="nav-text">启用反向代理功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#添加入站规则"><span class="nav-number">4.</span> <span class="nav-text">添加入站规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-number">5.</span> <span class="nav-text">最后</span></a></li></ol></div>
-            
-
-          </div>
-        </div>
-      <!--/noindex-->
       
 
       
