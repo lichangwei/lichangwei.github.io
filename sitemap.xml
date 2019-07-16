@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://lichangwei.github.io/2019/07/15/nginx-try-files/</loc>
+    
+    <lastmod>2019-07-16T11:20:11.041Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://lichangwei.github.io/2019/06/18/crypto-password-between-browser-and-node-server/</loc>
     
     <lastmod>2019-06-18T08:28:14.589Z</lastmod>
