@@ -104,24 +104,34 @@
 
 
 
-  <meta name="description" content="我们都知道，手机厂商为了满足不同用户的需求，制造了各种尺寸的手机屏幕。我们在开发移动端的应用，需要考虑这些不同尺寸的屏幕，至少要保证不会出现大块空白或元素互相遮盖的情况，给开发带来了很大的困难。下面我将介绍一下我们在年报项目里的一些做法。 1. 使用SVG格式的图片在项目的开始阶段我们就和设计师达成一致意见，全部使用SVG格式的图片。这样就不再关心 2. CSS中的长度单位">
+  <meta name="description" content="前两天有位同事发给我了两张 SonarQube 代码质量扫描的截图，能够看出 SonarQube 还是能帮我们发现不少问题的。下面我们介绍三种使用 SonarQube 静态扫描代码质量的方法  通过 SonarScanner 手动扫描代码 通过 VS Code 插件即时扫描代码 通过 jenkins 插件持续扫描代码  通过 SonarScanner 手动扫描代码下面就是我的操作步骤，我使用的是">
 <meta property="og:type" content="article">
-<meta property="og:title" content="年报系列分享之适配篇">
-<meta property="og:url" content="http://lichangwei.github.io/2019/12/02/annual-report-adaptation/index.html">
+<meta property="og:title" content="使用 SonarQube 静态扫描代码质量">
+<meta property="og:url" content="http://lichangwei.github.io/2020/03/04/sonarqube/index.html">
 <meta property="og:site_name" content="飞鹰走码">
-<meta property="og:description" content="我们都知道，手机厂商为了满足不同用户的需求，制造了各种尺寸的手机屏幕。我们在开发移动端的应用，需要考虑这些不同尺寸的屏幕，至少要保证不会出现大块空白或元素互相遮盖的情况，给开发带来了很大的困难。下面我将介绍一下我们在年报项目里的一些做法。 1. 使用SVG格式的图片在项目的开始阶段我们就和设计师达成一致意见，全部使用SVG格式的图片。这样就不再关心 2. CSS中的长度单位">
+<meta property="og:description" content="前两天有位同事发给我了两张 SonarQube 代码质量扫描的截图，能够看出 SonarQube 还是能帮我们发现不少问题的。下面我们介绍三种使用 SonarQube 静态扫描代码质量的方法  通过 SonarScanner 手动扫描代码 通过 VS Code 插件即时扫描代码 通过 jenkins 插件持续扫描代码  通过 SonarScanner 手动扫描代码下面就是我的操作步骤，我使用的是">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-01-03T05:25:57.580Z">
+<meta property="og:image" content="http://lichangwei.github.io/images/sonar.1.png">
+<meta property="og:image" content="http://lichangwei.github.io/images/sonar.2.png">
+<meta property="og:image" content="http://lichangwei.github.io/images/sonar.dashboard.png">
+<meta property="og:image" content="http://lichangwei.github.io/images/sonarlint.setting.png">
+<meta property="og:image" content="http://lichangwei.github.io/images/sonarlint.tips.png">
+<meta property="og:image" content="http://lichangwei.github.io/images/sonar.scanner.jenkins.download.png">
+<meta property="og:image" content="http://lichangwei.github.io/images/sonar.scanner.jenkins.config.png">
+<meta property="og:image" content="http://lichangwei.github.io/images/sonar.scanner.jenkins.config.png">
+<meta property="og:image" content="http://lichangwei.github.io/images/sonar.scanner.jenkins.project.png">
+<meta property="og:updated_time" content="2020-03-05T07:15:27.832Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="年报系列分享之适配篇">
-<meta name="twitter:description" content="我们都知道，手机厂商为了满足不同用户的需求，制造了各种尺寸的手机屏幕。我们在开发移动端的应用，需要考虑这些不同尺寸的屏幕，至少要保证不会出现大块空白或元素互相遮盖的情况，给开发带来了很大的困难。下面我将介绍一下我们在年报项目里的一些做法。 1. 使用SVG格式的图片在项目的开始阶段我们就和设计师达成一致意见，全部使用SVG格式的图片。这样就不再关心 2. CSS中的长度单位">
+<meta name="twitter:title" content="使用 SonarQube 静态扫描代码质量">
+<meta name="twitter:description" content="前两天有位同事发给我了两张 SonarQube 代码质量扫描的截图，能够看出 SonarQube 还是能帮我们发现不少问题的。下面我们介绍三种使用 SonarQube 静态扫描代码质量的方法  通过 SonarScanner 手动扫描代码 通过 VS Code 插件即时扫描代码 通过 jenkins 插件持续扫描代码  通过 SonarScanner 手动扫描代码下面就是我的操作步骤，我使用的是">
+<meta name="twitter:image" content="http://lichangwei.github.io/images/sonar.1.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://lichangwei.github.io/2019/12/02/annual-report-adaptation/">
+  <link rel="canonical" href="http://lichangwei.github.io/2020/03/04/sonarqube/">
 
 
 
@@ -131,7 +141,7 @@
   };
 </script>
 
-  <title>年报系列分享之适配篇 | 飞鹰走码</title>
+  <title>使用 SonarQube 静态扫描代码质量 | 飞鹰走码</title>
   
 
 
@@ -337,7 +347,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://lichangwei.github.io/2019/12/02/annual-report-adaptation/">
+    <link itemprop="mainEntityOfPage" href="http://lichangwei.github.io/2020/03/04/sonarqube/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="李长伟">
@@ -354,7 +364,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">年报系列分享之适配篇
+          <h2 class="post-title" itemprop="name headline">使用 SonarQube 静态扫描代码质量
 
               
             
@@ -380,7 +390,7 @@
                 
               
 
-              <time title="创建时间：2019-12-02 00:00:00" itemprop="dateCreated datePublished" datetime="2019-12-02T00:00:00+08:00">2019-12-02</time>
+              <time title="创建时间：2020-03-04 00:00:00" itemprop="dateCreated datePublished" datetime="2020-03-04T00:00:00+08:00">2020-03-04</time>
             
 
             
@@ -397,7 +407,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2020-01-03 13:25:57" itemprop="dateModified" datetime="2020-01-03T13:25:57+08:00">2020-01-03</time>
+                <time title="修改时间：2020-03-05 15:15:27" itemprop="dateModified" datetime="2020-03-05T15:15:27+08:00">2020-03-05</time>
               
             
           </span>
@@ -437,9 +447,74 @@
       
 
       
-        <p>我们都知道，手机厂商为了满足不同用户的需求，制造了各种尺寸的手机屏幕。我们在开发移动端的应用，需要考虑这些不同尺寸的屏幕，至少要保证不会出现大块空白或元素互相遮盖的情况，给开发带来了很大的困难。下面我将介绍一下我们在年报项目里的一些做法。</p>
-<h2 id="1-使用SVG格式的图片"><a href="#1-使用SVG格式的图片" class="headerlink" title="1. 使用SVG格式的图片"></a>1. 使用<code>SVG</code>格式的图片</h2><p>在项目的开始阶段我们就和设计师达成一致意见，全部使用<code>SVG</code>格式的图片。这样就不再关心</p>
-<h2 id="2-CSS中的长度单位"><a href="#2-CSS中的长度单位" class="headerlink" title="2. CSS中的长度单位"></a>2. <code>CSS</code>中的长度单位</h2>
+        <p>前两天有位同事发给我了两张 SonarQube 代码质量扫描的截图，能够看出 SonarQube 还是能帮我们发现不少问题的。<br><img src="../../../../images/sonar.1.png" alt=""><br><img src="../../../../images/sonar.2.png" alt=""><br>下面我们介绍三种使用 SonarQube 静态扫描代码质量的方法</p>
+<ol>
+<li><a href="#通过-SonarScanner-手动扫描代码">通过 SonarScanner 手动扫描代码</a></li>
+<li><a href="#通过-VS-Code-插件即时扫描代码">通过 VS Code 插件即时扫描代码</a></li>
+<li><a href="#通过-jenkins-插件持续扫描代码">通过 jenkins 插件持续扫描代码</a></li>
+</ol>
+<h2 id="通过-SonarScanner-手动扫描代码"><a href="#通过-SonarScanner-手动扫描代码" class="headerlink" title="通过 SonarScanner 手动扫描代码"></a>通过 SonarScanner 手动扫描代码</h2><p>下面就是我的操作步骤，我使用的是 macOS 系统，如果你使用的是其他系统，以下步骤未必适用于你，请酌情参考。</p>
+<ol>
+<li>到<a href="https://docs.sonarqube.org/latest/analysis/scan/sonarscanner/" target="_blank" rel="noopener">官网</a>去下载 SonarScanner 的最新版本。</li>
+<li><p>解压缩第一步下载的 zip 文件，并移动移动你喜欢的目录中，我使用的目录是<code>/user/local</code>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 解压缩，在macOS上也可以双击文件来解压缩</span></span><br><span class="line">unzip sonar-scanner-4.2.0.1873-macosx.zip</span><br><span class="line"><span class="comment"># 移动到相应目录中</span></span><br><span class="line">sudo mv sonar-scanner-4.2.0.1873-macosx /user/<span class="built_in">local</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改<code>~/.bash_profile</code>文件，把<code>sonar-scanner</code>命令添加为全局命令。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 打开 bash 配置文件</span></span><br><span class="line">vi ~/.bash_profile</span><br><span class="line"><span class="comment"># 添加以下代码，如果你的 SonarScanner 版本或目录和我不一样，记得修改一下</span></span><br><span class="line"><span class="built_in">export</span> SONAR_SCANNER=/usr/<span class="built_in">local</span>/sonar-scanner-4.2.0.1873-macosx</span><br><span class="line"><span class="built_in">export</span> PATH=<span class="variable">$M2</span>:<span class="variable">$PATH</span>:<span class="variable">$SONAR_SCANNER</span>/bin</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>让上一步的修改生效</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bash_profile</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>到此为止，我们已经安装好了，在终端里执行命令<code>sonar-scanner</code>会出现如下信息，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">INFO: Scanner configuration file: /usr/local/sonar-scanner-4.2.0.1873-macosx/conf/sonar-scanner.properties</span><br><span class="line">INFO: Project root configuration file: NONE</span><br><span class="line">INFO: SonarQube Scanner 4.2.0.1873</span><br><span class="line">INFO: Java 11.0.3 AdoptOpenJDK (64-bit)</span><br><span class="line">INFO: Mac OS X 10.15 x86_64</span><br><span class="line">INFO: User cache: /Users/gaiaworks/.sonar/cache</span><br><span class="line">ERROR: SonarQube server [http://localhost:9000] can not be reached</span><br><span class="line">INFO: ------------------------------------------------------------------------</span><br><span class="line">INFO: EXECUTION FAILURE</span><br><span class="line">INFO: ------------------------------------------------------------------------</span><br><span class="line">INFO: Total time: 0.551s</span><br><span class="line">INFO: Final Memory: 2M/17M</span><br><span class="line">INFO: ------------------------------------------------------------------------</span><br><span class="line">ERROR: Error during SonarQube Scanner execution</span><br><span class="line">org.sonarsource.scanner.api.internal.ScannerException: Unable to execute SonarQube</span><br></pre></td></tr></table></figure>
+<p>从以上信息的第一行可以看出，该命令从<code>/usr/local/sonar-scanner-4.2.0.1873-macosx/conf/sonar-scanner.properties</code>读取配置信息，从第二行可以看出当前项目根目录下没有配置文件，因此使用了默认 SonarQube 服务器地址：<a href="http://localhost:9000，但是访问不了。因此接下来我们还要修改配置了。" target="_blank" rel="noopener">http://localhost:9000，但是访问不了。因此接下来我们还要修改配置了。</a></p>
+</li>
+<li><p>假如我们的 SonarQube 服务器是<code>http://192.168.0.140:9000</code>，首先我们登入生成令牌（token），这样进行代码扫描时，就不用输入用户名和密码，更加安全。我们可以给每一种用途分别生成一个令牌，令牌也可以随时收回。打开<code>http://192.168.0.140:9000/account/security/</code> 生成令牌。令牌只在生成成时显示一次。如果不慎遗失也没关系，收回并重新生成一个即可。</p>
+</li>
+<li><p>假如我们生成的 token 是<code>df32aaf19ee1cdc5117aba235309492fd283e64f</code>，我们来修改 SonarScanner 的配置文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 打开配置文件</span></span><br><span class="line">vi /usr/<span class="built_in">local</span>/sonar-scanner-4.2.0.1873-macosx/conf/sonar-scanner.properties</span><br></pre></td></tr></table></figure>
+<p>添加以下内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sonar.host.url=http://192.168.0.140:9000</span><br><span class="line">sonar.login=df32aaf19ee1cdc5117aba235309492fd283e64f</span><br><span class="line">sonar.sourceEncoding=UTF-8</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在项目根目录下创建 SonarQube 项目配置文件<code>sonar-project.properties</code>，并填写以下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sonar.projectKey=project-key</span><br><span class="line">sonar.projectName=project-name</span><br><span class="line">sonar.sources=src</span><br><span class="line">sonar.exclusions=src/js/i18n/**/*</span><br></pre></td></tr></table></figure>
+<p>其中<br><code>sonar.projectKey</code>是项目的标识符，可以包含字母、数字、中划线-、下划线_、冒号:，并且不能全是数字。一旦修改了就被认为是一个新项目，就会导致项目的扫描历史丢失，所以开始时就要考虑清楚。建议在一个公司或团队中使用统一的命名规范。根据笔者经验不建议在 projectKey 中使用团队或部门代码，因为很多公司的组织架构不断地调整。<br><code>sonar.projectName</code>是用来给人阅读的，可以是中文，建议使用大家一看就明白的名称。<br><code>sonar.sources</code>指定代码目录，如果多个用都好分隔。<br><code>sonar.exclusions</code>指定一些不扫描的目录，比如在上面的配置中，排除了一些文案相关的文件。<br>其他参数可以参考<a href="https://docs.sonarqube.org/latest/analysis/analysis-parameters/" target="_blank" rel="noopener">官方文档</a>。</p>
+</li>
+<li><p>至此配置完毕，在项目根目录下执行命令<code>sonar-scanner</code>可以看到<code>EXECUTION SUCCESS</code>的字样，就说明执行成功了。在项目根目录下可以看到一个新目录<code>.scannerwork</code>，这个目录不要提交到代码仓中，记得在<code>.gitignore</code>文件中加上该目录名称哦。打开 SonarQube 服务器就可以看到如下信息，点击项目名称即可查看详细信息。<br><img src="../../../../images/sonar.dashboard.png" alt=""></p>
+</li>
+</ol>
+<h2 id="通过-VS-Code-插件即时扫描代码"><a href="#通过-VS-Code-插件即时扫描代码" class="headerlink" title="通过 VS Code 插件即时扫描代码"></a>通过 VS Code 插件即时扫描代码</h2><p>通过 VS Code 插件，可以让我们在编写代码的时候就能发现问题，避免有问题的代码进入代码仓库。大家都知道，问题发现的越早，解决的越早，成本越低，因此这种做法非常有意义，让问题在刚刚出现时就被发现，被解决。</p>
+<ol>
+<li><p>在 VS Code 中按下<code>Command + Shift + X</code>组合键或在点击左侧的 Extensions 图标即可打开插件面板，搜索<code>SonarLint</code>即可看到同名的插件，按下其右下角的安装按钮，就安装成功了。</p>
+</li>
+<li><p>在 VS Code 中按下<code>Command + ,</code>组合键或通过菜单<code>Code -&gt; Preferences -&gt; Settings</code>打开用户设置面板。</p>
+</li>
+<li><p>在用户设置面板中搜索<code>SonarLint</code>发现若干条配置项，点击任意一个“Edit in settings.json”直接修改 JSON 格式的配置文件。<br><img src="../../../../images/sonarlint.setting.png" alt=""></p>
+</li>
+<li><p>在新打开的<code>settings.json</code>文件中添加以下代码，</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"sonarlint.connectedMode.connections.sonarqube"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"serverUrl"</span>: <span class="string">"http://192.168.0.140:9000"</span>,</span><br><span class="line">      <span class="attr">"token"</span>: <span class="string">"df32aaf19ee1cdc5117aba235309492fd283e64f"</span></span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中<code>serverUrl</code>就是前面提到的 SonarQube 服务器地址，而<code>token</code>就是我们申请的令牌。</p>
+</li>
+<li><p>打开项目根目录下的<code>.vscode/settings.json</code>文件，如果没有则新建一个文件。在文件中添加以下内容：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"sonarlint.connectedMode.project"</span>: &#123;</span><br><span class="line">    <span class="attr">"projectKey"</span>: <span class="string">"project-key"</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样在编写代码时就可以及时获取 SonarQube 的扫描结果了。<br><img src="../../../../images/sonarlint.tips.png" alt=""><br>从<code>SonarLint</code>给出的信息看出类型 T 重复，原来是我忘记加上一对括号了。修改如下后就不再提示错误了。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">type</span> IResultType&lt;T&gt; = <span class="function">(<span class="params">(<span class="params"></span>) =&gt; T</span>) | <span class="params">T</span>;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="通过-jenkins-插件持续扫描代码"><a href="#通过-jenkins-插件持续扫描代码" class="headerlink" title="通过 jenkins 插件持续扫描代码"></a>通过 jenkins 插件持续扫描代码</h2><p>以上两种方法主要是开发人员自己扫描和查看，扫描频率和效果完全依赖于开发人员，如果开发人员忙起来忘记了，或故意忽略了编辑器插件给出的提示，或者通过配置项仅仅扫描了部分代码，效果就大打折扣，那么有没有一种方法能够持续地完整地扫描整个代码仓库吗？答案是有的，那就是咱们这回要讲的，通过 jenkins 等持续集成工具来持续扫描代码。</p>
+<ol>
+<li><p>由 jenkins 管理员打开插件管理页面<code>&lt;jenkins-domain&gt;/pluginManager/</code>，安装<code>SonarQube Scanner</code>插件，因为我已经安装了一段时间了，并且有了新版本，所以截图中<code>SonarQube Scanner</code>出现在<code>Updates</code>面板中，首次安装请在<code>Available</code>中搜索。<br><img src="../../../../images/sonar.scanner.jenkins.download.png" alt=""></p>
+</li>
+<li><p>由 jenkins 管理员打开全局工具配置页面<code>&lt;jenkins-domain&gt;/configureTools/</code>，配置如下：<br><img src="../../../../images/sonar.scanner.jenkins.config.png" alt=""></p>
+</li>
+<li>由 jenkins 管理员打开全局凭证创建页面<code>&lt;jenkins-domain&gt;/credentials/store/system/domain/_/newCredentials</code>，创建一个<code>Secret text</code>类型的凭证，把前面申请的令牌写在<code>Secret</code>字段里。<br><img src="../../../../images/sonar.scanner.jenkins.config.png" alt=""></li>
+<li><p>打开项目配置页面，点击“Add build step”，并选择“Execute SonarQube Scanner”，并填写如下<br><img src="../../../../images/sonar.scanner.jenkins.project.png" alt=""></p>
+</li>
+<li><p>点击“立即构建”就可以在持续集成的过程顺便扫描代码质量了，构建完成以后，点击“立即构建”下方的“SonarQube”就可以跳转到 SonarQube 服务器上该项目看板页面了。</p>
+</li>
+</ol>
+<p>至此我们就介绍完了使用 SonarQube 进行代码扫描的三种方法了，你更喜欢哪一种呢？欢迎评论。</p>
+
       
     </div>
 
@@ -551,7 +626,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">74</span>
+                    <span class="site-state-item-count">75</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -590,7 +665,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-使用SVG格式的图片"><span class="nav-number">1.</span> <span class="nav-text">1. 使用SVG格式的图片</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-CSS中的长度单位"><span class="nav-number">2.</span> <span class="nav-text">2. CSS中的长度单位</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#通过-SonarScanner-手动扫描代码"><span class="nav-number">1.</span> <span class="nav-text">通过 SonarScanner 手动扫描代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通过-VS-Code-插件即时扫描代码"><span class="nav-number">2.</span> <span class="nav-text">通过 VS Code 插件即时扫描代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通过-jenkins-插件持续扫描代码"><span class="nav-number">3.</span> <span class="nav-text">通过 jenkins 插件持续扫描代码</span></a></li></ol></div>
             
 
           </div>

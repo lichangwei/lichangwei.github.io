@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://lichangwei.github.io/2019/12/02/annual-report-adaptation/</loc>
+    <loc>http://lichangwei.github.io/2018/10/25/jwt/</loc>
     
-    <lastmod>2020-01-03T05:25:57.580Z</lastmod>
+    <lastmod>2020-03-06T05:58:19.740Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://lichangwei.github.io/2020/03/04/sonarqube/</loc>
+    
+    <lastmod>2020-03-05T07:15:27.832Z</lastmod>
     
   </url>
   
